@@ -42,7 +42,7 @@
 
 // ----------------------------------------------------------------------------
 
-#if ! defined(OS_STRING_POSIX_DEVICE_PREFIX)
+#if !defined(OS_STRING_POSIX_DEVICE_PREFIX)
 #define OS_STRING_POSIX_DEVICE_PREFIX "/dev/"
 #endif
 
@@ -50,281 +50,253 @@
 
 namespace os
 {
-  namespace posix
-  {
-    // ------------------------------------------------------------------------
+namespace posix
+{
+// ----------------------------------------------------------------------------
 
-    class device_impl;
+class device_impl;
 
-    // ========================================================================
+// ============================================================================
 
-    /**
-     * @brief Base device class.
-     * @headerfile device.h <micro-os-plus/posix-io/device.h>
-     * @ingroup cmsis-plus-posix-io-base
-     */
-    class device : public io
-    {
-      // ----------------------------------------------------------------------
+/**
+ * @brief Base device class.
+ * @headerfile device.h <micro-os-plus/posix-io/device.h>
+ * @ingroup cmsis-plus-posix-io-base
+ */
+class device : public io
+{
+  // --------------------------------------------------------------------------
 
-      /**
-       * @name Constructors & Destructor
-       * @{
-       */
+  /**
+   * @name Constructors & Destructor
+   * @{
+   */
 
-    public:
+public:
+  device (device_impl& impl, type t, const char* name);
 
-      device (device_impl& impl, type t, const char* name);
+  /**
+   * @cond ignore
+   */
 
-      /**
-       * @cond ignore
-       */
+  // The rule of five.
+  device (const device&) = delete;
+  device (device&&) = delete;
+  device& operator= (const device&) = delete;
+  device& operator= (device&&) = delete;
 
-      // The rule of five.
-      device (const device&) = delete;
-      device (device&&) = delete;
-      device&
-      operator= (const device&) = delete;
-      device&
-      operator= (device&&) = delete;
+  /**
+   * @endcond
+   */
 
-      /**
-       * @endcond
-       */
+  virtual ~device () override;
 
-      virtual
-      ~device () override;
+  /**
+   * @}
+   */
 
-      /**
-       * @}
-       */
+  // --------------------------------------------------------------------------
+  /**
+   * @name Public Member Functions
+   * @{
+   */
 
-      // ----------------------------------------------------------------------
-      /**
-       * @name Public Member Functions
-       * @{
-       */
+public:
+  /**
+   *
+   * @param path May be nullptr.
+   * @param oflag
+   * @return
+   */
+  int open (const char* path = nullptr, int oflag = 0, ...);
 
-    public:
+  /**
+   *
+   * @param path May be nullptr.
+   * @param oflag
+   * @param args
+   * @return
+   */
+  int vopen (const char* path, int oflag, std::va_list args);
 
-      /**
-       *
-       * @param path May be nullptr.
-       * @param oflag
-       * @return
-       */
-      int
-      open (const char* path = nullptr, int oflag = 0, ...);
+  virtual int close (void) override;
 
-      /**
-       *
-       * @param path May be nullptr.
-       * @param oflag
-       * @param args
-       * @return
-       */
-      int
-      vopen (const char* path, int oflag, std::va_list args);
+  int ioctl (int request, ...);
 
-      virtual int
-      close (void) override;
+  virtual int vioctl (int request, std::va_list args);
 
-      int
-      ioctl (int request, ...);
+  virtual void sync (void);
 
-      virtual int
-      vioctl (int request, std::va_list args);
+  // --------------------------------------------------------------------------
 
-      virtual void
-      sync (void);
+  virtual bool match_name (const char* name) const;
 
-      // ----------------------------------------------------------------------
+  const char* name (void) const;
 
-      virtual bool
-      match_name (const char* name) const;
+  static const char* device_prefix (void);
 
-      const char*
-      name (void) const;
+  // --------------------------------------------------------------------------
+  // Support functions.
 
-      static const char*
-      device_prefix (void);
+  device_impl& impl (void) const;
 
-      // ----------------------------------------------------------------------
-      // Support functions.
+  /**
+   * @}
+   */
 
-      device_impl&
-      impl (void) const;
+  // --------------------------------------------------------------------------
+protected:
+  /**
+   * @cond ignore
+   */
 
-      /**
-       * @}
-       */
+  const char* name_ = nullptr;
 
-      // ----------------------------------------------------------------------
-    protected:
+  /**
+   * @endcond
+   */
 
-      /**
-       * @cond ignore
-       */
+  // --------------------------------------------------------------------------
+public:
+  /**
+   * @cond ignore
+   */
 
-      const char* name_ = nullptr;
+  // Intrusive node used to link this device to the registry list.
+  // Must be public.
+  utils::double_list_links registry_links_;
 
-      /**
-       * @endcond
-       */
+  /**
+   * @endcond
+   */
+};
 
-      // ----------------------------------------------------------------------
-    public:
-
-      /**
-       * @cond ignore
-       */
-
-      // Intrusive node used to link this device to the registry list.
-      // Must be public.
-      utils::double_list_links registry_links_;
-
-      /**
-       * @endcond
-       */
-    };
-
-    // ========================================================================
+// ============================================================================
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpadded"
 
-    class device_impl : public io_impl
-    {
-      // ----------------------------------------------------------------------
+class device_impl : public io_impl
+{
+  // --------------------------------------------------------------------------
 
-      /**
-       * @cond ignore
-       */
+  /**
+   * @cond ignore
+   */
 
-      friend class device;
+  friend class device;
 
-      /**
-       * @endcond
-       */
+  /**
+   * @endcond
+   */
 
-      // ----------------------------------------------------------------------
-      /**
-       * @name Constructors & Destructor
-       * @{
-       */
+  // --------------------------------------------------------------------------
+  /**
+   * @name Constructors & Destructor
+   * @{
+   */
 
-    public:
+public:
+  device_impl (void);
 
-      device_impl (void);
+  /**
+   * @cond ignore
+   */
 
-      /**
-       * @cond ignore
-       */
+  // The rule of five.
+  device_impl (const device_impl&) = delete;
+  device_impl (device_impl&&) = delete;
+  device_impl& operator= (const device_impl&) = delete;
+  device_impl& operator= (device_impl&&) = delete;
 
-      // The rule of five.
-      device_impl (const device_impl&) = delete;
-      device_impl (device_impl&&) = delete;
-      device_impl&
-      operator= (const device_impl&) = delete;
-      device_impl&
-      operator= (device_impl&&) = delete;
+  /**
+   * @endcond
+   */
 
-      /**
-       * @endcond
-       */
+  virtual ~device_impl () override;
 
-      virtual
-      ~device_impl () override;
+  /**
+   * @}
+   */
 
-      /**
-       * @}
-       */
+  // --------------------------------------------------------------------------
+  /**
+   * @name Public Member Functions
+   * @{
+   */
 
-      // ----------------------------------------------------------------------
-      /**
-       * @name Public Member Functions
-       * @{
-       */
+public:
+  virtual bool do_is_opened (void) override;
 
-    public:
+  virtual int do_vopen (const char* path, int oflag, std::va_list args) = 0;
 
-      virtual bool
-      do_is_opened (void) override;
+  virtual int do_vioctl (int request, std::va_list args) = 0;
 
-      virtual int
-      do_vopen (const char* path, int oflag, std::va_list args) = 0;
+  virtual void do_sync (void) = 0;
 
-      virtual int
-      do_vioctl (int request, std::va_list args) = 0;
+  // --------------------------------------------------------------------------
 
-      virtual void
-      do_sync (void) = 0;
+  int open_count (void);
 
-      // ----------------------------------------------------------------------
+  /**
+   * @}
+   */
 
-      int
-      open_count (void);
+  // --------------------------------------------------------------------------
+protected:
+  /**
+   * @cond ignore
+   */
 
-      /**
-       * @}
-       */
+  int open_count_ = 0;
 
-      // ----------------------------------------------------------------------
-    protected:
-
-      /**
-       * @cond ignore
-       */
-
-      int open_count_ = 0;
-
-      /**
-       * @endcond
-       */
-    };
+  /**
+   * @endcond
+   */
+};
 
 #pragma GCC diagnostic pop
 
-  // ==========================================================================
-  } /* namespace posix */
+// ============================================================================
+} /* namespace posix */
 } /* namespace os */
 
 // ===== Inline & template implementations ====================================
 
 namespace os
 {
-  namespace posix
-  {
-    // ========================================================================
+namespace posix
+{
+// ============================================================================
 
-    inline const char*
-    device::name (void) const
-    {
-      return name_;
-    }
+inline const char*
+device::name (void) const
+{
+  return name_;
+}
 
-    inline device_impl&
-    device::impl (void) const
-    {
-      return static_cast<device_impl&> (impl_);
-    }
+inline device_impl&
+device::impl (void) const
+{
+  return static_cast<device_impl&> (impl_);
+}
 
-    inline const char*
-    device::device_prefix (void)
-    {
-      return OS_STRING_POSIX_DEVICE_PREFIX;
-    }
+inline const char*
+device::device_prefix (void)
+{
+  return OS_STRING_POSIX_DEVICE_PREFIX;
+}
 
-    // ========================================================================
+// ============================================================================
 
-    inline int
-    device_impl::open_count (void)
-    {
-      return open_count_;
-    }
+inline int
+device_impl::open_count (void)
+{
+  return open_count_;
+}
 
-  // ==========================================================================
-  } /* namespace posix */
+// ============================================================================
+} /* namespace posix */
 } /* namespace os */
 
 // ----------------------------------------------------------------------------

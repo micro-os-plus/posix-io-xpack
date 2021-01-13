@@ -36,1163 +36,1031 @@
 #include <micro-os-plus/config.h>
 #endif
 
-#include <micro-os-plus/posix-io/file.h>
 #include <micro-os-plus/posix-io/directory.h>
+#include <micro-os-plus/posix-io/file.h>
 
 #include <micro-os-plus/utils/lists.h>
 
 #include <micro-os-plus/diag/trace.h>
 
-#include <mutex>
 #include <cstdarg>
+#include <mutex>
 #include <sys/stat.h>
 #include <utime.h>
 
 // ----------------------------------------------------------------------------
 
-#define FF_MOUNT_FLAGS_HAS_VOLUME   (1)
+#define FF_MOUNT_FLAGS_HAS_VOLUME (1)
 
 // ----------------------------------------------------------------------------
 
 namespace os
 {
-  namespace posix
-  {
-    // ------------------------------------------------------------------------
+namespace posix
+{
+// ----------------------------------------------------------------------------
 
-    class io;
-    class file;
-    class directory;
-    class block_device;
+class io;
+class file;
+class directory;
+class block_device;
 
-    class file_system_impl;
+class file_system_impl;
 
-    /**
-     * @ingroup cmsis-plus-posix-io-func
-     * @{
-     */
+/**
+ * @ingroup cmsis-plus-posix-io-func
+ * @{
+ */
 
-    // ------------------------------------------------------------------------
-    // ----- Non-io, global file system functions -----
-    int
-    mkdir (const char* path, mode_t mode);
+// ----------------------------------------------------------------------------
+// ----- Non-io, global file system functions -----
+int mkdir (const char* path, mode_t mode);
 
-    int
-    rmdir (const char* path);
+int rmdir (const char* path);
 
-    void
-    sync (void);
+void sync (void);
 
-    // ------------------------------------------------------------------------
-    // ----- Non-io, file functions -----
+// ----------------------------------------------------------------------------
+// ----- Non-io, file functions -----
 
-    int
-    chmod (const char* path, mode_t mode);
+int chmod (const char* path, mode_t mode);
 
-    int
-    stat (const char* path, struct stat* buf);
+int stat (const char* path, struct stat* buf);
 
-    int
-    truncate (const char* path, off_t length);
+int truncate (const char* path, off_t length);
 
-    int
-    rename (const char* existing, const char* _new);
+int rename (const char* existing, const char* _new);
 
-    int
-    unlink (const char* path);
+int unlink (const char* path);
 
-    int
-    utime (const char* path, const struct utimbuf* times);
+int utime (const char* path, const struct utimbuf* times);
 
-    int
-    statvfs (const char* path, struct statvfs* buf);
+int statvfs (const char* path, struct statvfs* buf);
 
-    /**
-     * @brief Open directory.
-     * @param dirname [in] Directory name.
-     * @return Pointer to `directory` object.
-     */
-    directory*
-    opendir (const char* dirname);
+/**
+ * @brief Open directory.
+ * @param dirname [in] Directory name.
+ * @return Pointer to `directory` object.
+ */
+directory* opendir (const char* dirname);
 
-    /**
-     * @}
-     */
+/**
+ * @}
+ */
 
-    // ========================================================================
-    /**
-     * @brief File system class.
-     * @headerfile file-system.h <micro-os-plus/posix-io/file-system.h>
-     * @ingroup cmsis-plus-posix-io-base
-     */
-    class file_system
-    {
-      // ----------------------------------------------------------------------
+// ============================================================================
+/**
+ * @brief File system class.
+ * @headerfile file-system.h <micro-os-plus/posix-io/file-system.h>
+ * @ingroup cmsis-plus-posix-io-base
+ */
+class file_system
+{
+  // --------------------------------------------------------------------------
 
-      /**
-       * @cond ignore
-       */
+  /**
+   * @cond ignore
+   */
 
-      friend int
-      mkdir (const char* path, mode_t mode);
-
-      friend int
-      rmdir (const char* path);
-
-      friend void
-      sync (void);
-
-      friend int
-      chmod (const char* path, mode_t mode);
-
-      friend int
-      stat (const char* path, struct stat* buf);
-
-      friend int
-      truncate (const char* path, off_t length);
-
-      friend int
-      rename (const char* existing, const char* _new);
-
-      friend int
-      unlink (const char* path);
-
-      friend int
-      utime (const char* path, const struct utimbuf* times);
-
-      friend int
-      statvfs (const char* path, struct statvfs* buf);
-
-      /**
-       * @endcond
-       */
-
-      // ----------------------------------------------------------------------
-      /**
-       * @name Constructors & Destructor
-       * @{
-       */
-
-    public:
-
-      file_system (file_system_impl& impl, const char* name);
+  friend int mkdir (const char* path, mode_t mode);
 
-      /**
-       * @cond ignore
-       */
+  friend int rmdir (const char* path);
 
-      // The rule of five.
-      file_system (const file_system&) = delete;
-      file_system (file_system&&) = delete;
-      file_system&
-      operator= (const file_system&) = delete;
-      file_system&
-      operator= (file_system&&) = delete;
+  friend void sync (void);
 
-      /**
-       * @endcond
-       */
+  friend int chmod (const char* path, mode_t mode);
 
-      virtual
-      ~file_system ();
+  friend int stat (const char* path, struct stat* buf);
 
-      /**
-       * @}
-       */
+  friend int truncate (const char* path, off_t length);
 
-      // ----------------------------------------------------------------------
-      /**
-       * @name Public Member Functions
-       * @{
-       */
+  friend int rename (const char* existing, const char* _new);
 
-    public:
+  friend int unlink (const char* path);
 
-      int
-      mkfs (int options, ...);
+  friend int utime (const char* path, const struct utimbuf* times);
 
-      virtual int
-      vmkfs (int options, std::va_list args);
+  friend int statvfs (const char* path, struct statvfs* buf);
 
-      int
-      mount (const char* path = nullptr, unsigned int flags = 0, ...);
+  /**
+   * @endcond
+   */
 
-      /**
-       * @brief Mount file system.
-       *
-       * @param path Path, terminated in `/`. If `/` or nullptr, the
-       *   file system is mounted as root, i.e. the default if no other
-       *   mount point matches.
-       * @param flags File system specific flags.
-       * @param args Optional arguments.
-       * @retval 0 if successful,
-       * @retval -1 otherwise and the variable errno is set to
-       *   indicate the error.
-       */
-      virtual int
-      vmount (const char* path, unsigned int flags, std::va_list args);
+  // --------------------------------------------------------------------------
+  /**
+   * @name Constructors & Destructor
+   * @{
+   */
 
-      /**
-       * @brief Unmount file system.
-       *
-       * @param flags File system specific flags.
-       * @retval 0 if successful,
-       * @retval -1 otherwise and the variable errno is set to
-       *   indicate the error.
-       */
-      virtual int
-      umount (int unsigned flags = 0);
+public:
+  file_system (file_system_impl& impl, const char* name);
 
-      static file_system*
-      identify_mounted (const char** path1, const char** path2 = nullptr);
+  /**
+   * @cond ignore
+   */
 
-      // ----------------------------------------------------------------------
+  // The rule of five.
+  file_system (const file_system&) = delete;
+  file_system (file_system&&) = delete;
+  file_system& operator= (const file_system&) = delete;
+  file_system& operator= (file_system&&) = delete;
 
-      file*
-      open (const char* path = nullptr, int oflag = 0, ...);
+  /**
+   * @endcond
+   */
 
-      virtual file*
-      vopen (const char* path, int oflag, std::va_list args);
+  virtual ~file_system ();
 
-      // http://pubs.opengroup.org/onlinepubs/9699919799/functions/opendir.html
-      virtual directory*
-      opendir (const char* dirpath);
+  /**
+   * @}
+   */
 
-      // ----------------------------------------------------------------------
-      // Also called from namespace friend functions.
+  // --------------------------------------------------------------------------
+  /**
+   * @name Public Member Functions
+   * @{
+   */
 
-      virtual int
-      mkdir (const char* path, mode_t mode);
+public:
+  int mkfs (int options, ...);
 
-      virtual int
-      rmdir (const char* path);
+  virtual int vmkfs (int options, std::va_list args);
 
-      virtual void
-      sync (void);
+  int mount (const char* path = nullptr, unsigned int flags = 0, ...);
 
-      virtual int
-      chmod (const char* path, mode_t mode);
+  /**
+   * @brief Mount file system.
+   *
+   * @param path Path, terminated in `/`. If `/` or nullptr, the
+   *   file system is mounted as root, i.e. the default if no other
+   *   mount point matches.
+   * @param flags File system specific flags.
+   * @param args Optional arguments.
+   * @retval 0 if successful,
+   * @retval -1 otherwise and the variable errno is set to
+   *   indicate the error.
+   */
+  virtual int vmount (const char* path, unsigned int flags, std::va_list args);
 
-      virtual int
-      stat (const char* path, struct stat* buf);
+  /**
+   * @brief Unmount file system.
+   *
+   * @param flags File system specific flags.
+   * @retval 0 if successful,
+   * @retval -1 otherwise and the variable errno is set to
+   *   indicate the error.
+   */
+  virtual int umount (int unsigned flags = 0);
 
-      virtual int
-      truncate (const char* path, off_t length);
+  static file_system* identify_mounted (const char** path1,
+                                        const char** path2 = nullptr);
 
-      virtual int
-      rename (const char* existing, const char* _new);
+  // --------------------------------------------------------------------------
 
-      virtual int
-      unlink (const char* path);
+  file* open (const char* path = nullptr, int oflag = 0, ...);
 
-      virtual int
-      utime (const char* path, const struct utimbuf* times);
+  virtual file* vopen (const char* path, int oflag, std::va_list args);
 
-      virtual int
-      statvfs (struct statvfs* buf);
+  // http://pubs.opengroup.org/onlinepubs/9699919799/functions/opendir.html
+  virtual directory* opendir (const char* dirpath);
 
-    public:
+  // --------------------------------------------------------------------------
+  // Also called from namespace friend functions.
 
-      // ----------------------------------------------------------------------
-      // Support functions.
+  virtual int mkdir (const char* path, mode_t mode);
 
-      const char*
-      mounted_path (void);
+  virtual int rmdir (const char* path);
 
-      const char*
-      name (void) const;
+  virtual void sync (void);
 
-      void
-      add_deferred_file (file* fil);
+  virtual int chmod (const char* path, mode_t mode);
 
-      void
-      add_deferred_directory (directory* dir);
+  virtual int stat (const char* path, struct stat* buf);
 
-      using deferred_files_list_t = utils::intrusive_list<file,
-      utils::double_list_links, &file::deferred_links_>;
+  virtual int truncate (const char* path, off_t length);
 
-      using deferred_directories_list_t = utils::intrusive_list<directory,
-      utils::double_list_links, &directory::deferred_links_>;
+  virtual int rename (const char* existing, const char* _new);
 
-      deferred_files_list_t&
-      deferred_files_list (void);
+  virtual int unlink (const char* path);
 
-      deferred_directories_list_t&
-      deferred_directories_list (void);
+  virtual int utime (const char* path, const struct utimbuf* times);
 
-      // ----------------------------------------------------------------------
+  virtual int statvfs (struct statvfs* buf);
 
-      template<typename T>
-        T*
-        allocate_file (void);
+public:
+  // --------------------------------------------------------------------------
+  // Support functions.
 
-      template<typename T>
-        T*
-        allocate_directory (void);
+  const char* mounted_path (void);
 
-      template<typename T, typename L>
-        T*
-        allocate_file (L& locker);
+  const char* name (void) const;
 
-      template<typename T, typename L>
-        T*
-        allocate_directory (L& locker);
+  void add_deferred_file (file* fil);
 
-      template<typename T>
-        void
-        deallocate_files (void);
+  void add_deferred_directory (directory* dir);
 
-      template<typename T>
-        void
-        deallocate_directories (void);
+  using deferred_files_list_t
+      = utils::intrusive_list<file, utils::double_list_links,
+                              &file::deferred_links_>;
 
-      // ----------------------------------------------------------------------
-      // Support functions.
+  using deferred_directories_list_t
+      = utils::intrusive_list<directory, utils::double_list_links,
+                              &directory::deferred_links_>;
 
-      block_device&
-      device (void) const;
+  deferred_files_list_t& deferred_files_list (void);
 
-      file_system_impl&
-      impl (void) const;
+  deferred_directories_list_t& deferred_directories_list (void);
 
-      /**
-       * @}
-       */
+  // --------------------------------------------------------------------------
 
-      // ----------------------------------------------------------------------
-    protected:
+  template <typename T> T* allocate_file (void);
 
-      /**
-       * @cond ignore
-       */
+  template <typename T> T* allocate_directory (void);
 
-      const char* name_ = nullptr;
+  template <typename T, typename L> T* allocate_file (L& locker);
 
-      file_system_impl& impl_;
+  template <typename T, typename L> T* allocate_directory (L& locker);
 
-      deferred_files_list_t deferred_files_list_;
+  template <typename T> void deallocate_files (void);
 
-      deferred_directories_list_t deferred_directories_list_;
+  template <typename T> void deallocate_directories (void);
 
-      const char* mounted_path_ = nullptr;
+  // --------------------------------------------------------------------------
+  // Support functions.
 
-      /**
-       * @endcond
-       */
+  block_device& device (void) const;
 
-      // ----------------------------------------------------------------------
-    public:
+  file_system_impl& impl (void) const;
 
-      /**
-       * @cond ignore
-       */
+  /**
+   * @}
+   */
 
-      // Intrusive node used to link this file system to the
-      // mount manager list.
-      // Must be public. The constructor clears the pointers.
-      utils::double_list_links mount_manager_links_;
+  // --------------------------------------------------------------------------
+protected:
+  /**
+   * @cond ignore
+   */
 
-      /**
-       * @endcond
-       */
+  const char* name_ = nullptr;
 
-      // ----------------------------------------------------------------------
-    protected:
+  file_system_impl& impl_;
 
-      /**
-       * @cond ignore
-       */
+  deferred_files_list_t deferred_files_list_;
 
-      // Statics.
-      using mounted_list = utils::intrusive_list<file_system,
-      utils::double_list_links, &file_system::mount_manager_links_>;
-      static mounted_list mounted_list__;
+  deferred_directories_list_t deferred_directories_list_;
 
-      static file_system* mounted_root__;
+  const char* mounted_path_ = nullptr;
 
-      /**
-       * @endcond
-       */
-    };
+  /**
+   * @endcond
+   */
 
-    // ========================================================================
+  // --------------------------------------------------------------------------
+public:
+  /**
+   * @cond ignore
+   */
 
-    class file_system_impl
-    {
-      // ----------------------------------------------------------------------
+  // Intrusive node used to link this file system to the
+  // mount manager list.
+  // Must be public. The constructor clears the pointers.
+  utils::double_list_links mount_manager_links_;
 
-      friend class file_system;
+  /**
+   * @endcond
+   */
 
-      /**
-       * @name Constructors & Destructor
-       * @{
-       */
+  // --------------------------------------------------------------------------
+protected:
+  /**
+   * @cond ignore
+   */
 
-    public:
+  // Statics.
+  using mounted_list
+      = utils::intrusive_list<file_system, utils::double_list_links,
+                              &file_system::mount_manager_links_>;
+  static mounted_list mounted_list__;
 
-      file_system_impl (block_device& device);
+  static file_system* mounted_root__;
 
-      /**
-       * @cond ignore
-       */
+  /**
+   * @endcond
+   */
+};
 
-      // The rule of five.
-      file_system_impl (const file_system_impl&) = delete;
-      file_system_impl (file_system_impl&&) = delete;
-      file_system_impl&
-      operator= (const file_system_impl&) = delete;
-      file_system_impl&
-      operator= (file_system_impl&&) = delete;
+// ============================================================================
 
-      /**
-       * @endcond
-       */
+class file_system_impl
+{
+  // --------------------------------------------------------------------------
 
-      virtual
-      ~file_system_impl ();
+  friend class file_system;
 
-      /**
-       * @}
-       */
+  /**
+   * @name Constructors & Destructor
+   * @{
+   */
 
-      // ----------------------------------------------------------------------
-      /**
-       * @name Public Member Functions
-       * @{
-       */
+public:
+  file_system_impl (block_device& device);
 
-    public:
+  /**
+   * @cond ignore
+   */
 
-      virtual int
-      do_vmkfs (int options, std::va_list args) = 0;
+  // The rule of five.
+  file_system_impl (const file_system_impl&) = delete;
+  file_system_impl (file_system_impl&&) = delete;
+  file_system_impl& operator= (const file_system_impl&) = delete;
+  file_system_impl& operator= (file_system_impl&&) = delete;
 
-      virtual int
-      do_vmount (unsigned int flags, std::va_list args) = 0;
+  /**
+   * @endcond
+   */
 
-      virtual int
-      do_umount (unsigned int flags) = 0;
+  virtual ~file_system_impl ();
 
-      virtual file*
-      do_vopen (class file_system& fs, const char* path, int oflag,
-                std::va_list args) = 0;
+  /**
+   * @}
+   */
 
-      virtual directory*
-      do_opendir (class file_system& fs, const char* dirname) = 0;
+  // --------------------------------------------------------------------------
+  /**
+   * @name Public Member Functions
+   * @{
+   */
 
-      virtual int
-      do_mkdir (const char* path, mode_t mode) = 0;
+public:
+  virtual int do_vmkfs (int options, std::va_list args) = 0;
 
-      virtual int
-      do_rmdir (const char* path) = 0;
+  virtual int do_vmount (unsigned int flags, std::va_list args) = 0;
 
-      virtual void
-      do_sync (void) = 0;
+  virtual int do_umount (unsigned int flags) = 0;
 
-      virtual int
-      do_chmod (const char* path, mode_t mode) = 0;
+  virtual file* do_vopen (class file_system& fs, const char* path, int oflag,
+                          std::va_list args)
+      = 0;
 
-      virtual int
-      do_stat (const char* path, struct stat* buf) = 0;
+  virtual directory* do_opendir (class file_system& fs, const char* dirname)
+      = 0;
 
-      virtual int
-      do_truncate (const char* path, off_t length) = 0;
+  virtual int do_mkdir (const char* path, mode_t mode) = 0;
 
-      virtual int
-      do_rename (const char* existing, const char* _new) = 0;
+  virtual int do_rmdir (const char* path) = 0;
 
-      virtual int
-      do_unlink (const char* path) = 0;
+  virtual void do_sync (void) = 0;
 
-      virtual int
-      do_utime (const char* path, const struct utimbuf* times) = 0;
+  virtual int do_chmod (const char* path, mode_t mode) = 0;
 
-      virtual int
-      do_statvfs (struct statvfs* buf) = 0;
+  virtual int do_stat (const char* path, struct stat* buf) = 0;
 
-      // ----------------------------------------------------------------------
-      // Support functions.
+  virtual int do_truncate (const char* path, off_t length) = 0;
 
-      block_device&
-      device (void) const;
+  virtual int do_rename (const char* existing, const char* _new) = 0;
 
-      /**
-       * @}
-       */
+  virtual int do_unlink (const char* path) = 0;
 
-      // ----------------------------------------------------------------------
-    protected:
+  virtual int do_utime (const char* path, const struct utimbuf* times) = 0;
 
-      /**
-       * @cond ignore
-       */
+  virtual int do_statvfs (struct statvfs* buf) = 0;
 
-      block_device& device_;
+  // --------------------------------------------------------------------------
+  // Support functions.
 
-      file_system* fs_ = nullptr;
+  block_device& device (void) const;
 
-      /**
-       * @endcond
-       */
-    };
+  /**
+   * @}
+   */
 
-    // ========================================================================
+  // --------------------------------------------------------------------------
+protected:
+  /**
+   * @cond ignore
+   */
 
-    template<typename T>
-      class file_system_implementable : public file_system
-      {
-        // --------------------------------------------------------------------
+  block_device& device_;
 
-      public:
+  file_system* fs_ = nullptr;
 
-        using value_type = T;
+  /**
+   * @endcond
+   */
+};
 
-        // --------------------------------------------------------------------
+// ============================================================================
 
-        /**
-         * @name Constructors & Destructor
-         * @{
-         */
+template <typename T> class file_system_implementable : public file_system
+{
+  // --------------------------------------------------------------------------
 
-      public:
+public:
+  using value_type = T;
 
-        template<typename ... Args>
-          file_system_implementable (const char* name, block_device& device,
-                                     Args&&... args);
+  // --------------------------------------------------------------------------
 
-        /**
-         * @cond ignore
-         */
+  /**
+   * @name Constructors & Destructor
+   * @{
+   */
 
-        // The rule of five.
-        file_system_implementable (const file_system_implementable&) = delete;
-        file_system_implementable (file_system_implementable&&) = delete;
-        file_system_implementable&
-        operator= (const file_system_implementable&) = delete;
-        file_system_implementable&
-        operator= (file_system_implementable&&) = delete;
+public:
+  template <typename... Args>
+  file_system_implementable (const char* name, block_device& device,
+                             Args&&... args);
 
-        /**
-         * @endcond
-         */
+  /**
+   * @cond ignore
+   */
 
-        virtual
-        ~file_system_implementable ();
+  // The rule of five.
+  file_system_implementable (const file_system_implementable&) = delete;
+  file_system_implementable (file_system_implementable&&) = delete;
+  file_system_implementable& operator= (const file_system_implementable&)
+      = delete;
+  file_system_implementable& operator= (file_system_implementable&&) = delete;
 
-        /**
-         * @}
-         */
+  /**
+   * @endcond
+   */
 
-        // --------------------------------------------------------------------
-        /**
-         * @name Public Member Functions
-         * @{
-         */
+  virtual ~file_system_implementable ();
 
-      public:
+  /**
+   * @}
+   */
 
-        // Support functions.
+  // --------------------------------------------------------------------------
+  /**
+   * @name Public Member Functions
+   * @{
+   */
 
-        value_type&
-        impl (void) const;
+public:
+  // Support functions.
 
-        /**
-         * @}
-         */
+  value_type& impl (void) const;
 
-        // --------------------------------------------------------------------
-      protected:
+  /**
+   * @}
+   */
 
-        /**
-         * @cond ignore
-         */
+  // --------------------------------------------------------------------------
+protected:
+  /**
+   * @cond ignore
+   */
 
-        value_type impl_instance_;
+  value_type impl_instance_;
 
-        /**
-         * @endcond
-         */
-      };
+  /**
+   * @endcond
+   */
+};
 
-    // ========================================================================
+// ============================================================================
 
-    template<typename T, typename L>
-      class file_system_lockable : public file_system
-      {
-        // --------------------------------------------------------------------
+template <typename T, typename L>
+class file_system_lockable : public file_system
+{
+  // --------------------------------------------------------------------------
 
-      public:
+public:
+  using value_type = T;
+  using lockable_type = L;
 
-        using value_type = T;
-        using lockable_type = L;
+  // --------------------------------------------------------------------------
 
-        // --------------------------------------------------------------------
+  /**
+   * @name Constructors & Destructor
+   * @{
+   */
 
-        /**
-         * @name Constructors & Destructor
-         * @{
-         */
+public:
+  template <typename... Args>
+  file_system_lockable (const char* name, block_device& device,
+                        lockable_type& locker, Args&&... args);
 
-      public:
+  /**
+   * @cond ignore
+   */
 
-        template<typename ... Args>
-          file_system_lockable (const char* name, block_device& device,
-                                lockable_type& locker, Args&&... args);
+  // The rule of five.
+  file_system_lockable (const file_system_lockable&) = delete;
+  file_system_lockable (file_system_lockable&&) = delete;
+  file_system_lockable& operator= (const file_system_lockable&) = delete;
+  file_system_lockable& operator= (file_system_lockable&&) = delete;
 
-        /**
-         * @cond ignore
-         */
+  /**
+   * @endcond
+   */
 
-        // The rule of five.
-        file_system_lockable (const file_system_lockable&) = delete;
-        file_system_lockable (file_system_lockable&&) = delete;
-        file_system_lockable&
-        operator= (const file_system_lockable&) = delete;
-        file_system_lockable&
-        operator= (file_system_lockable&&) = delete;
+  virtual ~file_system_lockable () override;
 
-        /**
-         * @endcond
-         */
+  /**
+   * @}
+   */
 
-        virtual
-        ~file_system_lockable () override;
+  // --------------------------------------------------------------------------
+  /**
+   * @name Public Member Functions
+   * @{
+   */
 
-        /**
-         * @}
-         */
+public:
+  /**
+   * @brief Mount file system.
+   *
+   * @param path Path, terminated in `/`. If `/` or nullptr, the
+   *   file system is mounted as root, i.e. the default if no other
+   *   mount point matches.
+   * @param flags File system specific flags.
+   * @param args Optional arguments.
+   * @retval 0 if successful,
+   * @retval -1 otherwise and the variable errno is set to
+   *   indicate the error.
+   */
+  virtual int vmount (const char* path, unsigned int flags,
+                      std::va_list args) override;
 
-        // --------------------------------------------------------------------
-        /**
-         * @name Public Member Functions
-         * @{
-         */
+  /**
+   * @brief Unmount file system.
+   *
+   * @param flags File system specific flags.
+   * @retval 0 if successful,
+   * @retval -1 otherwise and the variable errno is set to
+   *   indicate the error.
+   */
+  virtual int umount (int unsigned flags = 0) override;
 
-      public:
+  // --------------------------------------------------------------------------
 
-        /**
-         * @brief Mount file system.
-         *
-         * @param path Path, terminated in `/`. If `/` or nullptr, the
-         *   file system is mounted as root, i.e. the default if no other
-         *   mount point matches.
-         * @param flags File system specific flags.
-         * @param args Optional arguments.
-         * @retval 0 if successful,
-         * @retval -1 otherwise and the variable errno is set to
-         *   indicate the error.
-         */
-        virtual int
-        vmount (const char* path, unsigned int flags, std::va_list args)
-            override;
+  virtual file* vopen (const char* path, int oflag,
+                       std::va_list args) override;
 
-        /**
-         * @brief Unmount file system.
-         *
-         * @param flags File system specific flags.
-         * @retval 0 if successful,
-         * @retval -1 otherwise and the variable errno is set to
-         *   indicate the error.
-         */
-        virtual int
-        umount (int unsigned flags = 0) override;
+  // http://pubs.opengroup.org/onlinepubs/9699919799/functions/opendir.html
+  virtual directory* opendir (const char* dirpath) override;
 
-        // --------------------------------------------------------------------
+  // --------------------------------------------------------------------------
 
-        virtual file*
-        vopen (const char* path, int oflag, std::va_list args) override;
+  virtual int mkdir (const char* path, mode_t mode) override;
 
-        // http://pubs.opengroup.org/onlinepubs/9699919799/functions/opendir.html
-        virtual directory*
-        opendir (const char* dirpath) override;
+  virtual int rmdir (const char* path) override;
 
-        // --------------------------------------------------------------------
+  virtual void sync (void) override;
 
-        virtual int
-        mkdir (const char* path, mode_t mode) override;
+  virtual int chmod (const char* path, mode_t mode) override;
 
-        virtual int
-        rmdir (const char* path) override;
+  virtual int stat (const char* path, struct stat* buf) override;
 
-        virtual void
-        sync (void) override;
+  virtual int truncate (const char* path, off_t length) override;
 
-        virtual int
-        chmod (const char* path, mode_t mode) override;
+  virtual int rename (const char* existing, const char* _new) override;
 
-        virtual int
-        stat (const char* path, struct stat* buf) override;
+  virtual int unlink (const char* path) override;
 
-        virtual int
-        truncate (const char* path, off_t length) override;
+  virtual int utime (const char* path, const struct utimbuf* times) override;
 
-        virtual int
-        rename (const char* existing, const char* _new) override;
+  virtual int statvfs (struct statvfs* buf) override;
 
-        virtual int
-        unlink (const char* path) override;
+  // --------------------------------------------------------------------------
+  // Support functions.
 
-        virtual int
-        utime (const char* path, const struct utimbuf* times) override;
+  value_type& impl (void) const;
 
-        virtual int
-        statvfs (struct statvfs* buf) override;
+  /**
+   * @}
+   */
 
-        // --------------------------------------------------------------------
-        // Support functions.
+  // --------------------------------------------------------------------------
+protected:
+  /**
+   * @cond ignore
+   */
 
-        value_type&
-        impl (void) const;
+  value_type impl_instance_;
 
-        /**
-         * @}
-         */
+  /**
+   * @endcond
+   */
+};
 
-        // --------------------------------------------------------------------
-      protected:
-
-        /**
-         * @cond ignore
-         */
-
-        value_type impl_instance_;
-
-        /**
-         * @endcond
-         */
-      };
-
-  // ==========================================================================
-  } /* namespace posix */
+// ============================================================================
+} /* namespace posix */
 } /* namespace os */
 
 // ===== Inline & template implementations ====================================
 
 namespace os
 {
-  namespace posix
-  {
-    // ========================================================================
+namespace posix
+{
+// ============================================================================
 
-    inline const char*
-    file_system::name (void) const
+inline const char*
+file_system::name (void) const
+{
+  return name_;
+}
+
+inline file_system_impl&
+file_system::impl (void) const
+{
+  return static_cast<file_system_impl&> (impl_);
+}
+
+inline block_device&
+file_system::device (void) const
+{
+  return impl ().device ();
+}
+
+inline void
+file_system::add_deferred_file (file* fil)
+{
+  deferred_files_list_.link (*fil);
+}
+
+inline void
+file_system::add_deferred_directory (directory* dir)
+{
+  deferred_directories_list_.link (*dir);
+}
+
+inline file_system::deferred_files_list_t&
+file_system::deferred_files_list (void)
+{
+  return deferred_files_list_;
+}
+
+inline file_system::deferred_directories_list_t&
+file_system::deferred_directories_list (void)
+{
+  return deferred_directories_list_;
+}
+
+template <typename T>
+T*
+file_system::allocate_file (void)
+{
+  using file_type = T;
+
+  file_type* fil;
+
+  if (deferred_files_list_.empty ())
     {
-      return name_;
+      fil = new file_type (*this);
     }
-
-    inline file_system_impl&
-    file_system::impl (void) const
+  else
     {
-      return static_cast<file_system_impl&> (impl_);
-    }
+      fil = static_cast<file_type*> (deferred_files_list_.unlink_head ());
 
-    inline block_device&
-    file_system::device (void) const
+      // Call the constructor before reusing the object,
+      fil->~file_type ();
+
+      // Placement new, run only the constructor.
+      new (fil) file_type (*this);
+
+      deallocate_files<file_type> ();
+    }
+  return fil;
+}
+
+template <typename T, typename L>
+T*
+file_system::allocate_file (L& locker)
+{
+  using file_type = T;
+
+  file_type* fil;
+
+  if (deferred_files_list_.empty ())
     {
-      return impl ().device ();
+      fil = new file_type (*this, locker);
     }
-
-    inline void
-    file_system::add_deferred_file (file* fil)
+  else
     {
-      deferred_files_list_.link (*fil);
-    }
+      fil = static_cast<file_type*> (deferred_files_list_.unlink_head ());
 
-    inline void
-    file_system::add_deferred_directory (directory* dir)
+      // Call the constructor before reusing the object,
+      fil->~file_type ();
+
+      // Placement new, run only the constructor.
+      new (fil) file_type (*this, locker);
+
+      deallocate_files<file_type> ();
+    }
+  return fil;
+}
+
+template <typename T>
+void
+file_system::deallocate_files (void)
+{
+  using file_type = T;
+
+  // Deallocate all remaining elements in the list.
+  while (!deferred_files_list_.empty ())
     {
-      deferred_directories_list_.link (*dir);
-    }
+      file_type* f
+          = static_cast<file_type*> (deferred_files_list_.unlink_head ());
 
-    inline file_system::deferred_files_list_t&
-    file_system::deferred_files_list (void)
+      // Call the destructor and the deallocator.
+      delete f;
+    }
+}
+
+template <typename T>
+T*
+file_system::allocate_directory (void)
+{
+  using directory_type = T;
+
+  directory_type* dir;
+
+  if (deferred_directories_list_.empty ())
     {
-      return deferred_files_list_;
+      dir = new directory_type (*this);
     }
-
-    inline file_system::deferred_directories_list_t&
-    file_system::deferred_directories_list (void)
+  else
     {
-      return deferred_directories_list_;
+      dir = static_cast<directory_type*> (
+          deferred_directories_list_.unlink_head ());
+
+      // Call the constructor before reusing the object,
+      dir->~directory_type ();
+
+      // Placement new, run only the constructor.
+      new (dir) directory_type (*this);
+
+      deallocate_directories<directory_type> ();
     }
+  return dir;
+}
 
-    template<typename T>
-      T*
-      file_system::allocate_file (void)
-      {
-        using file_type = T;
+template <typename T, typename L>
+T*
+file_system::allocate_directory (L& locker)
+{
+  using directory_type = T;
 
-        file_type* fil;
+  directory_type* dir;
 
-        if (deferred_files_list_.empty ())
-          {
-            fil = new file_type (*this);
-          }
-        else
-          {
-            fil = static_cast<file_type*> (deferred_files_list_.unlink_head ());
-
-            // Call the constructor before reusing the object,
-            fil->~file_type ();
-
-            // Placement new, run only the constructor.
-            new (fil) file_type (*this);
-
-            deallocate_files<file_type> ();
-          }
-        return fil;
-      }
-
-    template<typename T, typename L>
-      T*
-      file_system::allocate_file (L& locker)
-      {
-        using file_type = T;
-
-        file_type* fil;
-
-        if (deferred_files_list_.empty ())
-          {
-            fil = new file_type (*this, locker);
-          }
-        else
-          {
-            fil = static_cast<file_type*> (deferred_files_list_.unlink_head ());
-
-            // Call the constructor before reusing the object,
-            fil->~file_type ();
-
-            // Placement new, run only the constructor.
-            new (fil) file_type (*this, locker);
-
-            deallocate_files<file_type> ();
-          }
-        return fil;
-      }
-
-    template<typename T>
-      void
-      file_system::deallocate_files (void)
-      {
-        using file_type = T;
-
-        // Deallocate all remaining elements in the list.
-        while (!deferred_files_list_.empty ())
-          {
-            file_type* f =
-                static_cast<file_type*> (deferred_files_list_.unlink_head ());
-
-            // Call the destructor and the deallocator.
-            delete f;
-          }
-      }
-
-    template<typename T>
-      T*
-      file_system::allocate_directory (void)
-      {
-        using directory_type = T;
-
-        directory_type* dir;
-
-        if (deferred_directories_list_.empty ())
-          {
-            dir = new directory_type (*this);
-          }
-        else
-          {
-            dir =
-                static_cast<directory_type*> (deferred_directories_list_.unlink_head ());
-
-            // Call the constructor before reusing the object,
-            dir->~directory_type ();
-
-            // Placement new, run only the constructor.
-            new (dir) directory_type (*this);
-
-            deallocate_directories<directory_type> ();
-          }
-        return dir;
-      }
-
-    template<typename T, typename L>
-      T*
-      file_system::allocate_directory (L& locker)
-      {
-        using directory_type = T;
-
-        directory_type* dir;
-
-        if (deferred_directories_list_.empty ())
-          {
-            dir = new directory_type (*this, locker);
-          }
-        else
-          {
-            dir =
-                static_cast<directory_type*> (deferred_directories_list_.unlink_head ());
-
-            // Call the constructor before reusing the object,
-            dir->~directory_type ();
-
-            // Placement new, run only the constructor.
-            new (dir) directory_type (*this, locker);
-
-            deallocate_directories<directory_type> ();
-          }
-        return dir;
-      }
-
-    template<typename T>
-      void
-      file_system::deallocate_directories (void)
-      {
-        using directory_type = T;
-
-        // Deallocate all remaining elements in the list.
-        while (!deferred_directories_list_.empty ())
-          {
-            directory_type* d =
-                static_cast<directory_type*> (deferred_directories_list_.unlink_head ());
-
-            // Call the destructor and the deallocator.
-            delete d;
-          }
-      }
-
-    // ========================================================================
-
-    inline block_device&
-    file_system_impl::device (void) const
+  if (deferred_directories_list_.empty ())
     {
-      return device_;
+      dir = new directory_type (*this, locker);
     }
+  else
+    {
+      dir = static_cast<directory_type*> (
+          deferred_directories_list_.unlink_head ());
 
-    // ========================================================================
+      // Call the constructor before reusing the object,
+      dir->~directory_type ();
 
-    template<typename T>
-      template<typename ... Args>
-        file_system_implementable<T>::file_system_implementable (
-            const char* name, block_device& device, Args&&... args) :
-            file_system
-              { impl_instance_, name }, //
-            impl_instance_
-              { device, std::forward<Args>(args)... }
-        {
+      // Placement new, run only the constructor.
+      new (dir) directory_type (*this, locker);
+
+      deallocate_directories<directory_type> ();
+    }
+  return dir;
+}
+
+template <typename T>
+void
+file_system::deallocate_directories (void)
+{
+  using directory_type = T;
+
+  // Deallocate all remaining elements in the list.
+  while (!deferred_directories_list_.empty ())
+    {
+      directory_type* d = static_cast<directory_type*> (
+          deferred_directories_list_.unlink_head ());
+
+      // Call the destructor and the deallocator.
+      delete d;
+    }
+}
+
+// ============================================================================
+
+inline block_device&
+file_system_impl::device (void) const
+{
+  return device_;
+}
+
+// ============================================================================
+
+template <typename T>
+template <typename... Args>
+file_system_implementable<T>::file_system_implementable (const char* name,
+                                                         block_device& device,
+                                                         Args&&... args)
+    : file_system{ impl_instance_, name }, //
+      impl_instance_{ device, std::forward<Args> (args)... }
+{
 #if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
-          trace::printf ("file_system_implementable::%s(\"%s\")=@%p\n",
-                         __func__, name_, this);
+  trace::printf ("file_system_implementable::%s(\"%s\")=@%p\n", __func__,
+                 name_, this);
 #endif
-        }
+}
 
-    template<typename T>
-      file_system_implementable<T>::~file_system_implementable ()
-      {
+template <typename T>
+file_system_implementable<T>::~file_system_implementable ()
+{
 #if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
-        trace::printf ("file_system_implementable::%s() @%p %s\n", __func__,
-                       this, name_);
+  trace::printf ("file_system_implementable::%s() @%p %s\n", __func__, this,
+                 name_);
 #endif
-      }
+}
 
-    template<typename T>
-      typename file_system_implementable<T>::value_type&
-      file_system_implementable<T>::impl (void) const
-      {
-        return static_cast<value_type&> (impl_);
-      }
+template <typename T>
+typename file_system_implementable<T>::value_type&
+file_system_implementable<T>::impl (void) const
+{
+  return static_cast<value_type&> (impl_);
+}
 
-    // ========================================================================
+// ============================================================================
 
-    template<typename T, typename L>
-      template<typename ... Args>
-        file_system_lockable<T, L>::file_system_lockable (const char* name,
-                                                          block_device& device,
-                                                          lockable_type& locker,
-                                                          Args&&... args) :
-            file_system
-              { impl_instance_, name }, //
-            impl_instance_
-              { device, locker, std::forward<Args>(args)... }
-        {
+template <typename T, typename L>
+template <typename... Args>
+file_system_lockable<T, L>::file_system_lockable (const char* name,
+                                                  block_device& device,
+                                                  lockable_type& locker,
+                                                  Args&&... args)
+    : file_system{ impl_instance_, name }, //
+      impl_instance_{ device, locker, std::forward<Args> (args)... }
+{
 #if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
-          trace::printf ("file_system_lockable::%s()=%p\n", __func__, this);
+  trace::printf ("file_system_lockable::%s()=%p\n", __func__, this);
 #endif
-        }
+}
 
-    template<typename T, typename L>
-      file_system_lockable<T, L>::~file_system_lockable ()
-      {
+template <typename T, typename L>
+file_system_lockable<T, L>::~file_system_lockable ()
+{
 #if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
-        trace::printf ("file_system_lockable::%s() @%p\n", __func__, this);
+  trace::printf ("file_system_lockable::%s() @%p\n", __func__, this);
 #endif
-      }
+}
 
-    // ------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
-    template<typename T, typename L>
-      int
-      file_system_lockable<T, L>::vmount (const char* path, unsigned int flags,
-                                          std::va_list args)
-      {
-        std::lock_guard<L> lock
-          { impl_instance_.locker () };
+template <typename T, typename L>
+int
+file_system_lockable<T, L>::vmount (const char* path, unsigned int flags,
+                                    std::va_list args)
+{
+  std::lock_guard<L> lock{ impl_instance_.locker () };
 
-        return file_system::vmount (path, flags, args);
-      }
+  return file_system::vmount (path, flags, args);
+}
 
-    /**
-     * @details
-     * The root file system must be unmounted last, it cannot be
-     * unmounted if other mount points exists.
-     */
-    template<typename T, typename L>
-      int
-      file_system_lockable<T, L>::umount (int unsigned flags)
-      {
-        std::lock_guard<L> lock
-          { impl_instance_.locker () };
+/**
+ * @details
+ * The root file system must be unmounted last, it cannot be
+ * unmounted if other mount points exists.
+ */
+template <typename T, typename L>
+int
+file_system_lockable<T, L>::umount (int unsigned flags)
+{
+  std::lock_guard<L> lock{ impl_instance_.locker () };
 
-        return file_system::umount (flags);
-      }
+  return file_system::umount (flags);
+}
 
-    // ------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
-    template<typename T, typename L>
-      file*
-      file_system_lockable<T, L>::vopen (const char* path, int oflag,
-                                         std::va_list args)
-      {
-        std::lock_guard<L> lock
-          { impl_instance_.locker () };
+template <typename T, typename L>
+file*
+file_system_lockable<T, L>::vopen (const char* path, int oflag,
+                                   std::va_list args)
+{
+  std::lock_guard<L> lock{ impl_instance_.locker () };
 
-        return file_system::vopen (path, oflag, args);
-      }
+  return file_system::vopen (path, oflag, args);
+}
 
-    template<typename T, typename L>
-      directory*
-      file_system_lockable<T, L>::opendir (const char* dirpath)
-      {
-        std::lock_guard<L> lock
-          { impl_instance_.locker () };
+template <typename T, typename L>
+directory*
+file_system_lockable<T, L>::opendir (const char* dirpath)
+{
+  std::lock_guard<L> lock{ impl_instance_.locker () };
 
-        return file_system::opendir (dirpath);
-      }
+  return file_system::opendir (dirpath);
+}
 
-    // ------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
-    template<typename T, typename L>
-      int
-      file_system_lockable<T, L>::mkdir (const char* path, mode_t mode)
-      {
-        std::lock_guard<L> lock
-          { impl_instance_.locker () };
+template <typename T, typename L>
+int
+file_system_lockable<T, L>::mkdir (const char* path, mode_t mode)
+{
+  std::lock_guard<L> lock{ impl_instance_.locker () };
 
-        return file_system::mkdir (path, mode);
-      }
+  return file_system::mkdir (path, mode);
+}
 
-    template<typename T, typename L>
-      int
-      file_system_lockable<T, L>::rmdir (const char* path)
-      {
-        std::lock_guard<L> lock
-          { impl_instance_.locker () };
+template <typename T, typename L>
+int
+file_system_lockable<T, L>::rmdir (const char* path)
+{
+  std::lock_guard<L> lock{ impl_instance_.locker () };
 
-        return file_system::rmdir (path);
-      }
+  return file_system::rmdir (path);
+}
 
-    template<typename T, typename L>
-      void
-      file_system_lockable<T, L>::sync (void)
-      {
-        std::lock_guard<L> lock
-          { impl_instance_.locker () };
+template <typename T, typename L>
+void
+file_system_lockable<T, L>::sync (void)
+{
+  std::lock_guard<L> lock{ impl_instance_.locker () };
 
-        return file_system::sync ();
-      }
+  return file_system::sync ();
+}
 
-    // ------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
-    template<typename T, typename L>
-      int
-      file_system_lockable<T, L>::chmod (const char* path, mode_t mode)
-      {
-        std::lock_guard<L> lock
-          { impl_instance_.locker () };
+template <typename T, typename L>
+int
+file_system_lockable<T, L>::chmod (const char* path, mode_t mode)
+{
+  std::lock_guard<L> lock{ impl_instance_.locker () };
 
-        return file_system::chmod (path, mode);
-      }
+  return file_system::chmod (path, mode);
+}
 
-    template<typename T, typename L>
-      int
-      file_system_lockable<T, L>::stat (const char* path, struct stat* buf)
-      {
-        std::lock_guard<L> lock
-          { impl_instance_.locker () };
+template <typename T, typename L>
+int
+file_system_lockable<T, L>::stat (const char* path, struct stat* buf)
+{
+  std::lock_guard<L> lock{ impl_instance_.locker () };
 
-        return file_system::stat (path, buf);
-      }
+  return file_system::stat (path, buf);
+}
 
-    template<typename T, typename L>
-      int
-      file_system_lockable<T, L>::truncate (const char* path, off_t length)
-      {
-        std::lock_guard<L> lock
-          { impl_instance_.locker () };
+template <typename T, typename L>
+int
+file_system_lockable<T, L>::truncate (const char* path, off_t length)
+{
+  std::lock_guard<L> lock{ impl_instance_.locker () };
 
-        return file_system::truncate (path, length);
-      }
+  return file_system::truncate (path, length);
+}
 
-    template<typename T, typename L>
-      int
-      file_system_lockable<T, L>::rename (const char* existing,
-                                          const char* _new)
-      {
-        std::lock_guard<L> lock
-          { impl_instance_.locker () };
+template <typename T, typename L>
+int
+file_system_lockable<T, L>::rename (const char* existing, const char* _new)
+{
+  std::lock_guard<L> lock{ impl_instance_.locker () };
 
-        return file_system::rename (existing, _new);
-      }
+  return file_system::rename (existing, _new);
+}
 
-    template<typename T, typename L>
-      int
-      file_system_lockable<T, L>::unlink (const char* path)
-      {
-        std::lock_guard<L> lock
-          { impl_instance_.locker () };
+template <typename T, typename L>
+int
+file_system_lockable<T, L>::unlink (const char* path)
+{
+  std::lock_guard<L> lock{ impl_instance_.locker () };
 
-        return file_system::unlink (path);
-      }
+  return file_system::unlink (path);
+}
 
-    // http://pubs.opengroup.org/onlinepubs/9699919799/functions/utime.html
-    template<typename T, typename L>
-      int
-      file_system_lockable<T, L>::utime (const char* path,
-                                         const struct utimbuf* times)
-      {
-        std::lock_guard<L> lock
-          { impl_instance_.locker () };
+// http://pubs.opengroup.org/onlinepubs/9699919799/functions/utime.html
+template <typename T, typename L>
+int
+file_system_lockable<T, L>::utime (const char* path,
+                                   const struct utimbuf* times)
+{
+  std::lock_guard<L> lock{ impl_instance_.locker () };
 
-        return file_system::utime (path, times);
-      }
+  return file_system::utime (path, times);
+}
 
-    template<typename T, typename L>
-      int
-      file_system_lockable<T, L>::statvfs (struct statvfs* buf)
-      {
-        std::lock_guard<L> lock
-          { impl_instance_.locker () };
+template <typename T, typename L>
+int
+file_system_lockable<T, L>::statvfs (struct statvfs* buf)
+{
+  std::lock_guard<L> lock{ impl_instance_.locker () };
 
-        return file_system::statvfs (buf);
-      }
+  return file_system::statvfs (buf);
+}
 
-    template<typename T, typename L>
-      typename file_system_lockable<T, L>::value_type&
-      file_system_lockable<T, L>::impl (void) const
-      {
-        return static_cast<value_type&> (impl_);
-      }
+template <typename T, typename L>
+typename file_system_lockable<T, L>::value_type&
+file_system_lockable<T, L>::impl (void) const
+{
+  return static_cast<value_type&> (impl_);
+}
 
-// ==========================================================================
-  } /* namespace posix */
+// ============================================================================
+} /* namespace posix */
 } /* namespace os */
 
 // ----------------------------------------------------------------------------

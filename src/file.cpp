@@ -25,8 +25,8 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <micro-os-plus/posix-io/file.h>
 #include <micro-os-plus/posix-io/file-system.h>
+#include <micro-os-plus/posix-io/file.h>
 
 #include <micro-os-plus/diag/trace.h>
 
@@ -36,131 +36,128 @@
 
 namespace os
 {
-  namespace posix
-  {
-    // ========================================================================
+namespace posix
+{
+// ============================================================================
 
-    file::file (file_impl& impl) :
-        io
-          { impl, type::file }
-    {
+file::file (file_impl& impl) : io{ impl, type::file }
+{
 #if defined(OS_TRACE_POSIX_IO_FILE)
-      trace::printf ("file::%s()=%p\n", __func__, this);
+  trace::printf ("file::%s()=%p\n", __func__, this);
 #endif
-    }
+}
 
-    file::~file ()
-    {
+file::~file ()
+{
 #if defined(OS_TRACE_POSIX_IO_FILE)
-      trace::printf ("file::%s() @%p\n", __func__, this);
+  trace::printf ("file::%s() @%p\n", __func__, this);
 #endif
-    }
+}
 
-    // ------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
-    int
-    file::close (void)
-    {
+int
+file::close (void)
+{
 #if defined(OS_TRACE_POSIX_IO_FILE)
-      trace::printf ("file::%s() @%p\n", __func__, this);
+  trace::printf ("file::%s() @%p\n", __func__, this);
 #endif
 
-      int ret = io::close ();
+  int ret = io::close ();
 
-      // Note: the constructor is not called here.
+  // Note: the constructor is not called here.
 
-      // Link the file object to a list kept by the file system.
-      // It will be deallocated at the next open.
-      file_system ().add_deferred_file (this);
+  // Link the file object to a list kept by the file system.
+  // It will be deallocated at the next open.
+  file_system ().add_deferred_file (this);
 
-      return ret;
-    }
+  return ret;
+}
 
-    int
-    file::ftruncate (off_t length)
-    {
+int
+file::ftruncate (off_t length)
+{
 #if defined(OS_TRACE_POSIX_IO_FILE)
-      trace::printf ("file::%s(%u) @%p\n", __func__, length, this);
+  trace::printf ("file::%s(%u) @%p\n", __func__, length, this);
 #endif
 
-      if (length < 0)
-        {
-          errno = EINVAL;
-          return -1;
-        }
-
-      errno = 0;
-
-      // Execute the implementation specific code.
-      return impl ().do_ftruncate (length);
+  if (length < 0)
+    {
+      errno = EINVAL;
+      return -1;
     }
 
-    int
-    file::fsync (void)
-    {
+  errno = 0;
+
+  // Execute the implementation specific code.
+  return impl ().do_ftruncate (length);
+}
+
+int
+file::fsync (void)
+{
 #if defined(OS_TRACE_POSIX_IO_FILE)
-      trace::printf ("file::%s() @%p\n", __func__, this);
+  trace::printf ("file::%s() @%p\n", __func__, this);
 #endif
 
-      errno = 0;
+  errno = 0;
 
-      // Execute the implementation specific code.
-      return impl ().do_fsync ();
-    }
+  // Execute the implementation specific code.
+  return impl ().do_fsync ();
+}
 
-    int
-    file::fstatvfs (struct statvfs *buf)
-    {
+int
+file::fstatvfs (struct statvfs* buf)
+{
 #if defined(OS_TRACE_POSIX_IO_FILE)
-      trace::printf ("file::%s(%p) @%p\n", __func__, buf, this);
+  trace::printf ("file::%s(%p) @%p\n", __func__, buf, this);
 #endif
 
-      errno = 0;
+  errno = 0;
 
-      // Execute the file system code. Might be locked there.
-      return file_system ().statvfs (buf);
-    }
+  // Execute the file system code. Might be locked there.
+  return file_system ().statvfs (buf);
+}
 
-    // ========================================================================
+// ============================================================================
 
-    file_impl::file_impl (class file_system& fs) :
-        file_system_ (fs)
-    {
+file_impl::file_impl (class file_system& fs) : file_system_ (fs)
+{
 #if defined(OS_TRACE_POSIX_IO_FILE)
-      trace::printf ("file_impl::%s()=%p\n", __func__, this);
+  trace::printf ("file_impl::%s()=%p\n", __func__, this);
 #endif
-    }
+}
 
-    file_impl::~file_impl ()
-    {
+file_impl::~file_impl ()
+{
 #if defined(OS_TRACE_POSIX_IO_FILE)
-      trace::printf ("file_impl::%s() @%p\n", __func__, this);
+  trace::printf ("file_impl::%s() @%p\n", __func__, this);
 #endif
-    }
+}
 
-    // ------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 
-    int
-    file_impl::do_ftruncate (off_t length)
-    {
-      errno = ENOSYS; // Not implemented
-      return -1;
-    }
+int
+file_impl::do_ftruncate (off_t length)
+{
+  errno = ENOSYS; // Not implemented
+  return -1;
+}
 
 #pragma GCC diagnostic pop
 
-    int
-    file_impl::do_fsync (void)
-    {
-      errno = ENOSYS; // Not implemented
-      return -1;
-    }
+int
+file_impl::do_fsync (void)
+{
+  errno = ENOSYS; // Not implemented
+  return -1;
+}
 
-  // ==========================================================================
-  } /* namespace posix */
+// ============================================================================
+} /* namespace posix */
 } /* namespace os */
 
 // ----------------------------------------------------------------------------

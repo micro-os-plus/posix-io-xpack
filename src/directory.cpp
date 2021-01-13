@@ -30,114 +30,112 @@
 
 #include <micro-os-plus/diag/trace.h>
 
-#include <cerrno>
 #include <cassert>
+#include <cerrno>
 #include <string.h>
 
 // ----------------------------------------------------------------------------
 
 namespace os
 {
-  namespace posix
-  {
-    // ========================================================================
+namespace posix
+{
+// ============================================================================
 
-    directory::directory (directory_impl& impl) :
-        impl_ (impl)
-    {
+directory::directory (directory_impl& impl) : impl_ (impl)
+{
 #if defined(OS_TRACE_POSIX_IO_DIRECTORY)
-      trace::printf ("directory::%s()=%p\n", __func__, this);
+  trace::printf ("directory::%s()=%p\n", __func__, this);
 #endif
-    }
+}
 
-    directory::~directory ()
-    {
+directory::~directory ()
+{
 #if defined(OS_TRACE_POSIX_IO_DIRECTORY)
-      trace::printf ("directory::%s() @%p\n", __func__, this);
+  trace::printf ("directory::%s() @%p\n", __func__, this);
 #endif
-    }
+}
 
-    // ------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
-    struct dirent*
-    directory::read (void)
-    {
+struct dirent*
+directory::read (void)
+{
 #if defined(OS_TRACE_POSIX_IO_DIRECTORY)
-      trace::printf ("directory::%s() @%p\n", __func__, this);
-#endif
-
-      // assert(file_system_ != nullptr);
-
-      // POSIX requires not to change errno when end of directory is
-      // encountered. However, in this implementation, errno is
-      // always cleared when entering system calls.
-      errno = 0;
-
-      // Execute the implementation specific code.
-      return impl ().do_read ();
-    }
-
-    void
-    directory::rewind (void)
-    {
-#if defined(OS_TRACE_POSIX_IO_DIRECTORY)
-      trace::printf ("directory::%s() @%p\n", __func__, this);
+  trace::printf ("directory::%s() @%p\n", __func__, this);
 #endif
 
-      // assert(file_system_ != nullptr);
+  // assert(file_system_ != nullptr);
 
-      // POSIX does not mention what to do with errno.
-      errno = 0;
+  // POSIX requires not to change errno when end of directory is
+  // encountered. However, in this implementation, errno is
+  // always cleared when entering system calls.
+  errno = 0;
 
-      // Execute the implementation specific code.
-      impl ().do_rewind ();
-    }
+  // Execute the implementation specific code.
+  return impl ().do_read ();
+}
 
-    int
-    directory::close (void)
-    {
+void
+directory::rewind (void)
+{
 #if defined(OS_TRACE_POSIX_IO_DIRECTORY)
-      trace::printf ("directory::%s() @%p\n", __func__, this);
+  trace::printf ("directory::%s() @%p\n", __func__, this);
 #endif
 
-      // assert(file_system_ != nullptr);
-      errno = 0;
+  // assert(file_system_ != nullptr);
 
-      // Execute the implementation specific code.
-      int ret = impl ().do_close ();
-      if (ret != 0)
-        {
-          trace::printf ("directory::%s() @%p do_close() returned %d\n",
-                         __func__, this, ret);
-        }
+  // POSIX does not mention what to do with errno.
+  errno = 0;
 
-      // The file object will be deallocated at the next open.
-      file_system ().add_deferred_directory (this);
+  // Execute the implementation specific code.
+  impl ().do_rewind ();
+}
 
-      return ret;
-    }
-
-    // ========================================================================
-
-    directory_impl::directory_impl (class file_system& fs) :
-        file_system_ (fs)
-    {
+int
+directory::close (void)
+{
 #if defined(OS_TRACE_POSIX_IO_DIRECTORY)
-      trace::printf ("directory_impl::%s()=%p\n", __func__, this);
+  trace::printf ("directory::%s() @%p\n", __func__, this);
 #endif
-      memset (&dir_entry_, 0, sizeof(struct dirent));
-    }
 
-    directory_impl::~directory_impl ()
+  // assert(file_system_ != nullptr);
+  errno = 0;
+
+  // Execute the implementation specific code.
+  int ret = impl ().do_close ();
+  if (ret != 0)
     {
-#if defined(OS_TRACE_POSIX_IO_DIRECTORY)
-      trace::printf ("directory_impl::%s() @%p\n", __func__, this);
-#endif
+      trace::printf ("directory::%s() @%p do_close() returned %d\n", __func__,
+                     this, ret);
     }
 
-  // ========================================================================
+  // The file object will be deallocated at the next open.
+  file_system ().add_deferred_directory (this);
 
-  } /* namespace posix */
+  return ret;
+}
+
+// ============================================================================
+
+directory_impl::directory_impl (class file_system& fs) : file_system_ (fs)
+{
+#if defined(OS_TRACE_POSIX_IO_DIRECTORY)
+  trace::printf ("directory_impl::%s()=%p\n", __func__, this);
+#endif
+  memset (&dir_entry_, 0, sizeof (struct dirent));
+}
+
+directory_impl::~directory_impl ()
+{
+#if defined(OS_TRACE_POSIX_IO_DIRECTORY)
+  trace::printf ("directory_impl::%s() @%p\n", __func__, this);
+#endif
+}
+
+// ============================================================================
+
+} /* namespace posix */
 } /* namespace os */
 
 // ----------------------------------------------------------------------------

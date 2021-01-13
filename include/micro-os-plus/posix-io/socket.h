@@ -46,752 +46,668 @@
 
 namespace os
 {
-  namespace posix
-  {
-    // ------------------------------------------------------------------------
+namespace posix
+{
+// ----------------------------------------------------------------------------
 
-    class socket;
-    class socket_impl;
-    class net_stack;
+class socket;
+class socket_impl;
+class net_stack;
 
-    // ------------------------------------------------------------------------
-    /**
-     * @brief Network socket.
-     * @headerfile socket.h <micro-os-plus/posix-io/socket.h>
-     * @ingroup cmsis-plus-posix-io-base
-     */
-    class socket : public io
-    {
-      // ----------------------------------------------------------------------
-      /**
-       * @name Constructors & Destructor
-       * @{
-       */
+// ----------------------------------------------------------------------------
+/**
+ * @brief Network socket.
+ * @headerfile socket.h <micro-os-plus/posix-io/socket.h>
+ * @ingroup cmsis-plus-posix-io-base
+ */
+class socket : public io
+{
+  // --------------------------------------------------------------------------
+  /**
+   * @name Constructors & Destructor
+   * @{
+   */
 
-    public:
+public:
+  socket (socket_impl& impl, class net_stack& ns);
 
-      socket (socket_impl& impl, class net_stack& ns);
+  /**
+   * @cond ignore
+   */
 
-      /**
-       * @cond ignore
-       */
+  // The rule of five.
+  socket (const socket&) = delete;
+  socket (socket&&) = delete;
+  socket& operator= (const socket&) = delete;
+  socket& operator= (socket&&) = delete;
 
-      // The rule of five.
-      socket (const socket&) = delete;
-      socket (socket&&) = delete;
-      socket&
-      operator= (const socket&) = delete;
-      socket&
-      operator= (socket&&) = delete;
+  /**
+   * @endcond
+   */
 
-      /**
-       * @endcond
-       */
+  virtual ~socket ();
 
-      virtual
-      ~socket ();
+  /**
+   * @}
+   */
 
-      /**
-       * @}
-       */
+  // --------------------------------------------------------------------------
+  /**
+   * @name Public Member Functions
+   * @{
+   */
 
-      // ----------------------------------------------------------------------
-      /**
-       * @name Public Member Functions
-       * @{
-       */
+public:
+  virtual class socket* accept (struct sockaddr* address,
+                                socklen_t* address_len);
 
-    public:
+  virtual int bind (const struct sockaddr* address, socklen_t address_len);
 
-      virtual class socket*
-      accept (struct sockaddr* address, socklen_t* address_len);
+  virtual int connect (const struct sockaddr* address, socklen_t address_len);
 
-      virtual int
-      bind (const struct sockaddr* address, socklen_t address_len);
+  virtual int getpeername (struct sockaddr* address, socklen_t* address_len);
 
-      virtual int
-      connect (const struct sockaddr* address, socklen_t address_len);
+  virtual int getsockname (struct sockaddr* address, socklen_t* address_len);
 
-      virtual int
-      getpeername (struct sockaddr* address, socklen_t* address_len);
+  virtual int getsockopt (int level, int option_name, void* option_value,
+                          socklen_t* option_len);
 
-      virtual int
-      getsockname (struct sockaddr* address, socklen_t* address_len);
+  virtual int listen (int backlog);
 
-      virtual int
-      getsockopt (int level, int option_name, void* option_value,
-                  socklen_t* option_len);
+  virtual ssize_t recv (void* buffer, size_t length, int flags);
 
-      virtual int
-      listen (int backlog);
+  virtual ssize_t recvfrom (void* buffer, size_t length, int flags,
+                            struct sockaddr* address, socklen_t* address_len);
 
-      virtual ssize_t
-      recv (void* buffer, size_t length, int flags);
+  virtual ssize_t recvmsg (struct msghdr* message, int flags);
 
-      virtual ssize_t
-      recvfrom (void* buffer, size_t length, int flags,
-                struct sockaddr* address, socklen_t* address_len);
+  virtual ssize_t send (const void* buffer, size_t length, int flags);
 
-      virtual ssize_t
-      recvmsg (struct msghdr* message, int flags);
+  virtual ssize_t sendmsg (const struct msghdr* message, int flags);
 
-      virtual ssize_t
-      send (const void* buffer, size_t length, int flags);
+  virtual ssize_t sendto (const void* message, size_t length, int flags,
+                          const struct sockaddr* dest_addr,
+                          socklen_t dest_len);
 
-      virtual ssize_t
-      sendmsg (const struct msghdr* message, int flags);
+  virtual int setsockopt (int level, int option_name, const void* option_value,
+                          socklen_t option_len);
 
-      virtual ssize_t
-      sendto (const void* message, size_t length, int flags,
-              const struct sockaddr* dest_addr, socklen_t dest_len);
+  virtual int shutdown (int how);
 
-      virtual int
-      setsockopt (int level, int option_name, const void* option_value,
-                  socklen_t option_len);
+  virtual int sockatmark (void);
 
-      virtual int
-      shutdown (int how);
+  // --------------------------------------------------------------------------
+  // Support functions.
 
-      virtual int
-      sockatmark (void);
+  class net_stack* net_stack (void);
 
-      // ----------------------------------------------------------------------
-      // Support functions.
+  socket_impl& impl (void) const;
 
-      class net_stack*
-      net_stack (void);
+  /**
+   * @}
+   */
 
-      socket_impl&
-      impl (void) const;
+  // --------------------------------------------------------------------------
+public:
+  /**
+   * @cond ignore
+   */
 
-      /**
-       * @}
-       */
+  // Intrusive node used to link this socket to the deferred
+  // deallocation list. Must be public.
+  utils::double_list_links deferred_links_;
 
-      // ----------------------------------------------------------------------
-    public:
+  /**
+   * @endcond
+   */
 
-      /**
-       * @cond ignore
-       */
+  // --------------------------------------------------------------------------
+protected:
+  /**
+   * @cond ignore
+   */
 
-      // Intrusive node used to link this socket to the deferred
-      // deallocation list. Must be public.
-      utils::double_list_links deferred_links_;
+  class net_stack* net_stack_;
 
-      /**
-       * @endcond
-       */
+  /**
+   * @endcond
+   */
+};
 
-      // ----------------------------------------------------------------------
-    protected:
+// ============================================================================
 
-      /**
-       * @cond ignore
-       */
+class socket_impl : public io_impl
+{
+  // --------------------------------------------------------------------------
 
-      class net_stack* net_stack_;
+  /**
+   * @cond ignore
+   */
 
-      /**
-       * @endcond
-       */
+  friend class socket;
 
-    };
+  /**
+   * @endcond
+   */
 
-    // ========================================================================
+  // --------------------------------------------------------------------------
+  /**
+   * @name Constructors & Destructor
+   * @{
+   */
 
-    class socket_impl : public io_impl
-    {
-      // ----------------------------------------------------------------------
+public:
+  socket_impl (void);
 
-      /**
-       * @cond ignore
-       */
+  /**
+   * @cond ignore
+   */
 
-      friend class socket;
+  // The rule of five.
+  socket_impl (const socket_impl&) = delete;
+  socket_impl (socket_impl&&) = delete;
+  socket_impl& operator= (const socket_impl&) = delete;
+  socket_impl& operator= (socket_impl&&) = delete;
 
-      /**
-       * @endcond
-       */
+  /**
+   * @endcond
+   */
 
-      // ----------------------------------------------------------------------
-      /**
-       * @name Constructors & Destructor
-       * @{
-       */
+  virtual ~socket_impl ();
 
-    public:
+  /**
+   * @}
+   */
 
-      socket_impl (void);
+  // --------------------------------------------------------------------------
+  /**
+   * @name Public Member Functions
+   * @{
+   */
 
-      /**
-       * @cond ignore
-       */
+public:
+  virtual class socket* do_accept (struct sockaddr* address,
+                                   socklen_t* address_len)
+      = 0;
 
-      // The rule of five.
-      socket_impl (const socket_impl&) = delete;
-      socket_impl (socket_impl&&) = delete;
-      socket_impl&
-      operator= (const socket_impl&) = delete;
-      socket_impl&
-      operator= (socket_impl&&) = delete;
+  virtual int do_bind (const struct sockaddr* address, socklen_t address_len)
+      = 0;
 
-      /**
-       * @endcond
-       */
+  virtual int do_connect (const struct sockaddr* address,
+                          socklen_t address_len)
+      = 0;
 
-      virtual
-      ~socket_impl ();
+  virtual int do_getpeername (struct sockaddr* address, socklen_t* address_len)
+      = 0;
 
-      /**
-       * @}
-       */
+  virtual int do_getsockname (struct sockaddr* address, socklen_t* address_len)
+      = 0;
 
-      // ----------------------------------------------------------------------
-      /**
-       * @name Public Member Functions
-       * @{
-       */
+  virtual int do_getsockopt (int level, int option_name, void* option_value,
+                             socklen_t* option_len)
+      = 0;
 
-    public:
+  virtual int do_listen (int backlog) = 0;
 
-      virtual class socket*
-      do_accept (struct sockaddr* address, socklen_t* address_len) = 0;
+  virtual ssize_t do_recv (void* buffer, size_t length, int flags) = 0;
 
-      virtual int
-      do_bind (const struct sockaddr* address, socklen_t address_len) = 0;
+  virtual ssize_t do_recvfrom (void* buffer, size_t length, int flags,
+                               struct sockaddr* address,
+                               socklen_t* address_len)
+      = 0;
 
-      virtual int
-      do_connect (const struct sockaddr* address, socklen_t address_len) = 0;
+  virtual ssize_t do_recvmsg (struct msghdr* message, int flags) = 0;
 
-      virtual int
-      do_getpeername (struct sockaddr* address, socklen_t* address_len) = 0;
+  virtual ssize_t do_send (const void* buffer, size_t length, int flags) = 0;
 
-      virtual int
-      do_getsockname (struct sockaddr* address, socklen_t* address_len) = 0;
+  virtual ssize_t do_sendmsg (const struct msghdr* message, int flags) = 0;
 
-      virtual int
-      do_getsockopt (int level, int option_name, void* option_value,
-                     socklen_t* option_len) = 0;
+  virtual ssize_t do_sendto (const void* message, size_t length, int flags,
+                             const struct sockaddr* dest_addr,
+                             socklen_t dest_len)
+      = 0;
 
-      virtual int
-      do_listen (int backlog) = 0;
+  virtual int do_setsockopt (int level, int option_name,
+                             const void* option_value, socklen_t option_len)
+      = 0;
 
-      virtual ssize_t
-      do_recv (void* buffer, size_t length, int flags) = 0;
+  virtual int do_shutdown (int how) = 0;
 
-      virtual ssize_t
-      do_recvfrom (void* buffer, size_t length, int flags,
-                   struct sockaddr* address, socklen_t* address_len) = 0;
+  virtual int do_sockatmark (void) = 0;
 
-      virtual ssize_t
-      do_recvmsg (struct msghdr* message, int flags) = 0;
+  /**
+   * @}
+   */
+};
 
-      virtual ssize_t
-      do_send (const void* buffer, size_t length, int flags) = 0;
+// ============================================================================
 
-      virtual ssize_t
-      do_sendmsg (const struct msghdr* message, int flags) = 0;
+template <typename T> class socket_implementable : public socket
+{
+  // --------------------------------------------------------------------------
 
-      virtual ssize_t
-      do_sendto (const void* message, size_t length, int flags,
-                 const struct sockaddr* dest_addr, socklen_t dest_len) = 0;
+public:
+  using value_type = T;
 
-      virtual int
-      do_setsockopt (int level, int option_name, const void* option_value,
-                     socklen_t option_len) = 0;
+  // ---------------------------------------------------------------------
 
-      virtual int
-      do_shutdown (int how) = 0;
+  /**
+   * @name Constructors & Destructor
+   * @{
+   */
 
-      virtual int
-      do_sockatmark (void) = 0;
+public:
+  socket_implementable (class net_stack& ns);
 
-      /**
-       * @}
-       */
-    };
+  /**
+   * @cond ignore
+   */
 
-    // ========================================================================
+  // The rule of five.
+  socket_implementable (const socket_implementable&) = delete;
+  socket_implementable (socket_implementable&&) = delete;
+  socket_implementable& operator= (const socket_implementable&) = delete;
+  socket_implementable& operator= (socket_implementable&&) = delete;
 
-    template<typename T>
-      class socket_implementable : public socket
-      {
-        // --------------------------------------------------------------------
+  /**
+   * @endcond
+   */
 
-      public:
+  virtual ~socket_implementable ();
 
-        using value_type = T;
+  /**
+   * @}
+   */
 
-        // ---------------------------------------------------------------------
+  // --------------------------------------------------------------------------
+  /**
+   * @name Public Member Functions
+   * @{
+   */
 
-        /**
-         * @name Constructors & Destructor
-         * @{
-         */
+public:
+  // Support functions.
 
-      public:
+  value_type& impl (void) const;
 
-        socket_implementable (class net_stack& ns);
+  /**
+   * @}
+   */
 
-        /**
-         * @cond ignore
-         */
+  // --------------------------------------------------------------------------
+protected:
+  /**
+   * @cond ignore
+   */
 
-        // The rule of five.
-        socket_implementable (const socket_implementable&) = delete;
-        socket_implementable (socket_implementable&&) = delete;
-        socket_implementable&
-        operator= (const socket_implementable&) = delete;
-        socket_implementable&
-        operator= (socket_implementable&&) = delete;
+  value_type impl_instance_;
 
-        /**
-         * @endcond
-         */
+  /**
+   * @endcond
+   */
+};
 
-        virtual
-        ~socket_implementable ();
+// ============================================================================
 
-        /**
-         * @}
-         */
+template <typename T, typename L> class socket_lockable : public socket
+{
+  // --------------------------------------------------------------------------
 
-        // --------------------------------------------------------------------
-        /**
-         * @name Public Member Functions
-         * @{
-         */
+public:
+  using value_type = T;
+  using lockable_type = L;
 
-      public:
+  // --------------------------------------------------------------------------
 
-        // Support functions.
+  /**
+   * @name Constructors & Destructor
+   * @{
+   */
 
-        value_type&
-        impl (void) const;
+public:
+  socket_lockable (class net_stack& ns, lockable_type& locker);
 
-        /**
-         * @}
-         */
+  /**
+   * @cond ignore
+   */
 
-        // --------------------------------------------------------------------
-      protected:
+  // The rule of five.
+  socket_lockable (const socket_lockable&) = delete;
+  socket_lockable (socket_lockable&&) = delete;
+  socket_lockable& operator= (const socket_lockable&) = delete;
+  socket_lockable& operator= (socket_lockable&&) = delete;
 
-        /**
-         * @cond ignore
-         */
+  /**
+   * @endcond
+   */
 
-        value_type impl_instance_;
+  virtual ~socket_lockable ();
 
-        /**
-         * @endcond
-         */
-      };
+  /**
+   * @}
+   */
 
-    // ========================================================================
+  // --------------------------------------------------------------------------
+  /**
+   * @name Public Member Functions
+   * @{
+   */
 
-    template<typename T, typename L>
-      class socket_lockable : public socket
-      {
-        // --------------------------------------------------------------------
+public:
+  virtual int close (void) override;
 
-      public:
+  virtual class socket* accept (struct sockaddr* address,
+                                socklen_t* address_len) override;
 
-        using value_type = T;
-        using lockable_type = L;
+  virtual int bind (const struct sockaddr* address,
+                    socklen_t address_len) override;
 
-        // --------------------------------------------------------------------
+  virtual int connect (const struct sockaddr* address,
+                       socklen_t address_len) override;
 
-        /**
-         * @name Constructors & Destructor
-         * @{
-         */
+  virtual int getpeername (struct sockaddr* address,
+                           socklen_t* address_len) override;
 
-      public:
+  virtual int getsockname (struct sockaddr* address,
+                           socklen_t* address_len) override;
 
-        socket_lockable (class net_stack& ns, lockable_type& locker);
+  virtual int getsockopt (int level, int option_name, void* option_value,
+                          socklen_t* option_len) override;
 
-        /**
-         * @cond ignore
-         */
+  virtual int listen (int backlog) override;
 
-        // The rule of five.
-        socket_lockable (const socket_lockable&) = delete;
-        socket_lockable (socket_lockable&&) = delete;
-        socket_lockable&
-        operator= (const socket_lockable&) = delete;
-        socket_lockable&
-        operator= (socket_lockable&&) = delete;
+  virtual ssize_t recv (void* buffer, size_t length, int flags) override;
 
-        /**
-         * @endcond
-         */
+  virtual ssize_t recvfrom (void* buffer, size_t length, int flags,
+                            struct sockaddr* address,
+                            socklen_t* address_len) override;
 
-        virtual
-        ~socket_lockable ();
+  virtual ssize_t recvmsg (struct msghdr* message, int flags) override;
 
-        /**
-         * @}
-         */
+  virtual ssize_t send (const void* buffer, size_t length, int flags) override;
 
-        // --------------------------------------------------------------------
-        /**
-         * @name Public Member Functions
-         * @{
-         */
+  virtual ssize_t sendmsg (const struct msghdr* message, int flags) override;
 
-      public:
+  virtual ssize_t sendto (const void* message, size_t length, int flags,
+                          const struct sockaddr* dest_addr,
+                          socklen_t dest_len) override;
 
-        virtual int
-        close (void) override;
+  virtual int setsockopt (int level, int option_name, const void* option_value,
+                          socklen_t option_len) override;
 
-        virtual class socket*
-        accept (struct sockaddr* address, socklen_t* address_len) override;
+  virtual int shutdown (int how) override;
 
-        virtual int
-        bind (const struct sockaddr* address, socklen_t address_len) override;
+  virtual int sockatmark (void) override;
 
-        virtual int
-        connect (const struct sockaddr* address, socklen_t address_len)
-            override;
+  // --------------------------------------------------------------------------
+  // Support functions.
 
-        virtual int
-        getpeername (struct sockaddr* address, socklen_t* address_len) override;
+  value_type& impl (void) const;
 
-        virtual int
-        getsockname (struct sockaddr* address, socklen_t* address_len) override;
+  /**
+   * @}
+   */
 
-        virtual int
-        getsockopt (int level, int option_name, void* option_value,
-                    socklen_t* option_len) override;
+  // --------------------------------------------------------------------------
+protected:
+  /**
+   * @cond ignore
+   */
 
-        virtual int
-        listen (int backlog) override;
+  value_type impl_instance_;
 
-        virtual ssize_t
-        recv (void* buffer, size_t length, int flags) override;
+  lockable_type& locker_;
 
-        virtual ssize_t
-        recvfrom (void* buffer, size_t length, int flags,
-                  struct sockaddr* address, socklen_t* address_len) override;
+  /**
+   * @endcond
+   */
+};
 
-        virtual ssize_t
-        recvmsg (struct msghdr* message, int flags) override;
-
-        virtual ssize_t
-        send (const void* buffer, size_t length, int flags) override;
-
-        virtual ssize_t
-        sendmsg (const struct msghdr* message, int flags) override;
-
-        virtual ssize_t
-        sendto (const void* message, size_t length, int flags,
-                const struct sockaddr* dest_addr, socklen_t dest_len) override;
-
-        virtual int
-        setsockopt (int level, int option_name, const void* option_value,
-                    socklen_t option_len) override;
-
-        virtual int
-        shutdown (int how) override;
-
-        virtual int
-        sockatmark (void) override;
-
-        // --------------------------------------------------------------------
-        // Support functions.
-
-        value_type&
-        impl (void) const;
-
-        /**
-         * @}
-         */
-
-        // --------------------------------------------------------------------
-      protected:
-
-        /**
-         * @cond ignore
-         */
-
-        value_type impl_instance_;
-
-        lockable_type& locker_;
-
-        /**
-         * @endcond
-         */
-      };
-
-  // ==========================================================================
-  } /* namespace posix */
+// ============================================================================
+} /* namespace posix */
 } /* namespace os */
 
 // ===== Inline & template implementations ====================================
 
 namespace os
 {
-  namespace posix
-  {
-    // ========================================================================
+namespace posix
+{
+// ============================================================================
 
-    inline net_stack*
-    socket::net_stack (void)
-    {
-      return net_stack_;
-    }
+inline net_stack*
+socket::net_stack (void)
+{
+  return net_stack_;
+}
 
-    inline socket_impl&
-    socket::impl (void) const
-    {
-      return static_cast<socket_impl&> (impl_);
-    }
+inline socket_impl&
+socket::impl (void) const
+{
+  return static_cast<socket_impl&> (impl_);
+}
 
-    // ========================================================================
+// ============================================================================
 
-    template<typename T>
-      socket_implementable<T>::socket_implementable (class net_stack& ns) :
-          socket
-            { impl_instance_, ns }
-      {
+template <typename T>
+socket_implementable<T>::socket_implementable (class net_stack& ns)
+    : socket{ impl_instance_, ns }
+{
 #if defined(OS_TRACE_POSIX_IO_SOCKET)
-        trace::printf ("socket_implementable::%s()=@%p\n", __func__, this);
+  trace::printf ("socket_implementable::%s()=@%p\n", __func__, this);
 #endif
-      }
+}
 
-    template<typename T>
-      socket_implementable<T>::~socket_implementable ()
-      {
+template <typename T> socket_implementable<T>::~socket_implementable ()
+{
 #if defined(OS_TRACE_POSIX_IO_SOCKET)
-        trace::printf ("socket_implementable::%s() @%p\n", __func__, this);
+  trace::printf ("socket_implementable::%s() @%p\n", __func__, this);
 #endif
-      }
+}
 
-    template<typename T>
-      typename socket_implementable<T>::value_type&
-      socket_implementable<T>::impl (void) const
-      {
-        return static_cast<value_type&> (impl_);
-      }
+template <typename T>
+typename socket_implementable<T>::value_type&
+socket_implementable<T>::impl (void) const
+{
+  return static_cast<value_type&> (impl_);
+}
 
-    // ========================================================================
+// ============================================================================
 
-    template<typename T, typename L>
-      socket_lockable<T, L>::socket_lockable (class net_stack& ns,
-                                              lockable_type& locker) :
-          socket
-            { impl_instance_, ns }, //
-          locker_ (locker)
-      {
+template <typename T, typename L>
+socket_lockable<T, L>::socket_lockable (class net_stack& ns,
+                                        lockable_type& locker)
+    : socket{ impl_instance_, ns }, //
+      locker_ (locker)
+{
 #if defined(OS_TRACE_POSIX_IO_SOCKET)
-        trace::printf ("socket_lockable::%s()=@%p\n", __func__, this);
+  trace::printf ("socket_lockable::%s()=@%p\n", __func__, this);
 #endif
-      }
+}
 
-    template<typename T, typename L>
-      socket_lockable<T, L>::~socket_lockable ()
-      {
+template <typename T, typename L> socket_lockable<T, L>::~socket_lockable ()
+{
 #if defined(OS_TRACE_POSIX_IO_SOCKET)
-        trace::printf ("socket_lockable::%s() @%p\n", __func__, this);
+  trace::printf ("socket_lockable::%s() @%p\n", __func__, this);
 #endif
-      }
+}
 
-    // ------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
-    template<typename T, typename L>
-      int
-      socket_lockable<T, L>::close (void)
-      {
-        std::lock_guard<L> lock
-          { locker_ };
+template <typename T, typename L>
+int
+socket_lockable<T, L>::close (void)
+{
+  std::lock_guard<L> lock{ locker_ };
 
-        return socket::close ();
-      }
+  return socket::close ();
+}
 
-    template<typename T, typename L>
-      class socket*
-      socket_lockable<T, L>::accept (struct sockaddr* address,
-                                     socklen_t* address_len)
-      {
-        std::lock_guard<L> lock
-          { locker_ };
+template <typename T, typename L>
+class socket*
+socket_lockable<T, L>::accept (struct sockaddr* address,
+                               socklen_t* address_len)
+{
+  std::lock_guard<L> lock{ locker_ };
 
-        return socket::accept (address, address_len);
-      }
+  return socket::accept (address, address_len);
+}
 
-    template<typename T, typename L>
-      int
-      socket_lockable<T, L>::bind (const struct sockaddr* address,
-                                   socklen_t address_len)
-      {
-        std::lock_guard<L> lock
-          { locker_ };
+template <typename T, typename L>
+int
+socket_lockable<T, L>::bind (const struct sockaddr* address,
+                             socklen_t address_len)
+{
+  std::lock_guard<L> lock{ locker_ };
 
-        return socket::bind (address, address_len);
-      }
+  return socket::bind (address, address_len);
+}
 
-    template<typename T, typename L>
-      int
-      socket_lockable<T, L>::connect (const struct sockaddr* address,
-                                      socklen_t address_len)
-      {
-        std::lock_guard<L> lock
-          { locker_ };
+template <typename T, typename L>
+int
+socket_lockable<T, L>::connect (const struct sockaddr* address,
+                                socklen_t address_len)
+{
+  std::lock_guard<L> lock{ locker_ };
 
-        return socket::connect (address, address_len);
-      }
+  return socket::connect (address, address_len);
+}
 
-    template<typename T, typename L>
-      int
-      socket_lockable<T, L>::getpeername (struct sockaddr* address,
-                                          socklen_t* address_len)
-      {
-        std::lock_guard<L> lock
-          { locker_ };
+template <typename T, typename L>
+int
+socket_lockable<T, L>::getpeername (struct sockaddr* address,
+                                    socklen_t* address_len)
+{
+  std::lock_guard<L> lock{ locker_ };
 
-        return socket::getpeername (address, address_len);
-      }
+  return socket::getpeername (address, address_len);
+}
 
-    template<typename T, typename L>
-      int
-      socket_lockable<T, L>::getsockname (struct sockaddr* address,
-                                          socklen_t* address_len)
-      {
-        std::lock_guard<L> lock
-          { locker_ };
+template <typename T, typename L>
+int
+socket_lockable<T, L>::getsockname (struct sockaddr* address,
+                                    socklen_t* address_len)
+{
+  std::lock_guard<L> lock{ locker_ };
 
-        return socket::getsockname (address, address_len);
-      }
+  return socket::getsockname (address, address_len);
+}
 
-    template<typename T, typename L>
-      int
-      socket_lockable<T, L>::getsockopt (int level, int option_name,
-                                         void* option_value,
-                                         socklen_t* option_len)
-      {
-        std::lock_guard<L> lock
-          { locker_ };
+template <typename T, typename L>
+int
+socket_lockable<T, L>::getsockopt (int level, int option_name,
+                                   void* option_value, socklen_t* option_len)
+{
+  std::lock_guard<L> lock{ locker_ };
 
-        return socket::getsockopt (level, option_name, option_value, option_len);
-      }
+  return socket::getsockopt (level, option_name, option_value, option_len);
+}
 
-    template<typename T, typename L>
-      int
-      socket_lockable<T, L>::listen (int backlog)
-      {
-        std::lock_guard<L> lock
-          { locker_ };
+template <typename T, typename L>
+int
+socket_lockable<T, L>::listen (int backlog)
+{
+  std::lock_guard<L> lock{ locker_ };
 
-        return socket::listen (backlog);
-      }
+  return socket::listen (backlog);
+}
 
-    template<typename T, typename L>
-      ssize_t
-      socket_lockable<T, L>::recv (void* buffer, size_t length, int flags)
-      {
-        std::lock_guard<L> lock
-          { locker_ };
+template <typename T, typename L>
+ssize_t
+socket_lockable<T, L>::recv (void* buffer, size_t length, int flags)
+{
+  std::lock_guard<L> lock{ locker_ };
 
-        return socket::recv (buffer, length, flags);
-      }
+  return socket::recv (buffer, length, flags);
+}
 
-    template<typename T, typename L>
-      ssize_t
-      socket_lockable<T, L>::recvfrom (void* buffer, size_t length, int flags,
-                                       struct sockaddr* address,
-                                       socklen_t* address_len)
-      {
-        std::lock_guard<L> lock
-          { locker_ };
+template <typename T, typename L>
+ssize_t
+socket_lockable<T, L>::recvfrom (void* buffer, size_t length, int flags,
+                                 struct sockaddr* address,
+                                 socklen_t* address_len)
+{
+  std::lock_guard<L> lock{ locker_ };
 
-        return socket::recvfrom (buffer, length, flags, address, address_len);
-      }
+  return socket::recvfrom (buffer, length, flags, address, address_len);
+}
 
-    template<typename T, typename L>
-      ssize_t
-      socket_lockable<T, L>::recvmsg (struct msghdr* message, int flags)
-      {
-        std::lock_guard<L> lock
-          { locker_ };
+template <typename T, typename L>
+ssize_t
+socket_lockable<T, L>::recvmsg (struct msghdr* message, int flags)
+{
+  std::lock_guard<L> lock{ locker_ };
 
-        return socket::recvmsg (message, flags);
-      }
+  return socket::recvmsg (message, flags);
+}
 
-    template<typename T, typename L>
-      ssize_t
-      socket_lockable<T, L>::send (const void* buffer, size_t length, int flags)
-      {
-        std::lock_guard<L> lock
-          { locker_ };
+template <typename T, typename L>
+ssize_t
+socket_lockable<T, L>::send (const void* buffer, size_t length, int flags)
+{
+  std::lock_guard<L> lock{ locker_ };
 
-        return socket::send (buffer, length, flags);
-      }
+  return socket::send (buffer, length, flags);
+}
 
-    template<typename T, typename L>
-      ssize_t
-      socket_lockable<T, L>::sendmsg (const struct msghdr* message, int flags)
-      {
-        std::lock_guard<L> lock
-          { locker_ };
+template <typename T, typename L>
+ssize_t
+socket_lockable<T, L>::sendmsg (const struct msghdr* message, int flags)
+{
+  std::lock_guard<L> lock{ locker_ };
 
-        return socket::sendmsg (message, flags);
-      }
+  return socket::sendmsg (message, flags);
+}
 
-    template<typename T, typename L>
-      ssize_t
-      socket_lockable<T, L>::sendto (const void* message, size_t length,
-                                     int flags,
-                                     const struct sockaddr* dest_addr,
-                                     socklen_t dest_len)
-      {
-        std::lock_guard<L> lock
-          { locker_ };
+template <typename T, typename L>
+ssize_t
+socket_lockable<T, L>::sendto (const void* message, size_t length, int flags,
+                               const struct sockaddr* dest_addr,
+                               socklen_t dest_len)
+{
+  std::lock_guard<L> lock{ locker_ };
 
-        return socket::sendto (message, length, flags, dest_addr, dest_len);
-      }
+  return socket::sendto (message, length, flags, dest_addr, dest_len);
+}
 
-    template<typename T, typename L>
-      int
-      socket_lockable<T, L>::setsockopt (int level, int option_name,
-                                         const void* option_value,
-                                         socklen_t option_len)
-      {
-        std::lock_guard<L> lock
-          { locker_ };
+template <typename T, typename L>
+int
+socket_lockable<T, L>::setsockopt (int level, int option_name,
+                                   const void* option_value,
+                                   socklen_t option_len)
+{
+  std::lock_guard<L> lock{ locker_ };
 
-        return socket::setsockopt (level, option_name, option_value, option_len);
-      }
+  return socket::setsockopt (level, option_name, option_value, option_len);
+}
 
-    template<typename T, typename L>
-      int
-      socket_lockable<T, L>::shutdown (int how)
-      {
-        std::lock_guard<L> lock
-          { locker_ };
+template <typename T, typename L>
+int
+socket_lockable<T, L>::shutdown (int how)
+{
+  std::lock_guard<L> lock{ locker_ };
 
-        return socket::shutdown (how);
-      }
+  return socket::shutdown (how);
+}
 
-    template<typename T, typename L>
-      int
-      socket_lockable<T, L>::sockatmark (void)
-      {
-        std::lock_guard<L> lock
-          { locker_ };
+template <typename T, typename L>
+int
+socket_lockable<T, L>::sockatmark (void)
+{
+  std::lock_guard<L> lock{ locker_ };
 
-        return socket::sockatmark ();
-      }
+  return socket::sockatmark ();
+}
 
-    template<typename T, typename L>
-      typename socket_lockable<T, L>::value_type&
-      socket_lockable<T, L>::impl (void) const
-      {
-        return static_cast<value_type&> (impl_);
-      }
+template <typename T, typename L>
+typename socket_lockable<T, L>::value_type&
+socket_lockable<T, L>::impl (void) const
+{
+  return static_cast<value_type&> (impl_);
+}
 
-  // ==========================================================================
-  } /* namespace posix */
+// ============================================================================
+} /* namespace posix */
 } /* namespace os */
 
 // ----------------------------------------------------------------------------

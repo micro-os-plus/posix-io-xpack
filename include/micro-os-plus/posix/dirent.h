@@ -50,10 +50,10 @@ extern "C"
 {
 #endif
 
-// ----------------------------------------------------------------------------
+  // --------------------------------------------------------------------------
 
 #if !defined(OS_INTEGER_DIRENT_NAME_MAX)
-#define OS_INTEGER_DIRENT_NAME_MAX  (256)
+#define OS_INTEGER_DIRENT_NAME_MAX (256)
 #endif
 
   // --------------------------------------------------------------------------
@@ -61,13 +61,13 @@ extern "C"
   // http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/dirent.h.html
   struct dirent
   {
-    ino_t d_ino; /* File serial number. */
+    ino_t d_ino;                             /* File serial number. */
     char d_name[OS_INTEGER_DIRENT_NAME_MAX]; /* Filename string of entry. */
   };
 
-// The content of this structure is not relevant, it is here just to keep
-// POSIX compatibility, in real life the directory class is used
-// and casted to DIR.
+  // The content of this structure is not relevant, it is here just to keep
+  // POSIX compatibility, in real life the directory class is used
+  // and casted to DIR.
   typedef struct
   {
     ;
@@ -75,24 +75,20 @@ extern "C"
 
   // --------------------------------------------------------------------------
 
-  DIR*
-  opendir (const char* dirname);
+  DIR* opendir (const char* dirname);
 
-  struct dirent*
-  readdir (DIR* dirp);
+  struct dirent* readdir (DIR* dirp);
 
 #if 0
   int
   readdir_r (DIR* dirp, struct dirent* entry, struct dirent** result);
 #endif
 
-  void
-  rewinddir (DIR* dirp);
+  void rewinddir (DIR* dirp);
 
-  int
-  closedir (DIR* dirp);
+  int closedir (DIR* dirp);
 
-// ----------------------------------------------------------------------------
+  // --------------------------------------------------------------------------
 
 #ifdef __cplusplus
 }
