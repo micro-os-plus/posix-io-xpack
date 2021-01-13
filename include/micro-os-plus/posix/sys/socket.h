@@ -126,3 +126,5 @@ extern "C"
 #endif /* defined(_POSIX_VERSION) */
 
 #endif /* POSIX_IO_SYS_SOCKET_H_ */
+
+// ----------------------------------------------------------------------------

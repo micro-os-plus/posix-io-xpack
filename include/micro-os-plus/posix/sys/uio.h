@@ -70,3 +70,5 @@ extern "C"
 #endif /* defined(_POSIX_VERSION) */
 
 #endif /* POSIX_IO_SYS_UIO_H_ */
+
+// ----------------------------------------------------------------------------

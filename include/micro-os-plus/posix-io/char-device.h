@@ -312,3 +312,5 @@ namespace os
 #endif /* __cplusplus */
 
 #endif /* MICRO_OS_PLUS_POSIX_IO_CHAR_DEVICE_H_ */
+
+// ----------------------------------------------------------------------------

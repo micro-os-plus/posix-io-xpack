@@ -94,3 +94,5 @@
 #define __posix_writev writev
 
 #endif /* MICRO_OS_PLUS_POSIX_IO_REDEFINITIONS_H_ */
+
+// ----------------------------------------------------------------------------

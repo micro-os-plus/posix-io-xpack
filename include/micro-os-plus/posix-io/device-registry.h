@@ -233,3 +233,5 @@ namespace os
 #endif /* __cplusplus */
 
 #endif /* MICRO_OS_PLUS_POSIX_IO_DEVICE_REGISTRY_H_ */
+
+// ----------------------------------------------------------------------------

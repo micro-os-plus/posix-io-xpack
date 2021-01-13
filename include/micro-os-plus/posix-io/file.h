@@ -626,3 +626,5 @@ namespace os
 #endif /* __cplusplus */
 
 #endif /* MICRO_OS_PLUS_POSIX_IO_FILE_H_ */
+
+// ----------------------------------------------------------------------------

@@ -93,3 +93,5 @@ extern "C"
 #endif /* defined(_POSIX_VERSION) */
 
 #endif /* POSIX_IO_SYS_STATVFS_H_ */
+
+// ----------------------------------------------------------------------------
