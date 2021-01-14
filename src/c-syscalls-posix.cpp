@@ -27,24 +27,24 @@
 
 #if !defined(OS_USE_SEMIHOSTING_SYSCALLS)
 
-#include <micro-os-plus/posix-io/char-device.h>
-#include <micro-os-plus/posix-io/directory.h>
-#include <micro-os-plus/posix-io/file-descriptors-manager.h>
-#include <micro-os-plus/posix-io/file-system.h>
-#include <micro-os-plus/posix-io/file.h>
-#include <micro-os-plus/posix-io/io.h>
-#include <micro-os-plus/posix-io/net-stack.h>
-#include <micro-os-plus/posix-io/socket.h>
-#include <micro-os-plus/posix-io/tty.h>
-#include <micro-os-plus/posix-io/types.h>
 #include <micro-os-plus/rtos/os.h>
+#include <micro-os-plus/posix-io/types.h>
+#include <micro-os-plus/posix-io/file-descriptors-manager.h>
+#include <micro-os-plus/posix-io/io.h>
+#include <micro-os-plus/posix-io/char-device.h>
+#include <micro-os-plus/posix-io/tty.h>
+#include <micro-os-plus/posix-io/file.h>
+#include <micro-os-plus/posix-io/file-system.h>
+#include <micro-os-plus/posix-io/directory.h>
+#include <micro-os-plus/posix-io/socket.h>
+#include <micro-os-plus/posix-io/net-stack.h>
 
 #include <micro-os-plus/posix/sys/uio.h>
 
 #include <micro-os-plus/diag/trace.h>
 
-#include <cerrno>
 #include <cstdarg>
+#include <cerrno>
 
 // ----------------------------------------------------------------------------
 
@@ -67,7 +67,8 @@
 
 extern "C"
 {
-  void initialise_monitor_handles (void);
+  void
+  initialise_monitor_handles (void);
 }
 
 // ----------------------------------------------------------------------------
@@ -89,9 +90,9 @@ int
 __posix_open (const char* path, int oflag, ...)
 {
   va_list args;
-  va_start (args, oflag);
+  va_start(args, oflag);
   auto* const io = posix::vopen (path, oflag, args);
-  va_end (args);
+  va_end(args);
 
   if (io == nullptr)
     {
@@ -183,9 +184,9 @@ __posix_ioctl (int fildes, int request, ...)
     }
 
   va_list args;
-  va_start (args, request);
+  va_start(args, request);
   int ret = (static_cast<posix::char_device*> (io))->vioctl (request, args);
-  va_end (args);
+  va_end(args);
 
   return ret;
 }
@@ -253,7 +254,7 @@ __posix_tcdrain (int fildes)
 }
 
 int
-__posix_tcgetattr (int fildes, struct termios* termios_p)
+__posix_tcgetattr (int fildes, struct termios *termios_p)
 {
   auto* const io = posix::file_descriptors_manager::io (fildes);
   if (io == nullptr)
@@ -274,7 +275,7 @@ __posix_tcgetattr (int fildes, struct termios* termios_p)
 
 int
 __posix_tcsetattr (int fildes, int optional_actions,
-                   const struct termios* termios_p)
+                   const struct termios *termios_p)
 {
   auto* const io = posix::file_descriptors_manager::io (fildes);
   if (io == nullptr)
@@ -290,8 +291,8 @@ __posix_tcsetattr (int fildes, int optional_actions,
       return -1;
     }
 
-  return (static_cast<posix::tty*> (io))
-      ->tcsetattr (optional_actions, termios_p);
+  return (static_cast<posix::tty*> (io))->tcsetattr (optional_actions,
+                                                     termios_p);
 }
 
 int
@@ -345,9 +346,9 @@ __posix_fcntl (int fildes, int cmd, ...)
     }
 
   va_list args;
-  va_start (args, cmd);
+  va_start(args, cmd);
   int ret = io->vfcntl (cmd, args);
-  va_end (args);
+  va_end(args);
 
   return ret;
 }
@@ -591,8 +592,7 @@ __posix_accept (int socket, struct sockaddr* address, socklen_t* address_len)
 }
 
 int
-__posix_bind (int socket, const struct sockaddr* address,
-              socklen_t address_len)
+__posix_bind (int socket, const struct sockaddr* address, socklen_t address_len)
 {
   auto* const io = posix::file_descriptors_manager::socket (socket);
   if (io == nullptr)
@@ -797,14 +797,14 @@ __posix_sockatmark (int socket)
 // ----------------------------------------------------------------------------
 // Not yet implemented.
 
-int __attribute__ ((weak))
+int __attribute__((weak))
 __posix_readdir_r (DIR* dirp, struct dirent* entry, struct dirent** result)
 {
   errno = ENOSYS; // Not implemented
   return -1;
 }
 
-int __attribute__ ((weak))
+int __attribute__((weak))
 __posix_socketpair (int domain, int type, int protocol, int socket_vector[2])
 {
   errno = ENOSYS; // Not implemented
@@ -895,7 +895,7 @@ __posix_raise (int sig)
 }
 
 int
-__posix_system (const char* command)
+__posix_system (const char *command)
 {
   errno = ENOSYS; // Not implemented
   return -1;
@@ -977,3 +977,4 @@ initialise_monitor_handles (void)
 #endif /* !defined(OS_USE_SEMIHOSTING_SYSCALLS) */
 
 // ----------------------------------------------------------------------------
+

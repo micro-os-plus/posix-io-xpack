@@ -38,127 +38,138 @@
 
 #include <micro-os-plus/posix-io/types.h>
 
-#include <cassert>
 #include <cstddef>
+#include <cassert>
 
 // ----------------------------------------------------------------------------
 
 namespace os
 {
-namespace posix
-{
+  namespace posix
+  {
 
-// ----------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
-class io;
-class socket;
+    class io;
+    class socket;
 
-// ============================================================================
+    // ========================================================================
 
-/**
- * @brief File descriptors manager static class.
- * @headerfile file-descriptors-manager.h
- * <micro-os-plus/posix-io/file-descriptors-manager.h>
- * @ingroup cmsis-plus-posix-io-base
- */
-class file_descriptors_manager
-{
-  // --------------------------------------------------------------------------
+    /**
+     * @brief File descriptors manager static class.
+     * @headerfile file-descriptors-manager.h <micro-os-plus/posix-io/file-descriptors-manager.h>
+     * @ingroup cmsis-plus-posix-io-base
+     */
+    class file_descriptors_manager
+    {
+      // ----------------------------------------------------------------------
 
-  /**
-   * @name Constructors & Destructor
-   * @{
-   */
+      /**
+       * @name Constructors & Destructor
+       * @{
+       */
 
-public:
-  file_descriptors_manager (std::size_t size);
+    public:
 
-  /**
-   * @cond ignore
-   */
+      file_descriptors_manager (std::size_t size);
 
-  // The rule of five.
-  file_descriptors_manager (const file_descriptors_manager&) = delete;
-  file_descriptors_manager (file_descriptors_manager&&) = delete;
-  file_descriptors_manager& operator= (const file_descriptors_manager&)
-      = delete;
-  file_descriptors_manager& operator= (file_descriptors_manager&&) = delete;
+      /**
+       * @cond ignore
+       */
 
-  /**
-   * @endcond
-   */
+      // The rule of five.
+      file_descriptors_manager (const file_descriptors_manager&) = delete;
+      file_descriptors_manager (file_descriptors_manager&&) = delete;
+      file_descriptors_manager&
+      operator= (const file_descriptors_manager&) = delete;
+      file_descriptors_manager&
+      operator= (file_descriptors_manager&&) = delete;
 
-  ~file_descriptors_manager ();
+      /**
+       * @endcond
+       */
 
-  /**
-   * @}
-   */
+      ~file_descriptors_manager ();
 
-  // --------------------------------------------------------------------------
-  /**
-   * @name Public Static Member Functions
-   * @{
-   */
+      /**
+       * @}
+       */
 
-public:
-  static size_t size (void);
+      // ----------------------------------------------------------------------
+      /**
+       * @name Public Static Member Functions
+       * @{
+       */
 
-  static bool valid (int fildes);
+    public:
 
-  static class io* io (int fildes);
+      static size_t
+      size (void);
 
-  static class socket* socket (int fildes);
+      static bool
+      valid (int fildes);
 
-  static int allocate (class io* io);
+      static class io*
+      io (int fildes);
 
-  static int assign (file_descriptor_t fildes, class io* io);
+      static class socket*
+      socket (int fildes);
 
-  static int deallocate (file_descriptor_t fildes);
+      static int
+      allocate (class io* io);
 
-  static size_t used (void);
+      static int
+      assign (file_descriptor_t fildes, class io* io);
 
-  /**
-   * @}
-   */
+      static int
+      deallocate (file_descriptor_t fildes);
 
-  // --------------------------------------------------------------------------
-private:
-  /**
-   * @cond ignore
-   */
+      static size_t
+      used (void);
 
-  // Reserve 0, 1, 2 (stdin, stdout, stderr).
-  static constexpr std::size_t reserved__ = 3;
+      /**
+       * @}
+       */
 
-  static std::size_t size__;
+      // ----------------------------------------------------------------------
+    private:
 
-  static class io** descriptors_array__;
+      /**
+       * @cond ignore
+       */
 
-  /**
-   * @endcond
-   */
-};
+      // Reserve 0, 1, 2 (stdin, stdout, stderr).
+      static constexpr std::size_t reserved__ = 3;
 
-// ============================================================================
-} /* namespace posix */
+      static std::size_t size__;
+
+      static class io** descriptors_array__;
+
+      /**
+       * @endcond
+       */
+    };
+
+  // ==========================================================================
+  } /* namespace posix */
 } /* namespace os */
 
 // ===== Inline & template implementations ====================================
 
 namespace os
 {
-namespace posix
-{
-// ============================================================================
+  namespace posix
+  {
+    // ========================================================================
 
-inline size_t
-file_descriptors_manager::size (void)
-{
-  return size__;
-}
+    inline size_t
+    file_descriptors_manager::size (void)
+    {
+      return size__;
+    }
 
-// ============================================================================
-} /* namespace posix */
+  // ==========================================================================
+  } /* namespace posix */
 } /* namespace os */
 
 // ----------------------------------------------------------------------------

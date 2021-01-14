@@ -28,7 +28,7 @@
 #ifndef MICRO_OS_PLUS_POSIX_IO_TTY_H_
 #define MICRO_OS_PLUS_POSIX_IO_TTY_H_
 
-#if defined(__cplusplus)
+#if defined (__cplusplus)
 
 // ----------------------------------------------------------------------------
 
@@ -36,262 +36,299 @@
 #include <micro-os-plus/config.h>
 #endif
 
+#include <micro-os-plus/rtos/os.h>
 #include <micro-os-plus/posix-io/char-device.h>
 #include <micro-os-plus/posix/termios.h>
-#include <micro-os-plus/rtos/os.h>
 
 // ----------------------------------------------------------------------------
 
 namespace os
 {
-namespace posix
-{
-// ----------------------------------------------------------------------------
+  namespace posix
+  {
+    // ------------------------------------------------------------------------
 
-class tty_impl;
+    class tty_impl;
 
-// ============================================================================
+    // ========================================================================
 
-class tty : public char_device
-{
-  // --------------------------------------------------------------------------
+    class tty : public char_device
+    {
+      // ----------------------------------------------------------------------
 
-  /**
-   * @name Constructors & Destructor
-   * @{
-   */
+      /**
+       * @name Constructors & Destructor
+       * @{
+       */
 
-public:
-  tty (tty_impl& impl, const char* name);
+    public:
 
-  /**
-   * @cond ignore
-   */
+      tty (tty_impl& impl, const char* name);
 
-  // The rule of five.
-  tty (const tty&) = delete;
-  tty (tty&&) = delete;
-  tty& operator= (const tty&) = delete;
-  tty& operator= (tty&&) = delete;
+      /**
+       * @cond ignore
+       */
 
-  /**
-   * @endcond
-   */
+      // The rule of five.
+      tty (const tty&) = delete;
+      tty (tty&&) = delete;
+      tty&
+      operator= (const tty&) = delete;
+      tty&
+      operator= (tty&&) = delete;
 
-  virtual ~tty () noexcept;
+      /**
+       * @endcond
+       */
 
-  /**
-   * @}
-   */
+      virtual
+      ~tty () noexcept;
 
-  // --------------------------------------------------------------------------
-  /**
-   * @name Public Member Functions
-   * @{
-   */
+      /**
+       * @}
+       */
 
-public:
-  // http://pubs.opengroup.org/onlinepubs/9699919799/functions/tcgetattr.html
-  virtual int tcgetattr (struct termios* ptio);
+      // ----------------------------------------------------------------------
+      /**
+       * @name Public Member Functions
+       * @{
+       */
 
-  // http://pubs.opengroup.org/onlinepubs/9699919799/functions/tcsetattr.html
-  virtual int tcsetattr (int options, const struct termios* ptio);
+    public:
 
-  // http://pubs.opengroup.org/onlinepubs/9699919799/functions/tcflush.html
-  virtual int tcflush (int queue_selector);
+      // http://pubs.opengroup.org/onlinepubs/9699919799/functions/tcgetattr.html
+      virtual int
+      tcgetattr (struct termios *ptio);
 
-  // http://pubs.opengroup.org/onlinepubs/9699919799/functions/tcsendbreak.html
-  virtual int tcsendbreak (int duration);
+      // http://pubs.opengroup.org/onlinepubs/9699919799/functions/tcsetattr.html
+      virtual int
+      tcsetattr (int options, const struct termios *ptio);
 
-  // http://pubs.opengroup.org/onlinepubs/9699919799/functions/tcdrain.html
-  virtual int tcdrain (void);
+      // http://pubs.opengroup.org/onlinepubs/9699919799/functions/tcflush.html
+      virtual int
+      tcflush (int queue_selector);
 
-  // --------------------------------------------------------------------------
-  // Support functions.
+      // http://pubs.opengroup.org/onlinepubs/9699919799/functions/tcsendbreak.html
+      virtual int
+      tcsendbreak (int duration);
 
-  tty_impl& impl (void) const;
-};
+      // http://pubs.opengroup.org/onlinepubs/9699919799/functions/tcdrain.html
+      virtual int
+      tcdrain (void);
 
-// ============================================================================
+      // ----------------------------------------------------------------------
+      // Support functions.
+
+      tty_impl&
+      impl (void) const;
+    };
+
+    // ========================================================================
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpadded"
 
-class tty_impl : public char_device_impl
-{
-  // --------------------------------------------------------------------------
+    class tty_impl : public char_device_impl
+    {
+      // ----------------------------------------------------------------------
 
-  friend class tty;
+      friend class tty;
 
-  /**
-   * @name Constructors & Destructor
-   * @{
-   */
+      /**
+       * @name Constructors & Destructor
+       * @{
+       */
 
-public:
-  tty_impl (void);
+    public:
 
-  /**
-   * @cond ignore
-   */
+      tty_impl (void);
 
-  // The rule of five.
-  tty_impl (const tty_impl&) = delete;
-  tty_impl (tty_impl&&) = delete;
-  tty_impl& operator= (const tty_impl&) = delete;
-  tty_impl& operator= (tty_impl&&) = delete;
+      /**
+       * @cond ignore
+       */
 
-  /**
-   * @endcond
-   */
+      // The rule of five.
+      tty_impl (const tty_impl&) = delete;
+      tty_impl (tty_impl&&) = delete;
+      tty_impl&
+      operator= (const tty_impl&) = delete;
+      tty_impl&
+      operator= (tty_impl&&) = delete;
 
-  virtual ~tty_impl ();
+      /**
+       * @endcond
+       */
 
-  /**
-   * @}
-   */
+      virtual
+      ~tty_impl ();
 
-  // --------------------------------------------------------------------------
-  /**
-   * @name Public Member Functions
-   * @{
-   */
+      /**
+       * @}
+       */
 
-public:
-  virtual int do_tcgetattr (struct termios* ptio) = 0;
+      // ----------------------------------------------------------------------
+      /**
+       * @name Public Member Functions
+       * @{
+       */
 
-  virtual int do_tcsetattr (int options, const struct termios* ptio) = 0;
+    public:
 
-  virtual int do_tcflush (int queue_selector) = 0;
+      virtual int
+      do_tcgetattr (struct termios *ptio) = 0;
 
-  virtual int do_tcsendbreak (int duration) = 0;
+      virtual int
+      do_tcsetattr (int options, const struct termios *ptio) = 0;
 
-  virtual int do_tcdrain (void) = 0;
+      virtual int
+      do_tcflush (int queue_selector) = 0;
 
-  virtual int do_isatty (void) final;
+      virtual int
+      do_tcsendbreak (int duration) = 0;
 
-  /**
-   * @}
-   */
-};
+      virtual int
+      do_tcdrain (void) = 0;
+
+      virtual int
+      do_isatty (void) final;
+
+      /**
+       * @}
+       */
+    };
 
 #pragma GCC diagnostic pop
 
-// ============================================================================
+    // ========================================================================
 
-template <typename T> class tty_implementable : public tty
-{
-  // --------------------------------------------------------------------------
+    template<typename T>
+      class tty_implementable : public tty
+      {
+        // --------------------------------------------------------------------
 
-public:
-  using value_type = T;
+      public:
 
-  // --------------------------------------------------------------------------
+        using value_type = T;
 
-  /**
-   * @name Constructors & Destructor
-   * @{
-   */
+        // --------------------------------------------------------------------
 
-public:
-  template <typename... Args>
-  tty_implementable (const char* name, Args&&... args);
+        /**
+         * @name Constructors & Destructor
+         * @{
+         */
 
-  /**
-   * @cond ignore
-   */
+      public:
 
-  // The rule of five.
-  tty_implementable (const tty_implementable&) = delete;
-  tty_implementable (tty_implementable&&) = delete;
-  tty_implementable& operator= (const tty_implementable&) = delete;
-  tty_implementable& operator= (tty_implementable&&) = delete;
+        template<typename ... Args>
+          tty_implementable (const char* name, Args&&... args);
 
-  /**
-   * @endcond
-   */
+        /**
+         * @cond ignore
+         */
 
-  virtual ~tty_implementable ();
+        // The rule of five.
+        tty_implementable (const tty_implementable&) = delete;
+        tty_implementable (tty_implementable&&) = delete;
+        tty_implementable&
+        operator= (const tty_implementable&) = delete;
+        tty_implementable&
+        operator= (tty_implementable&&) = delete;
 
-  /**
-   * @}
-   */
+        /**
+         * @endcond
+         */
 
-  // --------------------------------------------------------------------------
-  /**
-   * @name Public Member Functions
-   * @{
-   */
+        virtual
+        ~tty_implementable ();
 
-public:
-  // Support functions.
+        /**
+         * @}
+         */
 
-  value_type& impl (void) const;
+        // --------------------------------------------------------------------
+        /**
+         * @name Public Member Functions
+         * @{
+         */
 
-  /**
-   * @}
-   */
+      public:
 
-  // --------------------------------------------------------------------------
-protected:
-  /**
-   * @cond ignore
-   */
+        // Support functions.
 
-  value_type impl_instance_;
+        value_type&
+        impl (void) const;
 
-  /**
-   * @endcond
-   */
-};
+        /**
+         * @}
+         */
 
-// ============================================================================
-} /* namespace posix */
+        // --------------------------------------------------------------------
+      protected:
+
+        /**
+         * @cond ignore
+         */
+
+        value_type impl_instance_;
+
+        /**
+         * @endcond
+         */
+      };
+
+  // ==========================================================================
+  } /* namespace posix */
 } /* namespace os */
 
 // ===== Inline & template implementations ====================================
 
 namespace os
 {
-namespace posix
-{
-// ============================================================================
+  namespace posix
+  {
+    // ========================================================================
 
-inline tty_impl&
-tty::impl (void) const
-{
-  return static_cast<tty_impl&> (impl_);
-}
+    inline tty_impl&
+    tty::impl (void) const
+    {
+      return static_cast<tty_impl&> (impl_);
+    }
 
-// ============================================================================
+    // ========================================================================
 
-template <typename T>
-template <typename... Args>
-tty_implementable<T>::tty_implementable (const char* name, Args&&... args)
-    : tty{ impl_instance_, name }, //
-      impl_instance_{ std::forward<Args> (args)... }
-{
+    template<typename T>
+      template<typename ... Args>
+        tty_implementable<T>::tty_implementable (const char* name,
+                                                 Args&&... args) :
+            tty
+              { impl_instance_, name }, //
+            impl_instance_
+              { std::forward<Args>(args)... }
+        {
 #if defined(OS_TRACE_POSIX_IO_TTY)
-  trace::printf ("tty_implementable::%s(\"%s\")=@%p\n", __func__, name_, this);
+          trace::printf ("tty_implementable::%s(\"%s\")=@%p\n", __func__, name_,
+                         this);
 #endif
-}
+        }
 
-template <typename T> tty_implementable<T>::~tty_implementable ()
-{
+    template<typename T>
+      tty_implementable<T>::~tty_implementable ()
+      {
 #if defined(OS_TRACE_POSIX_IO_TTY)
-  trace::printf ("tty_implementable::%s() @%p %s\n", __func__, this, name_);
+        trace::printf ("tty_implementable::%s() @%p %s\n", __func__, this,
+                       name_);
 #endif
-}
+      }
 
-template <typename T>
-typename tty_implementable<T>::value_type&
-tty_implementable<T>::impl (void) const
-{
-  return static_cast<value_type&> (impl_);
-}
+    template<typename T>
+      typename tty_implementable<T>::value_type&
+      tty_implementable<T>::impl (void) const
+      {
+        return static_cast<value_type&> (impl_);
+      }
 
-// ============================================================================
-} /* namespace posix */
+  // ==========================================================================
+  } /* namespace posix */
 } /* namespace os */
 
 #endif /* __cplusplus */

@@ -40,55 +40,59 @@
 
 namespace os
 {
-namespace posix
-{
-// ----------------------------------------------------------------------------
+  namespace posix
+  {
+    // ------------------------------------------------------------------------
 
-class net_interface_impl;
+    class net_interface_impl;
 
-// ============================================================================
+    // ========================================================================
 
-/**
- * @brief Network interface class.
- * @headerfile net-interface.h <micro-os-plus/posix-io/net-interface.h>
- * @ingroup cmsis-plus-posix-io-base
- */
-class net_interface
-{
-  // --------------------------------------------------------------------------
+    /**
+     * @brief Network interface class.
+     * @headerfile net-interface.h <micro-os-plus/posix-io/net-interface.h>
+     * @ingroup cmsis-plus-posix-io-base
+     */
+    class net_interface
+    {
+      // ----------------------------------------------------------------------
 
-  /**
-   * @name Constructors & Destructor
-   * @{
-   */
+      /**
+       * @name Constructors & Destructor
+       * @{
+       */
 
-public:
-  net_interface (net_interface_impl& impl, const char* name);
+    public:
 
-  /**
-   * @cond ignore
-   */
+      net_interface (net_interface_impl& impl, const char* name);
 
-  // The rule of five.
-  net_interface (const net_interface&) = delete;
-  net_interface (net_interface&&) = delete;
-  net_interface& operator= (const net_interface&) = delete;
-  net_interface& operator= (net_interface&&) = delete;
+      /**
+       * @cond ignore
+       */
 
-  /**
-   * @endcond
-   */
+      // The rule of five.
+      net_interface (const net_interface&) = delete;
+      net_interface (net_interface&&) = delete;
+      net_interface&
+      operator= (const net_interface&) = delete;
+      net_interface&
+      operator= (net_interface&&) = delete;
 
-  virtual ~net_interface ();
+      /**
+       * @endcond
+       */
 
-  /**
-   * @}
-   */
+      virtual
+      ~net_interface ();
 
-  // TODO: add content
-};
+      /**
+       * @}
+       */
 
-} /* namespace posix */
+      // TODO: add content
+    };
+
+  } /* namespace posix */
 } /* namespace os */
 
 // ----------------------------------------------------------------------------

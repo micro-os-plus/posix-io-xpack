@@ -36,11 +36,11 @@
 #include <micro-os-plus/config.h>
 #endif
 
-#include <micro-os-plus/diag/trace.h>
 #include <micro-os-plus/posix-io/types.h>
+#include <micro-os-plus/diag/trace.h>
 
-#include <cstdarg>
 #include <cstddef>
+#include <cstdarg>
 
 // Needed for ssize_t
 #include <sys/types.h>
@@ -51,161 +51,186 @@ struct iovec;
 
 namespace os
 {
-namespace posix
-{
-// ----------------------------------------------------------------------------
+  namespace posix
+  {
+    // ------------------------------------------------------------------------
 
-class io;
-class io_impl;
+    class io;
+    class io_impl;
 
-class file_system;
-class socket;
+    class file_system;
+    class socket;
 
-/**
- * @ingroup cmsis-plus-posix-io-func
- * @{
- */
+    /**
+     * @ingroup cmsis-plus-posix-io-func
+     * @{
+     */
 
-// ----------------------------------------------------------------------------
-io* open (const char* path, int oflag, ...);
+    // ------------------------------------------------------------------------
+    io*
+    open (const char* path, int oflag, ...);
 
-io* vopen (const char* path, int oflag, std::va_list args);
+    io*
+    vopen (const char* path, int oflag, std::va_list args);
 
-/**
- * @}
- */
+    /**
+     * @}
+     */
 
-// ============================================================================
-/**
- * @brief Base I/O class.
- * @headerfile io.h <micro-os-plus/posix-io/io.h>
- * @ingroup cmsis-plus-posix-io-base
- */
-class io
-{
-  // --------------------------------------------------------------------------
+    // ========================================================================
+    /**
+     * @brief Base I/O class.
+     * @headerfile io.h <micro-os-plus/posix-io/io.h>
+     * @ingroup cmsis-plus-posix-io-base
+     */
+    class io
+    {
+      // ----------------------------------------------------------------------
 
-  /**
-   * @cond ignore
-   */
+      /**
+       * @cond ignore
+       */
 
-  friend class file_system;
-  friend class file_descriptors_manager;
+      friend class file_system;
+      friend class file_descriptors_manager;
 
-  friend io* vopen (const char* path, int oflag, std::va_list args);
+      friend io*
+      vopen (const char* path, int oflag, std::va_list args);
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wshadow"
-  friend class socket* socket (int domain, int type, int protocol);
+      friend class socket*
+      socket (int domain, int type, int protocol);
 #pragma GCC diagnostic pop
 
-  /**
-   * @endcond
-   */
+      /**
+       * @endcond
+       */
 
-  // --------------------------------------------------------------------------
-public:
-  /**
-   * @name Types & Constants
-   * @{
-   */
+      // ----------------------------------------------------------------------
+    public:
 
-  using type_t = unsigned int;
-  enum type : type_t
-  {
-    unknown = 0,
-    not_set = 1 << 0,
-    char_device = 1 << 1,
-    block_device = 1 << 2,
-    tty = 1 << 3,
-    file = 1 << 4,
-    socket = 1 << 5
-  };
+      /**
+       * @name Types & Constants
+       * @{
+       */
 
-  /**
-   * @}
-   */
+      using type_t = unsigned int;
+      enum type
+        : type_t
+          { unknown = 0,
+        not_set = 1 << 0,
+        char_device = 1 << 1,
+        block_device = 1 << 2,
+        tty = 1 << 3,
+        file = 1 << 4,
+        socket = 1 << 5
+      };
 
-  // --------------------------------------------------------------------------
-  /**
-   * @name Constructors & Destructor
-   * @{
-   */
+      /**
+       * @}
+       */
 
-protected:
-  io (io_impl& impl, type t);
+      // ----------------------------------------------------------------------
+      /**
+       * @name Constructors & Destructor
+       * @{
+       */
 
-  /**
-   * @cond ignore
-   */
+    protected:
 
-  // The rule of five.
-  io (const io&) = delete;
-  io (io&&) = delete;
-  io& operator= (const io&) = delete;
-  io& operator= (io&&) = delete;
+      io (io_impl& impl, type t);
 
-  /**
-   * @endcond
-   */
+      /**
+       * @cond ignore
+       */
 
-  // --------------------------------------------------------------------------
-public:
-  virtual ~io ();
+      // The rule of five.
+      io (const io&) = delete;
+      io (io&&) = delete;
+      io&
+      operator= (const io&) = delete;
+      io&
+      operator= (io&&) = delete;
 
-  /**
-   * @}
-   */
+      /**
+       * @endcond
+       */
 
-  // --------------------------------------------------------------------------
-  /**
-   * @name Public Member Functions
-   * @{
-   */
+      // ----------------------------------------------------------------------
+    public:
 
-public:
-  virtual int close (void);
+      virtual
+      ~io ();
 
-  virtual ssize_t read (void* buf, std::size_t nbyte);
+      /**
+       * @}
+       */
 
-  virtual ssize_t write (const void* buf, std::size_t nbyte);
+      // ----------------------------------------------------------------------
+      /**
+       * @name Public Member Functions
+       * @{
+       */
 
-  virtual ssize_t writev (const struct iovec* iov, int iovcnt);
+    public:
 
-  int fcntl (int cmd, ...);
+      virtual int
+      close (void);
 
-  virtual int vfcntl (int cmd, std::va_list args);
+      virtual ssize_t
+      read (void* buf, std::size_t nbyte);
 
-  int isatty (void);
+      virtual ssize_t
+      write (const void* buf, std::size_t nbyte);
 
-  virtual int fstat (struct stat* buf);
+      virtual ssize_t
+      writev (const struct iovec* iov, int iovcnt);
 
-  virtual off_t lseek (off_t offset, int whence);
+      int
+      fcntl (int cmd, ...);
 
-  // --------------------------------------------------------------------------
-  // Support functions.
+      virtual int
+      vfcntl (int cmd, std::va_list args);
 
-  type_t get_type (void) const;
+      int
+      isatty (void);
 
-  file_descriptor_t file_descriptor (void) const;
+      virtual int
+      fstat (struct stat* buf);
 
-  bool is_opened (void);
+      virtual off_t
+      lseek (off_t offset, int whence);
 
-  io_impl& impl (void) const;
+      // ----------------------------------------------------------------------
+      // Support functions.
 
-  /**
-   * @}
-   */
+      type_t
+      get_type (void) const;
 
-  // --------------------------------------------------------------------------
-  /**
-   * @name Private Member Functions
-   * @{
-   */
+      file_descriptor_t
+      file_descriptor (void) const;
 
-protected:
-  // --------------------------------------------------------------------------
-  // Support functions.
+      bool
+      is_opened (void);
+
+      io_impl&
+      impl (void) const;
+
+      /**
+       * @}
+       */
+
+      // ----------------------------------------------------------------------
+      /**
+       * @name Private Member Functions
+       * @{
+       */
+
+    protected:
+
+      // ----------------------------------------------------------------------
+      // Support functions.
 
 #if 0
       // Is called at the end of close, to release objects
@@ -214,198 +239,222 @@ protected:
       do_release (void);
 #endif
 
-  void file_descriptor (file_descriptor_t fildes);
+      void
+      file_descriptor (file_descriptor_t fildes);
 
-  void clear_file_descriptor (void);
+      void
+      clear_file_descriptor (void);
 
-  io* alloc_file_descriptor (void);
+      io*
+      alloc_file_descriptor (void);
 
-  /**
-   * @}
-   */
+      /**
+       * @}
+       */
 
-  // --------------------------------------------------------------------------
-protected:
-  /**
-   * @cond ignore
-   */
+      // ----------------------------------------------------------------------
+    protected:
 
-  io_impl& impl_;
+      /**
+       * @cond ignore
+       */
 
-  /**
-   * @endcond
-   */
+      io_impl& impl_;
 
-  // --------------------------------------------------------------------------
-protected:
-  /**
-   * @cond ignore
-   */
+      /**
+       * @endcond
+       */
 
-  type_t type_ = type::not_set;
+      // ----------------------------------------------------------------------
+    protected:
 
-  file_descriptor_t file_descriptor_ = no_file_descriptor;
+      /**
+       * @cond ignore
+       */
 
-  /**
-   * @endcond
-   */
-};
+      type_t type_ = type::not_set;
 
-// ============================================================================
+      file_descriptor_t file_descriptor_ = no_file_descriptor;
 
-class io_impl
-{
-  // --------------------------------------------------------------------------
+      /**
+       * @endcond
+       */
+    };
 
-  friend class io;
+    // ========================================================================
 
-  /**
-   * @name Constructors & Destructor
-   * @{
-   */
+    class io_impl
+    {
+      // ----------------------------------------------------------------------
 
-public:
-  io_impl (void);
+      friend class io;
 
-  /**
-   * @cond ignore
-   */
+      /**
+       * @name Constructors & Destructor
+       * @{
+       */
 
-  // The rule of five.
-  io_impl (const io_impl&) = delete;
-  io_impl (io_impl&&) = delete;
-  io_impl& operator= (const io_impl&) = delete;
-  io_impl& operator= (io_impl&&) = delete;
+    public:
 
-  /**
-   * @endcond
-   */
+      io_impl (void);
 
-  virtual ~io_impl ();
+      /**
+       * @cond ignore
+       */
 
-  /**
-   * @}
-   */
+      // The rule of five.
+      io_impl (const io_impl&) = delete;
+      io_impl (io_impl&&) = delete;
+      io_impl&
+      operator= (const io_impl&) = delete;
+      io_impl&
+      operator= (io_impl&&) = delete;
 
-  // --------------------------------------------------------------------------
-  /**
-   * @name Public Member Functions
-   * @{
-   */
+      /**
+       * @endcond
+       */
 
-public:
-  // Implementations
+      virtual
+      ~io_impl ();
 
-  virtual void do_deallocate (void);
+      /**
+       * @}
+       */
 
-  virtual bool do_is_opened (void) = 0;
+      // ----------------------------------------------------------------------
+      /**
+       * @name Public Member Functions
+       * @{
+       */
 
-  virtual bool do_is_connected (void);
+    public:
 
-  virtual ssize_t do_read (void* buf, std::size_t nbyte) = 0;
+      // Implementations
 
-  virtual ssize_t do_write (const void* buf, std::size_t nbyte) = 0;
+      virtual void
+      do_deallocate (void);
 
-  virtual ssize_t do_writev (const struct iovec* iov, int iovcnt);
+      virtual bool
+      do_is_opened (void) = 0;
 
-  virtual int do_vfcntl (int cmd, std::va_list args);
+      virtual bool
+      do_is_connected (void);
 
-  virtual int do_isatty (void);
+      virtual ssize_t
+      do_read (void* buf, std::size_t nbyte) = 0;
 
-  virtual int do_fstat (struct stat* buf);
+      virtual ssize_t
+      do_write (const void* buf, std::size_t nbyte) = 0;
 
-  virtual off_t do_lseek (off_t offset, int whence) = 0;
+      virtual ssize_t
+      do_writev (const struct iovec* iov, int iovcnt);
 
-  virtual int do_close (void) = 0;
+      virtual int
+      do_vfcntl (int cmd, std::va_list args);
 
-  // --------------------------------------------------------------------------
-  // Support functions.
+      virtual int
+      do_isatty (void);
 
-  off_t offset (void);
+      virtual int
+      do_fstat (struct stat* buf);
 
-  void offset (off_t offset);
+      virtual off_t
+      do_lseek (off_t offset, int whence) = 0;
 
-  /**
-   * @}
-   */
+      virtual int
+      do_close (void) = 0;
 
-  // --------------------------------------------------------------------------
-protected:
-  /**
-   * @cond ignore
-   */
+      // ----------------------------------------------------------------------
+      // Support functions.
 
-  off_t offset_ = 0;
+      off_t
+      offset (void);
 
-  /**
-   * @endcond
-   */
-};
+      void
+      offset (off_t offset);
 
-// ============================================================================
-} /* namespace posix */
+      /**
+       * @}
+       */
+
+      // ----------------------------------------------------------------------
+    protected:
+
+      /**
+       * @cond ignore
+       */
+
+      off_t offset_ = 0;
+
+      /**
+       * @endcond
+       */
+    };
+
+  // ==========================================================================
+  } /* namespace posix */
 } /* namespace os */
 
 // ===== Inline & template implementations ====================================
 
 namespace os
 {
-namespace posix
-{
-// ============================================================================
+  namespace posix
+  {
+    // ========================================================================
 
-inline io::type_t
-io::get_type (void) const
-{
-  return type_;
-}
+    inline io::type_t
+    io::get_type (void) const
+    {
+      return type_;
+    }
 
-inline void
-io::file_descriptor (file_descriptor_t fildes)
-{
-  file_descriptor_ = fildes;
-}
+    inline void
+    io::file_descriptor (file_descriptor_t fildes)
+    {
+      file_descriptor_ = fildes;
+    }
 
-inline void
-io::clear_file_descriptor (void)
-{
-  file_descriptor_ = no_file_descriptor;
-}
+    inline void
+    io::clear_file_descriptor (void)
+    {
+      file_descriptor_ = no_file_descriptor;
+    }
 
-inline file_descriptor_t
-io::file_descriptor (void) const
-{
-  return file_descriptor_;
-}
+    inline file_descriptor_t
+    io::file_descriptor (void) const
+    {
+      return file_descriptor_;
+    }
 
-inline bool
-io::is_opened (void)
-{
-  return impl ().do_is_opened ();
-}
+    inline bool
+    io::is_opened (void)
+    {
+      return impl ().do_is_opened ();
+    }
 
-inline io_impl&
-io::impl (void) const
-{
-  return impl_;
-}
+    inline io_impl&
+    io::impl (void) const
+    {
+      return impl_;
+    }
 
-// ============================================================================
+    // ========================================================================
 
-inline off_t
-io_impl::offset (void)
-{
-  return offset_;
-}
+    inline off_t
+    io_impl::offset (void)
+    {
+      return offset_;
+    }
 
-inline void
-io_impl::offset (off_t offset)
-{
-  offset_ = offset;
-}
+    inline void
+    io_impl::offset (off_t offset)
+    {
+      offset_ = offset;
+    }
 
-// ============================================================================
-} /* namespace posix */
+  // ==========================================================================
+  } /* namespace posix */
 } /* namespace os */
 
 // ----------------------------------------------------------------------------
