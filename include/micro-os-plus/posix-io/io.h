@@ -28,6 +28,8 @@
 #ifndef MICRO_OS_PLUS_POSIX_IO_IO_H_
 #define MICRO_OS_PLUS_POSIX_IO_IO_H_
 
+// ----------------------------------------------------------------------------
+
 #if defined(__cplusplus)
 
 // ----------------------------------------------------------------------------
@@ -109,16 +111,15 @@ namespace os
 
       // ----------------------------------------------------------------------
     public:
-
       /**
        * @name Types & Constants
        * @{
        */
 
       using type_t = unsigned int;
-      enum type
-        : type_t
-          { unknown = 0,
+      enum type : type_t
+      {
+        unknown = 0,
         not_set = 1 << 0,
         char_device = 1 << 1,
         block_device = 1 << 2,
@@ -138,7 +139,6 @@ namespace os
        */
 
     protected:
-
       io (io_impl& impl, type t);
 
       /**
@@ -149,9 +149,11 @@ namespace os
       io (const io&) = delete;
       io (io&&) = delete;
       io&
-      operator= (const io&) = delete;
+      operator= (const io&)
+          = delete;
       io&
-      operator= (io&&) = delete;
+      operator= (io&&)
+          = delete;
 
       /**
        * @endcond
@@ -159,9 +161,7 @@ namespace os
 
       // ----------------------------------------------------------------------
     public:
-
-      virtual
-      ~io ();
+      virtual ~io ();
 
       /**
        * @}
@@ -174,7 +174,6 @@ namespace os
        */
 
     public:
-
       virtual int
       close (void);
 
@@ -228,7 +227,6 @@ namespace os
        */
 
     protected:
-
       // ----------------------------------------------------------------------
       // Support functions.
 
@@ -254,7 +252,6 @@ namespace os
 
       // ----------------------------------------------------------------------
     protected:
-
       /**
        * @cond ignore
        */
@@ -267,7 +264,6 @@ namespace os
 
       // ----------------------------------------------------------------------
     protected:
-
       /**
        * @cond ignore
        */
@@ -295,7 +291,6 @@ namespace os
        */
 
     public:
-
       io_impl (void);
 
       /**
@@ -306,16 +301,17 @@ namespace os
       io_impl (const io_impl&) = delete;
       io_impl (io_impl&&) = delete;
       io_impl&
-      operator= (const io_impl&) = delete;
+      operator= (const io_impl&)
+          = delete;
       io_impl&
-      operator= (io_impl&&) = delete;
+      operator= (io_impl&&)
+          = delete;
 
       /**
        * @endcond
        */
 
-      virtual
-      ~io_impl ();
+      virtual ~io_impl ();
 
       /**
        * @}
@@ -328,23 +324,25 @@ namespace os
        */
 
     public:
-
       // Implementations
 
       virtual void
       do_deallocate (void);
 
       virtual bool
-      do_is_opened (void) = 0;
+      do_is_opened (void)
+          = 0;
 
       virtual bool
       do_is_connected (void);
 
       virtual ssize_t
-      do_read (void* buf, std::size_t nbyte) = 0;
+      do_read (void* buf, std::size_t nbyte)
+          = 0;
 
       virtual ssize_t
-      do_write (const void* buf, std::size_t nbyte) = 0;
+      do_write (const void* buf, std::size_t nbyte)
+          = 0;
 
       virtual ssize_t
       do_writev (const struct iovec* iov, int iovcnt);
@@ -359,10 +357,12 @@ namespace os
       do_fstat (struct stat* buf);
 
       virtual off_t
-      do_lseek (off_t offset, int whence) = 0;
+      do_lseek (off_t offset, int whence)
+          = 0;
 
       virtual int
-      do_close (void) = 0;
+      do_close (void)
+          = 0;
 
       // ----------------------------------------------------------------------
       // Support functions.
@@ -379,7 +379,6 @@ namespace os
 
       // ----------------------------------------------------------------------
     protected:
-
       /**
        * @cond ignore
        */
@@ -391,9 +390,9 @@ namespace os
        */
     };
 
-  // ==========================================================================
-  } /* namespace posix */
-} /* namespace os */
+    // ==========================================================================
+  } // namespace posix
+} // namespace os
 
 // ===== Inline & template implementations ====================================
 
@@ -453,13 +452,15 @@ namespace os
       offset_ = offset;
     }
 
-  // ==========================================================================
-  } /* namespace posix */
-} /* namespace os */
+    // ==========================================================================
+  } // namespace posix
+} // namespace os
 
 // ----------------------------------------------------------------------------
 
 #endif /* __cplusplus */
+
+// ----------------------------------------------------------------------------
 
 #endif /* MICRO_OS_PLUS_POSIX_IO_IO_H_ */
 

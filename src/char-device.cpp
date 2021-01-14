@@ -40,9 +40,8 @@ namespace os
   {
     // ========================================================================
 
-    char_device::char_device (char_device_impl& impl, const char* name) :
-        device
-          { impl, type::char_device, name }
+    char_device::char_device (char_device_impl& impl, const char* name)
+        : device{ impl, type::char_device, name }
     {
 #if defined(OS_TRACE_POSIX_IO_CHAR_DEVICE)
       trace::printf ("char_device::%s(\"%s\")=@%p\n", __func__, name_, this);
@@ -96,8 +95,8 @@ namespace os
       errno = ENOSYS; // Not implemented
     }
 
-  // ==========================================================================
-  } /* namespace posix */
-} /* namespace os */
+    // ==========================================================================
+  } // namespace posix
+} // namespace os
 
 // ----------------------------------------------------------------------------

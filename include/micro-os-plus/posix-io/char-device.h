@@ -28,6 +28,8 @@
 #ifndef MICRO_OS_PLUS_POSIX_IO_CHAR_DEVICE_H_
 #define MICRO_OS_PLUS_POSIX_IO_CHAR_DEVICE_H_
 
+// ----------------------------------------------------------------------------
+
 #if defined(__cplusplus)
 
 // ----------------------------------------------------------------------------
@@ -65,7 +67,6 @@ namespace os
        */
 
     public:
-
       char_device (char_device_impl& impl, const char* name);
 
       /**
@@ -76,16 +77,17 @@ namespace os
       char_device (const char_device&) = delete;
       char_device (char_device&&) = delete;
       char_device&
-      operator= (const char_device&) = delete;
+      operator= (const char_device&)
+          = delete;
       char_device&
-      operator= (char_device&&) = delete;
+      operator= (char_device&&)
+          = delete;
 
       /**
        * @endcond
        */
 
-      virtual
-      ~char_device ();
+      virtual ~char_device ();
 
       /**
        * @}
@@ -98,7 +100,6 @@ namespace os
        */
 
     public:
-
       // Support functions.
 
       char_device_impl&
@@ -126,7 +127,6 @@ namespace os
        */
 
     public:
-
       char_device_impl (void);
 
       /**
@@ -137,16 +137,17 @@ namespace os
       char_device_impl (const char_device_impl&) = delete;
       char_device_impl (char_device_impl&&) = delete;
       char_device_impl&
-      operator= (const char_device_impl&) = delete;
+      operator= (const char_device_impl&)
+          = delete;
       char_device_impl&
-      operator= (char_device_impl&&) = delete;
+      operator= (char_device_impl&&)
+          = delete;
 
       /**
        * @endcond
        */
 
-      virtual
-      ~char_device_impl ();
+      virtual ~char_device_impl ();
 
       /**
        * @}
@@ -159,7 +160,6 @@ namespace os
        */
 
     public:
-
       // Implementations
 
       virtual off_t
@@ -177,84 +177,81 @@ namespace os
 
     // ========================================================================
 
-    template<typename T>
-      class char_device_implementable : public char_device
-      {
-        // --------------------------------------------------------------------
+    template <typename T>
+    class char_device_implementable : public char_device
+    {
+      // ----------------------------------------------------------------------
 
-      public:
+    public:
+      using value_type = T;
 
-        using value_type = T;
+      // ----------------------------------------------------------------------
 
-        // --------------------------------------------------------------------
+      /**
+       * @name Constructors & Destructor
+       * @{
+       */
 
-        /**
-         * @name Constructors & Destructor
-         * @{
-         */
+    public:
+      template <typename... Args>
+      char_device_implementable (const char* name, Args&&... args);
 
-      public:
+      /**
+       * @cond ignore
+       */
 
-        template<typename ... Args>
-          char_device_implementable (const char* name, Args&&... args);
+      // The rule of five.
+      char_device_implementable (const char_device_implementable&) = delete;
+      char_device_implementable (char_device_implementable&&) = delete;
+      char_device_implementable&
+      operator= (const char_device_implementable&)
+          = delete;
+      char_device_implementable&
+      operator= (char_device_implementable&&)
+          = delete;
 
-        /**
-         * @cond ignore
-         */
+      /**
+       * @endcond
+       */
 
-        // The rule of five.
-        char_device_implementable (const char_device_implementable&) = delete;
-        char_device_implementable (char_device_implementable&&) = delete;
-        char_device_implementable&
-        operator= (const char_device_implementable&) = delete;
-        char_device_implementable&
-        operator= (char_device_implementable&&) = delete;
+      virtual ~char_device_implementable ();
 
-        /**
-         * @endcond
-         */
+      /**
+       * @}
+       */
 
-        virtual
-        ~char_device_implementable ();
+      // ----------------------------------------------------------------------
+      /**
+       * @name Public Member Functions
+       * @{
+       */
 
-        /**
-         * @}
-         */
+    public:
+      // Support functions.
 
-        // --------------------------------------------------------------------
-        /**
-         * @name Public Member Functions
-         * @{
-         */
+      value_type&
+      impl (void) const;
 
-      public:
+      /**
+       * @}
+       */
 
-        // Support functions.
+      // ----------------------------------------------------------------------
+    protected:
+      /**
+       * @cond ignore
+       */
 
-        value_type&
-        impl (void) const;
+      value_type impl_instance_;
 
-        /**
-         * @}
-         */
+      /**
+       * @endcond
+       */
+    };
 
-        // --------------------------------------------------------------------
-      protected:
-
-        /**
-         * @cond ignore
-         */
-
-        value_type impl_instance_;
-
-        /**
-         * @endcond
-         */
-      };
-
-  // ==========================================================================
-  } /* namespace posix */
-} /* namespace os */
+    // ==========================================================================
+  } // namespace posix
+} // namespace os
 
 // ===== Inline & template implementations ====================================
 
@@ -272,44 +269,44 @@ namespace os
 
     // ========================================================================
 
-    template<typename T>
-      template<typename ... Args>
-        char_device_implementable<T>::char_device_implementable (
-            const char* name, Args&&... args) :
-            char_device
-              { impl_instance_, name }, //
-            impl_instance_
-              { std::forward<Args>(args)... }
-        {
+    template <typename T>
+    template <typename... Args>
+    char_device_implementable<T>::char_device_implementable (const char* name,
+                                                             Args&&... args)
+        : char_device{ impl_instance_, name }, //
+          impl_instance_{ std::forward<Args> (args)... }
+    {
 #if defined(OS_TRACE_POSIX_IO_CHAR_DEVICE)
-          trace::printf ("char_device_implementable::%s(\"%s\")=@%p\n",
-                         __func__, name_, this);
+      trace::printf ("char_device_implementable::%s(\"%s\")=@%p\n", __func__,
+                     name_, this);
 #endif
-        }
+    }
 
-    template<typename T>
-      char_device_implementable<T>::~char_device_implementable ()
-      {
+    template <typename T>
+    char_device_implementable<T>::~char_device_implementable ()
+    {
 #if defined(OS_TRACE_POSIX_IO_CHAR_DEVICE)
-        trace::printf ("char_device_implementable::%s() @%p %s\n", __func__,
-                       this, name_);
+      trace::printf ("char_device_implementable::%s() @%p %s\n", __func__,
+                     this, name_);
 #endif
-      }
+    }
 
-    template<typename T>
-      typename char_device_implementable<T>::value_type&
-      char_device_implementable<T>::impl (void) const
-      {
-        return static_cast<value_type&> (impl_);
-      }
+    template <typename T>
+    typename char_device_implementable<T>::value_type&
+    char_device_implementable<T>::impl (void) const
+    {
+      return static_cast<value_type&> (impl_);
+    }
 
-  // ==========================================================================
-  } /* namespace posix */
-} /* namespace os */
+    // ==========================================================================
+  } // namespace posix
+} // namespace os
 
 // ----------------------------------------------------------------------------
 
 #endif /* __cplusplus */
+
+// ----------------------------------------------------------------------------
 
 #endif /* MICRO_OS_PLUS_POSIX_IO_CHAR_DEVICE_H_ */
 

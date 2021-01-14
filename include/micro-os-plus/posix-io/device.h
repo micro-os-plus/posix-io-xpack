@@ -28,6 +28,8 @@
 #ifndef MICRO_OS_PLUS_POSIX_IO_BLOCK_H_
 #define MICRO_OS_PLUS_POSIX_IO_BLOCK_H_
 
+// ----------------------------------------------------------------------------
+
 #if defined(__cplusplus)
 
 // ----------------------------------------------------------------------------
@@ -42,7 +44,7 @@
 
 // ----------------------------------------------------------------------------
 
-#if ! defined(OS_STRING_POSIX_DEVICE_PREFIX)
+#if !defined(OS_STRING_POSIX_DEVICE_PREFIX)
 #define OS_STRING_POSIX_DEVICE_PREFIX "/dev/"
 #endif
 
@@ -73,7 +75,6 @@ namespace os
        */
 
     public:
-
       device (device_impl& impl, type t, const char* name);
 
       /**
@@ -84,16 +85,17 @@ namespace os
       device (const device&) = delete;
       device (device&&) = delete;
       device&
-      operator= (const device&) = delete;
+      operator= (const device&)
+          = delete;
       device&
-      operator= (device&&) = delete;
+      operator= (device&&)
+          = delete;
 
       /**
        * @endcond
        */
 
-      virtual
-      ~device () override;
+      virtual ~device () override;
 
       /**
        * @}
@@ -106,7 +108,6 @@ namespace os
        */
 
     public:
-
       /**
        *
        * @param path May be nullptr.
@@ -161,7 +162,6 @@ namespace os
 
       // ----------------------------------------------------------------------
     protected:
-
       /**
        * @cond ignore
        */
@@ -174,7 +174,6 @@ namespace os
 
       // ----------------------------------------------------------------------
     public:
-
       /**
        * @cond ignore
        */
@@ -214,7 +213,6 @@ namespace os
        */
 
     public:
-
       device_impl (void);
 
       /**
@@ -225,16 +223,17 @@ namespace os
       device_impl (const device_impl&) = delete;
       device_impl (device_impl&&) = delete;
       device_impl&
-      operator= (const device_impl&) = delete;
+      operator= (const device_impl&)
+          = delete;
       device_impl&
-      operator= (device_impl&&) = delete;
+      operator= (device_impl&&)
+          = delete;
 
       /**
        * @endcond
        */
 
-      virtual
-      ~device_impl () override;
+      virtual ~device_impl () override;
 
       /**
        * @}
@@ -247,18 +246,20 @@ namespace os
        */
 
     public:
-
       virtual bool
       do_is_opened (void) override;
 
       virtual int
-      do_vopen (const char* path, int oflag, std::va_list args) = 0;
+      do_vopen (const char* path, int oflag, std::va_list args)
+          = 0;
 
       virtual int
-      do_vioctl (int request, std::va_list args) = 0;
+      do_vioctl (int request, std::va_list args)
+          = 0;
 
       virtual void
-      do_sync (void) = 0;
+      do_sync (void)
+          = 0;
 
       // ----------------------------------------------------------------------
 
@@ -271,7 +272,6 @@ namespace os
 
       // ----------------------------------------------------------------------
     protected:
-
       /**
        * @cond ignore
        */
@@ -285,9 +285,9 @@ namespace os
 
 #pragma GCC diagnostic pop
 
-  // ==========================================================================
-  } /* namespace posix */
-} /* namespace os */
+    // ==========================================================================
+  } // namespace posix
+} // namespace os
 
 // ===== Inline & template implementations ====================================
 
@@ -323,13 +323,15 @@ namespace os
       return open_count_;
     }
 
-  // ==========================================================================
-  } /* namespace posix */
-} /* namespace os */
+    // ==========================================================================
+  } // namespace posix
+} // namespace os
 
 // ----------------------------------------------------------------------------
 
 #endif /* __cplusplus */
+
+// ----------------------------------------------------------------------------
 
 #endif /* MICRO_OS_PLUS_POSIX_IO_BLOCK_H_ */
 

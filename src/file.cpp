@@ -40,9 +40,7 @@ namespace os
   {
     // ========================================================================
 
-    file::file (file_impl& impl) :
-        io
-          { impl, type::file }
+    file::file (file_impl& impl) : io{ impl, type::file }
     {
 #if defined(OS_TRACE_POSIX_IO_FILE)
       trace::printf ("file::%s()=%p\n", __func__, this);
@@ -109,7 +107,7 @@ namespace os
     }
 
     int
-    file::fstatvfs (struct statvfs *buf)
+    file::fstatvfs (struct statvfs* buf)
     {
 #if defined(OS_TRACE_POSIX_IO_FILE)
       trace::printf ("file::%s(%p) @%p\n", __func__, buf, this);
@@ -123,8 +121,7 @@ namespace os
 
     // ========================================================================
 
-    file_impl::file_impl (class file_system& fs) :
-        file_system_ (fs)
+    file_impl::file_impl (class file_system& fs) : file_system_ (fs)
     {
 #if defined(OS_TRACE_POSIX_IO_FILE)
       trace::printf ("file_impl::%s()=%p\n", __func__, this);
@@ -159,8 +156,8 @@ namespace os
       return -1;
     }
 
-  // ==========================================================================
-  } /* namespace posix */
-} /* namespace os */
+    // ==========================================================================
+  } // namespace posix
+} // namespace os
 
 // ----------------------------------------------------------------------------

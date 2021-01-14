@@ -28,6 +28,8 @@
 #ifndef MICRO_OS_PLUS_POSIX_IO_REDEFINITIONS_H_
 #define MICRO_OS_PLUS_POSIX_IO_REDEFINITIONS_H_
 
+// ----------------------------------------------------------------------------
+
 // These definitions might be useful in some tests, to check
 // if both prefixed and not prefixed names are ok.
 
@@ -92,6 +94,8 @@
 #define __posix_wait wait
 #define __posix_write write
 #define __posix_writev writev
+
+// ----------------------------------------------------------------------------
 
 #endif /* MICRO_OS_PLUS_POSIX_IO_REDEFINITIONS_H_ */
 

@@ -61,7 +61,7 @@ namespace os
       trace::printf ("file_descriptors_manager::%s(%d)=%p\n", __func__, size,
                      this);
 
-      assert(size > 0);
+      assert (size > 0);
 
       size__ = size + reserved__; // Add space for standard files.
       descriptors_array__ = new class io*[size__];
@@ -179,7 +179,7 @@ namespace os
     class socket*
     file_descriptors_manager::socket (int fildes)
     {
-      assert((fildes >= 0) && (static_cast<std::size_t> (fildes) < size__));
+      assert ((fildes >= 0) && (static_cast<std::size_t> (fildes) < size__));
       auto* const io = descriptors_array__[fildes];
       if (io->get_type () != io::type::socket)
         {
@@ -193,7 +193,7 @@ namespace os
     {
       std::size_t count = reserved__;
       for (std::size_t i = reserved__; i < file_descriptors_manager::size ();
-          ++i)
+           ++i)
         {
           if (descriptors_array__[i] != nullptr)
             {
@@ -203,8 +203,8 @@ namespace os
       return count;
     }
 
-  // ========================================================================
-  } /* namespace posix */
-} /* namespace os */
+    // ========================================================================
+  } // namespace posix
+} // namespace os
 
 // ----------------------------------------------------------------------------

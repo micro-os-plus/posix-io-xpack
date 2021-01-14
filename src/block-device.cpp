@@ -43,9 +43,12 @@ namespace os
   {
     // ========================================================================
 
-    block_device::block_device (block_device_impl& impl, const char* name) :
-        device
-          { impl, type::block_device, name, }
+    block_device::block_device (block_device_impl& impl, const char* name)
+        : device{
+            impl,
+            type::block_device,
+            name,
+          }
     {
 #if defined(OS_TRACE_POSIX_IO_BLOCK_DEVICE)
       trace::printf ("block_device::%s(\"%s\")=@%p\n", __func__, name_, this);
@@ -130,7 +133,7 @@ namespace os
         case BLKSSZGET:
           // Get logical device sector size (to be used for read/writes).
           {
-            std::size_t* sz = va_arg(args, std::size_t*);
+            std::size_t* sz = va_arg (args, std::size_t*);
             if (sz == nullptr || impl ().block_logical_size_bytes_ != 0)
               {
                 errno = EINVAL;
@@ -144,7 +147,7 @@ namespace os
         case BLKPBSZGET:
           // Get physical device sector size (internally used for erase).
           {
-            std::size_t* sz = va_arg(args, std::size_t*);
+            std::size_t* sz = va_arg (args, std::size_t*);
             if (sz == nullptr || impl ().block_physical_size_bytes_ != 0)
               {
                 errno = EINVAL;
@@ -158,15 +161,15 @@ namespace os
         case BLKGETSIZE64:
           // Get device size in bytes.
           {
-            uint64_t* sz = va_arg(args, uint64_t*);
+            uint64_t* sz = va_arg (args, uint64_t*);
             if (sz == nullptr || impl ().num_blocks_ != 0)
               {
                 errno = EINVAL;
                 return -1;
               }
 
-            *sz = (static_cast<uint64_t> (impl ().num_blocks_
-                * impl ().block_logical_size_bytes_));
+            *sz = (static_cast<uint64_t> (
+                impl ().num_blocks_ * impl ().block_logical_size_bytes_));
             return 0;
           }
 
@@ -253,8 +256,8 @@ namespace os
         }
 
       std::size_t nblocks = nbyte / block_logical_size_bytes_;
-      blknum_t blknum = static_cast<std::size_t> (offset_)
-          / block_logical_size_bytes_;
+      blknum_t blknum
+          = static_cast<std::size_t> (offset_) / block_logical_size_bytes_;
 
       if (blknum + nblocks > num_blocks_)
         {
@@ -288,8 +291,8 @@ namespace os
         }
 
       std::size_t nblocks = nbyte / block_logical_size_bytes_;
-      blknum_t blknum = static_cast<std::size_t> (offset_)
-          / block_logical_size_bytes_;
+      blknum_t blknum
+          = static_cast<std::size_t> (offset_) / block_logical_size_bytes_;
 
       if (blknum + nblocks > num_blocks_)
         {
@@ -305,8 +308,8 @@ namespace os
       return ret;
     }
 
-  // ==========================================================================
-  } /* namespace posix */
-} /* namespace os */
+    // ==========================================================================
+  } // namespace posix
+} // namespace os
 
 // ----------------------------------------------------------------------------

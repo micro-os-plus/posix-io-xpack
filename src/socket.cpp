@@ -39,10 +39,9 @@ namespace os
   {
     // ========================================================================
 
-    socket::socket (socket_impl& impl, class net_stack& ns) :
-        io
-          { impl, type::socket }, //
-        net_stack_ (&ns)
+    socket::socket (socket_impl& impl, class net_stack& ns)
+        : io{ impl, type::socket }, //
+          net_stack_ (&ns)
     {
 #if defined(OS_TRACE_POSIX_IO_SOCKET)
       trace::printf ("socket::%s()=@%p\n", __func__, this);
@@ -231,8 +230,8 @@ namespace os
 #endif
     }
 
-  // ==========================================================================
-  } /* namespace posix */
-} /* namespace os */
+    // ==========================================================================
+  } // namespace posix
+} // namespace os
 
 // ----------------------------------------------------------------------------

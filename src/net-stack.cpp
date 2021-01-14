@@ -78,9 +78,9 @@ namespace os
 
     // ========================================================================
 
-    net_stack::net_stack (net_stack_impl& impl, const char* name) :
-        name_ (name), //
-        impl_ (impl)
+    net_stack::net_stack (net_stack_impl& impl, const char* name)
+        : name_ (name), //
+          impl_ (impl)
     {
 #if defined(OS_TRACE_POSIX_IO_NET_STACK)
       trace::printf ("net_stack::%s(\"%s\")=%p\n", __func__, name_, this);
@@ -105,8 +105,8 @@ namespace os
 
     // ========================================================================
 
-    net_stack_impl::net_stack_impl (net_interface& interface) :
-        interface_ (interface)
+    net_stack_impl::net_stack_impl (net_interface& interface)
+        : interface_ (interface)
     {
 #if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("net_stack_impl::%s()=%p\n", __func__, this);
@@ -120,8 +120,8 @@ namespace os
 #endif
     }
 
-  // ==========================================================================
-  } /* namespace posix */
-} /* namespace os */
+    // ==========================================================================
+  } // namespace posix
+} // namespace os
 
 // ----------------------------------------------------------------------------

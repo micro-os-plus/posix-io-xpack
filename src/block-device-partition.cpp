@@ -38,9 +38,8 @@ namespace os
     // ========================================================================
 
     block_device_partition::block_device_partition (block_device_impl& impl,
-                                                    const char* name) :
-        block_device
-          { impl, name }
+                                                    const char* name)
+        : block_device{ impl, name }
     {
 #if defined(OS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
       trace::printf ("block_device_partition::%s(\"%s\")=@%p\n", __func__,
@@ -72,22 +71,24 @@ namespace os
     // ========================================================================
 
     block_device_partition_impl::block_device_partition_impl (
-        block_device& parent) :
-        parent_ (parent)
+        block_device& parent)
+        : parent_ (parent)
     {
 #if defined(OS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
-      trace::printf ("block_device_partition_impl::%s()=@%p\n", __func__, this);
+      trace::printf ("block_device_partition_impl::%s()=@%p\n", __func__,
+                     this);
 #endif
     }
 
     block_device_partition_impl::~block_device_partition_impl ()
     {
 #if defined(OS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
-      trace::printf ("block_device_partition_impl::%s() @%p\n", __func__, this);
+      trace::printf ("block_device_partition_impl::%s() @%p\n", __func__,
+                     this);
 #endif
     }
 
-    // ----------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
@@ -110,7 +111,7 @@ namespace os
 #endif
 
       partition_offset_blocks_ = offset;
-      assert(nblocks > 0);
+      assert (nblocks > 0);
       num_blocks_ = nblocks;
 
       // Inherit from parent.
@@ -161,7 +162,8 @@ namespace os
     block_device_partition_impl::do_sync (void)
     {
 #if defined(OS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
-      trace::printf ("block_device_partition_impl::%s() @%p\n", __func__, this);
+      trace::printf ("block_device_partition_impl::%s() @%p\n", __func__,
+                     this);
 #endif
 
       return parent_.sync ();
@@ -171,14 +173,15 @@ namespace os
     block_device_partition_impl::do_close (void)
     {
 #if defined(OS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
-      trace::printf ("block_device_partition_impl::%s() @%p\n", __func__, this);
+      trace::printf ("block_device_partition_impl::%s() @%p\n", __func__,
+                     this);
 #endif
 
       return parent_.close ();
     }
 
-  // ==========================================================================
-  } /* namespace posix */
-} /* namespace os */
+    // ==========================================================================
+  } // namespace posix
+} // namespace os
 
 // ----------------------------------------------------------------------------

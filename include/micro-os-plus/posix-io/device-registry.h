@@ -28,6 +28,8 @@
 #ifndef MICRO_OS_PLUS_POSIX_IO_DEVICE_REGISTRY_H_
 #define MICRO_OS_PLUS_POSIX_IO_DEVICE_REGISTRY_H_
 
+// ----------------------------------------------------------------------------
+
 #if defined(__cplusplus)
 
 // ----------------------------------------------------------------------------
@@ -56,92 +58,91 @@ namespace os
      * @headerfile device-registry.h <micro-os-plus/posix-io/device-registry.h>
      * @ingroup cmsis-plus-posix-io-base
      */
-    template<typename T>
-      class device_registry
-      {
-      public:
+    template <typename T>
+    class device_registry
+    {
+    public:
+      using value_type = T;
+      using pointer = T*;
+      using reference = T&;
 
-        using value_type = T;
-        using pointer = T*;
-        using reference = T&;
+      // ----------------------------------------------------------------------
 
-        // --------------------------------------------------------------------
+      /**
+       * @name Constructors & Destructor
+       * @{
+       */
 
-        /**
-         * @name Constructors & Destructor
-         * @{
-         */
+    public:
+      // Do not allow to create instances of this class.
+      device_registry () = delete;
 
-      public:
+      /**
+       * @cond ignore
+       */
 
-        // Do not allow to create instances of this class.
-        device_registry () = delete;
+      // The rule of five.
+      device_registry (const value_type&) = delete;
+      device_registry (value_type&&) = delete;
+      value_type&
+      operator= (const value_type&)
+          = delete;
+      value_type&
+      operator= (value_type&&)
+          = delete;
 
-        /**
-         * @cond ignore
-         */
+      /**
+       * @endcond
+       */
 
-        // The rule of five.
-        device_registry (const value_type&) = delete;
-        device_registry (value_type&&) = delete;
-        value_type&
-        operator= (const value_type&) = delete;
-        value_type&
-        operator= (value_type&&) = delete;
+      ~device_registry () = delete;
 
-        /**
-         * @endcond
-         */
+      /**
+       * @}
+       */
 
-        ~device_registry () = delete;
+      // ----------------------------------------------------------------------
+      /**
+       * @name Public Static Member Functions
+       * @{
+       */
 
-        /**
-         * @}
-         */
+    public:
+      static void
+      link (value_type* device);
 
-        // --------------------------------------------------------------------
-        /**
-         * @name Public Static Member Functions
-         * @{
-         */
+      static value_type*
+      identify_device (const char* path);
 
-      public:
+      /**
+       * @}
+       */
 
-        static void
-        link (value_type* device);
+      // ----------------------------------------------------------------------
+    private:
+      /**
+       * @cond ignore
+       */
 
-        static value_type*
-        identify_device (const char* path);
+      // Since devices may be constructed statically, so may ask
+      // to be linked here at any time, this list must be initialised
+      // before any static constructor.
+      // With the order of static constructors unknown, this means it
+      // must be allocated in the BSS and will be initialised to 0 by
+      // the startup code.
+      using device_list
+          = utils::intrusive_list<device, utils::double_list_links,
+                                  &device::registry_links_, T>;
+      static device_list registry_list__;
 
-        /**
-         * @}
-         */
+      /**
+       * @endcond
+       */
+    };
 
-        // --------------------------------------------------------------------
-      private:
-
-        /**
-         * @cond ignore
-         */
-
-        // Since devices may be constructed statically, so may ask
-        // to be linked here at any time, this list must be initialised
-        // before any static constructor.
-        // With the order of static constructors unknown, this means it
-        // must be allocated in the BSS and will be initialised to 0 by
-        // the startup code.
-        using device_list = utils::intrusive_list<device,
-        utils::double_list_links, &device::registry_links_, T>;
-        static device_list registry_list__;
-
-        /**
-         * @endcond
-         */
-      };
-
-  // ==========================================================================
-  } /* namespace posix */
-} /* namespace os */
+    // ==========================================================================
+  } // namespace posix
+} // namespace os
 
 // ===== Inline & template implementations ====================================
 
@@ -151,58 +152,58 @@ namespace os
   {
     // ========================================================================
 
-    template<typename T>
-      void
-      device_registry<T>::link (value_type* device)
-      {
+    template <typename T>
+    void
+    device_registry<T>::link (value_type* device)
+    {
 #if defined(DEBUG)
-        for (auto&& d : registry_list__)
-          {
-            // Validate the device name by checking duplicates.
-            if (std::strcmp (device->name (), d.name ()) == 0)
-              {
-                trace::puts ("Duplicate device name. Abort.");
-                std::abort ();
-              }
-          }
+      for (auto&& d : registry_list__)
+        {
+          // Validate the device name by checking duplicates.
+          if (std::strcmp (device->name (), d.name ()) == 0)
+            {
+              trace::puts ("Duplicate device name. Abort.");
+              std::abort ();
+            }
+        }
 #endif // DEBUG
 
-        registry_list__.link (*device);
+      registry_list__.link (*device);
 
-        trace::printf ("Device '%s%s' linked.\n", value_type::device_prefix (),
-                       device->name ());
-      }
+      trace::printf ("Device '%s%s' linked.\n", value_type::device_prefix (),
+                     device->name ());
+    }
 
     /**
      * return pointer to device or nullptr if not found.
      */
-    template<typename T>
-      T*
-      device_registry<T>::identify_device (const char* path)
-      {
-        assert(path != nullptr);
+    template <typename T>
+    T*
+    device_registry<T>::identify_device (const char* path)
+    {
+      assert (path != nullptr);
 
-        auto prefix = value_type::device_prefix ();
-        if (std::strncmp (prefix, path, std::strlen (prefix)) != 0)
-          {
-            // The device prefix does not match, not a device.
-            return nullptr;
-          }
+      auto prefix = value_type::device_prefix ();
+      if (std::strncmp (prefix, path, std::strlen (prefix)) != 0)
+        {
+          // The device prefix does not match, not a device.
+          return nullptr;
+        }
 
-        // The prefix was identified; try to match the rest of the path.
-        auto name = path + std::strlen (prefix);
+      // The prefix was identified; try to match the rest of the path.
+      auto name = path + std::strlen (prefix);
 
-        for (auto&& p : registry_list__)
-          {
-            if (p.match_name (name))
-              {
-                return static_cast<value_type*> (&p);
-              }
-          }
+      for (auto&& p : registry_list__)
+        {
+          if (p.match_name (name))
+            {
+              return static_cast<value_type*> (&p);
+            }
+        }
 
-        // Not a known device.
-        return nullptr;
-      }
+      // Not a known device.
+      return nullptr;
+    }
 
     /**
      * @cond ignore
@@ -215,22 +216,25 @@ namespace os
 #endif
 
     // Initialised to 0 by BSS.
-    template<typename T>
-      typename device_registry<T>::device_list device_registry<T>::registry_list__;
+    template <typename T>
+    typename device_registry<T>::device_list
+        device_registry<T>::registry_list__;
 
 #pragma GCC diagnostic pop
 
-  /**
-   * @endcond
-   */
+    /**
+     * @endcond
+     */
 
-  // ==========================================================================
-  } /* namespace posix */
-} /* namespace os */
+    // ==========================================================================
+  } // namespace posix
+} // namespace os
 
 // ----------------------------------------------------------------------------
 
 #endif /* __cplusplus */
+
+// ----------------------------------------------------------------------------
 
 #endif /* MICRO_OS_PLUS_POSIX_IO_DEVICE_REGISTRY_H_ */
 

@@ -50,7 +50,7 @@ extern "C"
 {
 #endif
 
-// ----------------------------------------------------------------------------
+  // --------------------------------------------------------------------------
 
   typedef uint32_t socklen_t;
 
@@ -58,8 +58,8 @@ extern "C"
 
   struct sockaddr
   {
-    sa_family_t sa_family;  //Address family.
-    char sa_data[];  // Socket address (variable-length data).
+    sa_family_t sa_family; // Address family.
+    char sa_data[]; // Socket address (variable-length data).
   };
 
   int
@@ -117,13 +117,15 @@ extern "C"
   int
   socketpair (int domain, int type, int protocol, int socket_vector[2]);
 
-// ----------------------------------------------------------------------------
+  // --------------------------------------------------------------------------
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* defined(_POSIX_VERSION) */
+
+// ----------------------------------------------------------------------------
 
 #endif /* POSIX_IO_SYS_SOCKET_H_ */
 
