@@ -65,10 +65,10 @@ extern "C"
 }
 #endif
 
-#endif /* defined(_POSIX_VERSION) */
+#endif // defined(_POSIX_VERSION)
 
 // ----------------------------------------------------------------------------
 
-#endif /* POSIX_IO_SYS_SELECT_H_ */
+#endif // POSIX_IO_SYS_SELECT_H_
 
 // ----------------------------------------------------------------------------

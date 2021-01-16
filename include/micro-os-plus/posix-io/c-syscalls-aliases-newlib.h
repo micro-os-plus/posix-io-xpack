@@ -258,6 +258,6 @@ extern "C"
 
 // ----------------------------------------------------------------------------
 
-#endif /* MICRO_OS_PLUS_POSIX_IO_C_POSIX_SYSCALLS_ALIASES_NEWLIB_H_ */
+#endif // MICRO_OS_PLUS_POSIX_IO_C_POSIX_SYSCALLS_ALIASES_NEWLIB_H_
 
 // ----------------------------------------------------------------------------

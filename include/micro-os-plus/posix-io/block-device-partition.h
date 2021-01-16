@@ -537,10 +537,10 @@ namespace os
   } // namespace posix
 } // namespace os
 
-#endif /* __cplusplus */
+#endif // __cplusplus
 
 // ----------------------------------------------------------------------------
 
-#endif /* MICRO_OS_PLUS_POSIX_IO_BLOCK_DEVICE_PARTITION_H_ */
+#endif // MICRO_OS_PLUS_POSIX_IO_BLOCK_DEVICE_PARTITION_H_
 
 // ----------------------------------------------------------------------------

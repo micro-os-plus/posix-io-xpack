@@ -53,10 +53,10 @@ extern "C"
 }
 #endif
 
-#endif /* defined(_POSIX_VERSION) */
+#endif // defined(_POSIX_VERSION)
 
 // ----------------------------------------------------------------------------
 
-#endif /* POSIX_STROPTS_H_ */
+#endif // POSIX_STROPTS_H_
 
 // ----------------------------------------------------------------------------

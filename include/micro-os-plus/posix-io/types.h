@@ -53,7 +53,7 @@ namespace os
   } // namespace posix
 } // namespace os
 
-#endif /* __cplusplus */
+#endif // __cplusplus
 
 #ifdef __cplusplus
 extern "C"
@@ -291,6 +291,6 @@ extern "C"
 
 // ----------------------------------------------------------------------------
 
-#endif /* MICRO_OS_PLUS_POSIX_IO_TYPES_H_ */
+#endif // MICRO_OS_PLUS_POSIX_IO_TYPES_H_
 
 // ----------------------------------------------------------------------------

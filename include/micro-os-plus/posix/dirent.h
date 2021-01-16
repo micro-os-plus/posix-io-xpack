@@ -98,10 +98,10 @@ extern "C"
 }
 #endif
 
-#endif /* defined(_POSIX_VERSION) */
+#endif // defined(_POSIX_VERSION)
 
 // ----------------------------------------------------------------------------
 
-#endif /* POSIX_DIRENT_H_ */
+#endif // POSIX_DIRENT_H_
 
 // ----------------------------------------------------------------------------

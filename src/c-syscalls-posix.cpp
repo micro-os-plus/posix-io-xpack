@@ -973,10 +973,10 @@ initialise_monitor_handles (void)
 
 #endif
 
-#endif /* defined(__ARM_EABI__) && (__STDC_HOSTED__ != 0) */
+#endif // defined(__ARM_EABI__) && (__STDC_HOSTED__ != 0)
 
 // ----------------------------------------------------------------------------
 
-#endif /* !defined(OS_USE_SEMIHOSTING_SYSCALLS) */
+#endif // !defined(OS_USE_SEMIHOSTING_SYSCALLS)
 
 // ----------------------------------------------------------------------------

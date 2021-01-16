@@ -322,10 +322,10 @@ extern "C"
 }
 #endif
 
-#endif /* defined(_POSIX_VERSION) */
+#endif // defined(_POSIX_VERSION)
 
 // ----------------------------------------------------------------------------
 
-#endif /* POSIX_TERMIOS_H_ */
+#endif // POSIX_TERMIOS_H_
 
 // ----------------------------------------------------------------------------
