@@ -11,41 +11,47 @@
 
 message(STATUS "Including micro-os-plus-posix-io...")
 
+# -----------------------------------------------------------------------------
+
 function(target_sources_micro_os_plus_posix_io target)
 
-  get_filename_component(PARENT_DIR ${CMAKE_CURRENT_FUNCTION_LIST_DIR} DIRECTORY)
+  get_filename_component(xpack_root_folder ${CMAKE_CURRENT_FUNCTION_LIST_DIR} DIRECTORY)
 
   target_sources(
     ${target}
 
     PRIVATE
-    ${PARENT_DIR}/src/newlib/c-newlib-reent.cpp
-    ${PARENT_DIR}/src/block-device.cpp
-    ${PARENT_DIR}/src/block-device-partition.cpp
-    ${PARENT_DIR}/src/char-device.cpp
-    ${PARENT_DIR}/src/c-syscalls-posix.cpp
-    ${PARENT_DIR}/src/device.cpp
-    ${PARENT_DIR}/src/directory.cpp
-    ${PARENT_DIR}/src/file.cpp
-    ${PARENT_DIR}/src/file-descriptors-manager.cpp
-    ${PARENT_DIR}/src/file-system.cpp
-    ${PARENT_DIR}/src/io.cpp
-    ${PARENT_DIR}/src/net-stack.cpp
-    ${PARENT_DIR}/src/socket.cpp
-    ${PARENT_DIR}/src/tty.cpp
+      ${xpack_root_folder}/src/newlib/c-newlib-reent.cpp
+      ${xpack_root_folder}/src/block-device.cpp
+      ${xpack_root_folder}/src/block-device-partition.cpp
+      ${xpack_root_folder}/src/char-device.cpp
+      ${xpack_root_folder}/src/c-syscalls-posix.cpp
+      ${xpack_root_folder}/src/device.cpp
+      ${xpack_root_folder}/src/directory.cpp
+      ${xpack_root_folder}/src/file.cpp
+      ${xpack_root_folder}/src/file-descriptors-manager.cpp
+      ${xpack_root_folder}/src/file-system.cpp
+      ${xpack_root_folder}/src/io.cpp
+      ${xpack_root_folder}/src/net-stack.cpp
+      ${xpack_root_folder}/src/socket.cpp
+      ${xpack_root_folder}/src/tty.cpp
   )
+
 endfunction()
+
+# -----------------------------------------------------------------------------
 
 function(target_include_directories_micro_os_plus_posix_io target)
 
-  get_filename_component(PARENT_DIR ${CMAKE_CURRENT_FUNCTION_LIST_DIR} DIRECTORY)
+  get_filename_component(xpack_root_folder ${CMAKE_CURRENT_FUNCTION_LIST_DIR} DIRECTORY)
 
   target_include_directories(
     ${target}
 
     PUBLIC
-      ${PARENT_DIR}/include
+      ${xpack_root_folder}/include
   )
+
 endfunction()
 
 # -----------------------------------------------------------------------------
