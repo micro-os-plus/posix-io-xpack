@@ -27,7 +27,7 @@
 
 #if !defined(OS_USE_SEMIHOSTING_SYSCALLS)
 
-#include <micro-os-plus/rtos/os.h>
+#include <micro-os-plus/rtos.h>
 #include <micro-os-plus/posix-io/types.h>
 #include <micro-os-plus/posix-io/file-descriptors-manager.h>
 #include <micro-os-plus/posix-io/io.h>
