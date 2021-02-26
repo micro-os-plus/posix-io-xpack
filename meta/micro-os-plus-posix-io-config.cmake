@@ -39,24 +39,13 @@ if(NOT TARGET micro-os-plus-posix-io-static)
 
   # ---------------------------------------------------------------------------
 
+  file(GLOB_RECURSE source_files CONFIGURE_DEPENDS "${xpack_current_folder}/src/*.c*")
+
   target_sources(
     micro-os-plus-posix-io-static
 
     PRIVATE
-      ${xpack_current_folder}/src/newlib/c-newlib-reent.cpp
-      ${xpack_current_folder}/src/block-device.cpp
-      ${xpack_current_folder}/src/block-device-partition.cpp
-      ${xpack_current_folder}/src/char-device.cpp
-      ${xpack_current_folder}/src/c-syscalls-posix.cpp
-      ${xpack_current_folder}/src/device.cpp
-      ${xpack_current_folder}/src/directory.cpp
-      ${xpack_current_folder}/src/file.cpp
-      ${xpack_current_folder}/src/file-descriptors-manager.cpp
-      ${xpack_current_folder}/src/file-system.cpp
-      ${xpack_current_folder}/src/io.cpp
-      ${xpack_current_folder}/src/net-stack.cpp
-      ${xpack_current_folder}/src/socket.cpp
-      ${xpack_current_folder}/src/tty.cpp
+      ${source_files}
   )
 
   target_include_directories(
