@@ -35,6 +35,7 @@
 // ----------------------------------------------------------------------------
 
 #if defined(OS_USE_OS_APP_CONFIG_H)
+// Include the application specific definitions.
 #include <micro-os-plus/config.h>
 #endif
 
