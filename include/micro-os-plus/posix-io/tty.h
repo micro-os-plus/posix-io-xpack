@@ -38,7 +38,6 @@
 #include <micro-os-plus/config.h>
 #endif
 
-#include <micro-os-plus/rtos/os.h>
 #include <micro-os-plus/posix-io/char-device.h>
 #include <micro-os-plus/posix/termios.h>
 
