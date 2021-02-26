@@ -34,9 +34,11 @@
 
 // ----------------------------------------------------------------------------
 
-#if defined(OS_USE_OS_APP_CONFIG_H)
+#if defined(HAVE_MICRO_OS_PLUS_CONFIG_H)
 #include <micro-os-plus/config.h>
-#endif
+#endif // HAVE_MICRO_OS_PLUS_CONFIG_H
+
+// ----------------------------------------------------------------------------
 
 #include <micro-os-plus/posix-io/device.h>
 
