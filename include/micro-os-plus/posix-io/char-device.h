@@ -57,7 +57,7 @@ namespace os
     /**
      * @brief Char device class.
      * @headerfile char-device.h <micro-os-plus/posix-io/char-device.h>
-     * @ingroup cmsis-plus-posix-io-base
+     * @ingroup micro-os-plus-posix-io-base
      */
     class char_device : public device
     {

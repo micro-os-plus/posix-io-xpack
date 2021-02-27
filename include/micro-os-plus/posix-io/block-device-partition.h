@@ -58,7 +58,7 @@ namespace os
      * @brief Block device partition class.
      * @headerfile block-device-partition.h
      * <micro-os-plus/posix-io/block-device-partitions.h>
-     * @ingroup cmsis-plus-posix-io-base
+     * @ingroup micro-os-plus-posix-io-base
      */
     class block_device_partition : public block_device
     {

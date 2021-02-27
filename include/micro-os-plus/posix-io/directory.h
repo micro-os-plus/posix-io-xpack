@@ -68,7 +68,7 @@ namespace os
     /**
      * @brief Directory class.
      * @headerfile directory.h <micro-os-plus/posix-io/directory.h>
-     * @ingroup cmsis-plus-posix-io-base
+     * @ingroup micro-os-plus-posix-io-base
      */
     class directory
     {

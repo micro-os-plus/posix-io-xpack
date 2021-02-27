@@ -63,7 +63,7 @@ namespace os
     /**
      * @brief File class.
      * @headerfile file.h <micro-os-plus/posix-io/file.h>
-     * @ingroup cmsis-plus-posix-io-base
+     * @ingroup micro-os-plus-posix-io-base
      */
     class file : public io
     {

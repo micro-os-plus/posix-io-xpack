@@ -65,7 +65,7 @@ namespace os
     /**
      * @brief Base device class.
      * @headerfile device.h <micro-os-plus/posix-io/device.h>
-     * @ingroup cmsis-plus-posix-io-base
+     * @ingroup micro-os-plus-posix-io-base
      */
     class device : public io
     {

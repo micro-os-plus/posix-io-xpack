@@ -62,7 +62,7 @@ namespace os
     /**
      * @brief Network socket.
      * @headerfile socket.h <micro-os-plus/posix-io/socket.h>
-     * @ingroup cmsis-plus-posix-io-base
+     * @ingroup micro-os-plus-posix-io-base
      */
     class socket : public io
     {

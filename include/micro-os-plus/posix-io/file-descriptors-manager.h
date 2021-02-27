@@ -62,7 +62,7 @@ namespace os
      * @brief File descriptors manager static class.
      * @headerfile file-descriptors-manager.h
      * <micro-os-plus/posix-io/file-descriptors-manager.h>
-     * @ingroup cmsis-plus-posix-io-base
+     * @ingroup micro-os-plus-posix-io-base
      */
     class file_descriptors_manager
     {

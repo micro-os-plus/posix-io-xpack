@@ -58,7 +58,7 @@ namespace os
     /**
      * @brief Devices registry static class.
      * @headerfile device-registry.h <micro-os-plus/posix-io/device-registry.h>
-     * @ingroup cmsis-plus-posix-io-base
+     * @ingroup micro-os-plus-posix-io-base
      */
     template <typename T>
     class device_registry

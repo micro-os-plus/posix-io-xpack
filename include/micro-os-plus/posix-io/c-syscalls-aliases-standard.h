@@ -38,7 +38,7 @@ extern "C"
   // --------------------------------------------------------------------------
 
   /**
-   * @ingroup cmsis-plus-posix-io-c
+   * @ingroup micro-os-plus-posix-io-c
    * @{
    */
 

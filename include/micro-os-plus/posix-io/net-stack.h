@@ -63,7 +63,7 @@ namespace os
     class net_stack_impl;
 
     /**
-     * @ingroup cmsis-plus-posix-io-func
+     * @ingroup micro-os-plus-posix-io-func
      * @{
      */
 
@@ -80,7 +80,7 @@ namespace os
     /**
      * @brief Network stack class.
      * @headerfile net-stack.h <micro-os-plus/posix-io/net-stack.h>
-     * @ingroup cmsis-plus-posix-io-base
+     * @ingroup micro-os-plus-posix-io-base
      */
     class net_stack
     {

@@ -72,7 +72,7 @@ namespace os
     class file_system_impl;
 
     /**
-     * @ingroup cmsis-plus-posix-io-func
+     * @ingroup micro-os-plus-posix-io-func
      * @{
      */
 
@@ -127,7 +127,7 @@ namespace os
     /**
      * @brief File system class.
      * @headerfile file-system.h <micro-os-plus/posix-io/file-system.h>
-     * @ingroup cmsis-plus-posix-io-base
+     * @ingroup micro-os-plus-posix-io-base
      */
     class file_system
     {

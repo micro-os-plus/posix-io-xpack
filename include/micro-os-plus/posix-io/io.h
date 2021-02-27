@@ -66,7 +66,7 @@ namespace os
     class socket;
 
     /**
-     * @ingroup cmsis-plus-posix-io-func
+     * @ingroup micro-os-plus-posix-io-func
      * @{
      */
 
@@ -85,7 +85,7 @@ namespace os
     /**
      * @brief Base I/O class.
      * @headerfile io.h <micro-os-plus/posix-io/io.h>
-     * @ingroup cmsis-plus-posix-io-base
+     * @ingroup micro-os-plus-posix-io-base
      */
     class io
     {

@@ -53,7 +53,7 @@ namespace os
     /**
      * @brief Network interface class.
      * @headerfile net-interface.h <micro-os-plus/posix-io/net-interface.h>
-     * @ingroup cmsis-plus-posix-io-base
+     * @ingroup micro-os-plus-posix-io-base
      */
     class net_interface
     {
