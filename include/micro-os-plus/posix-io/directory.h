@@ -488,7 +488,7 @@ namespace os
         : directory{ impl_instance_ }, //
           impl_instance_{ fs }
     {
-#if defined(OS_TRACE_POSIX_IO_DIRECTORY)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_DIRECTORY)
       trace::printf ("directory_implementable::%s()=@%p\n", __func__, this);
 #endif
     }
@@ -496,7 +496,7 @@ namespace os
     template <typename T>
     directory_implementable<T>::~directory_implementable ()
     {
-#if defined(OS_TRACE_POSIX_IO_DIRECTORY)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_DIRECTORY)
       trace::printf ("directory_implementable::%s() @%p\n", __func__, this);
 #endif
     }
@@ -517,7 +517,7 @@ namespace os
           impl_instance_{ fs }, //
           locker_ (locker)
     {
-#if defined(OS_TRACE_POSIX_IO_DIRECTORY)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_DIRECTORY)
       trace::printf ("directory_lockable::%s()=@%p\n", __func__, this);
 #endif
     }
@@ -525,7 +525,7 @@ namespace os
     template <typename T, typename L>
     directory_lockable<T, L>::~directory_lockable ()
     {
-#if defined(OS_TRACE_POSIX_IO_DIRECTORY)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_DIRECTORY)
       trace::printf ("directory_lockable::%s() @%p\n", __func__, this);
 #endif
     }
@@ -536,7 +536,7 @@ namespace os
     struct dirent*
     directory_lockable<T, L>::read (void)
     {
-#if defined(OS_TRACE_POSIX_IO_DIRECTORY)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_DIRECTORY)
       trace::printf ("directory_lockable::%s() @%p\n", __func__, this);
 #endif
 
@@ -549,7 +549,7 @@ namespace os
     void
     directory_lockable<T, L>::rewind (void)
     {
-#if defined(OS_TRACE_POSIX_IO_DIRECTORY)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_DIRECTORY)
       trace::printf ("directory_lockable::%s() @%p\n", __func__, this);
 #endif
 
@@ -562,7 +562,7 @@ namespace os
     int
     directory_lockable<T, L>::close (void)
     {
-#if defined(OS_TRACE_POSIX_IO_DIRECTORY)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_DIRECTORY)
       trace::printf ("directory_lockable::%s() @%p\n", __func__, this);
 #endif
 

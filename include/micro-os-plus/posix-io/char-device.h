@@ -278,7 +278,7 @@ namespace os
         : char_device{ impl_instance_, name }, //
           impl_instance_{ std::forward<Args> (args)... }
     {
-#if defined(OS_TRACE_POSIX_IO_CHAR_DEVICE)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_CHAR_DEVICE)
       trace::printf ("char_device_implementable::%s(\"%s\")=@%p\n", __func__,
                      name_, this);
 #endif
@@ -287,7 +287,7 @@ namespace os
     template <typename T>
     char_device_implementable<T>::~char_device_implementable ()
     {
-#if defined(OS_TRACE_POSIX_IO_CHAR_DEVICE)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_CHAR_DEVICE)
       trace::printf ("char_device_implementable::%s() @%p %s\n", __func__,
                      this, name_);
 #endif

@@ -985,7 +985,7 @@ namespace os
         : file_system{ impl_instance_, name }, //
           impl_instance_{ device, std::forward<Args> (args)... }
     {
-#if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("file_system_implementable::%s(\"%s\")=@%p\n", __func__,
                      name_, this);
 #endif
@@ -994,7 +994,7 @@ namespace os
     template <typename T>
     file_system_implementable<T>::~file_system_implementable ()
     {
-#if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("file_system_implementable::%s() @%p %s\n", __func__,
                      this, name_);
 #endif
@@ -1018,7 +1018,7 @@ namespace os
         : file_system{ impl_instance_, name }, //
           impl_instance_{ device, locker, std::forward<Args> (args)... }
     {
-#if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("file_system_lockable::%s()=%p\n", __func__, this);
 #endif
     }
@@ -1026,7 +1026,7 @@ namespace os
     template <typename T, typename L>
     file_system_lockable<T, L>::~file_system_lockable ()
     {
-#if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("file_system_lockable::%s() @%p\n", __func__, this);
 #endif
     }

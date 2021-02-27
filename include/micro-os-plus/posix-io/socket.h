@@ -562,7 +562,7 @@ namespace os
     socket_implementable<T>::socket_implementable (class net_stack& ns)
         : socket{ impl_instance_, ns }
     {
-#if defined(OS_TRACE_POSIX_IO_SOCKET)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_SOCKET)
       trace::printf ("socket_implementable::%s()=@%p\n", __func__, this);
 #endif
     }
@@ -570,7 +570,7 @@ namespace os
     template <typename T>
     socket_implementable<T>::~socket_implementable ()
     {
-#if defined(OS_TRACE_POSIX_IO_SOCKET)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_SOCKET)
       trace::printf ("socket_implementable::%s() @%p\n", __func__, this);
 #endif
     }
@@ -590,7 +590,7 @@ namespace os
         : socket{ impl_instance_, ns }, //
           locker_ (locker)
     {
-#if defined(OS_TRACE_POSIX_IO_SOCKET)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_SOCKET)
       trace::printf ("socket_lockable::%s()=@%p\n", __func__, this);
 #endif
     }
@@ -598,7 +598,7 @@ namespace os
     template <typename T, typename L>
     socket_lockable<T, L>::~socket_lockable ()
     {
-#if defined(OS_TRACE_POSIX_IO_SOCKET)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_SOCKET)
       trace::printf ("socket_lockable::%s() @%p\n", __func__, this);
 #endif
     }

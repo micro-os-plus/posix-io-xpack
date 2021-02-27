@@ -563,7 +563,7 @@ namespace os
         : net_stack{ impl_instance_, name }, //
           impl_instance_{ interface, std::forward<Args> (args)... }
     {
-#if defined(OS_TRACE_POSIX_IO_NET_STACK)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_NET_STACK)
       trace::printf ("net_stack_implementable::%s(\"%s\")=@%p\n", __func__,
                      name_, this);
 #endif
@@ -572,7 +572,7 @@ namespace os
     template <typename T>
     net_stack_implementable<T>::~net_stack_implementable ()
     {
-#if defined(OS_TRACE_POSIX_IO_NET_STACK)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_NET_STACK)
       trace::printf ("net_stack_implementable::%s() @%p %s\n", __func__, this,
                      name_);
 #endif
@@ -596,7 +596,7 @@ namespace os
         : net_stack{ impl_instance_, name }, //
           impl_instance_{ interface, locker, std::forward<Args> (args)... }
     {
-#if defined(OS_TRACE_POSIX_IO_NET_STACK)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_NET_STACK)
       trace::printf ("net_stack_lockable::%s()=%p\n", __func__, this);
 #endif
     }
@@ -604,7 +604,7 @@ namespace os
     template <typename T, typename L>
     net_stack_lockable<T, L>::~net_stack_lockable ()
     {
-#if defined(OS_TRACE_POSIX_IO_NET_STACK)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_NET_STACK)
       trace::printf ("net_stack_lockable::%s() @%p\n", __func__, this);
 #endif
     }

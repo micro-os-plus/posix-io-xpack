@@ -43,14 +43,14 @@ namespace os
         : io{ impl, type::socket }, //
           net_stack_ (&ns)
     {
-#if defined(OS_TRACE_POSIX_IO_SOCKET)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_SOCKET)
       trace::printf ("socket::%s()=@%p\n", __func__, this);
 #endif
     }
 
     socket::~socket ()
     {
-#if defined(OS_TRACE_POSIX_IO_SOCKET)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_SOCKET)
       trace::printf ("socket::%s() @%p\n", __func__, this);
 #endif
 
@@ -218,14 +218,14 @@ namespace os
 
     socket_impl::socket_impl (void)
     {
-#if defined(OS_TRACE_POSIX_IO_SOCKET)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_SOCKET)
       trace::printf ("socket_impl::%s()=%p\n", __func__, this);
 #endif
     }
 
     socket_impl::~socket_impl ()
     {
-#if defined(OS_TRACE_POSIX_IO_SOCKET)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_SOCKET)
       trace::printf ("socket_impl::%s() @%p\n", __func__, this);
 #endif
     }

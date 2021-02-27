@@ -46,8 +46,8 @@
 
 // ----------------------------------------------------------------------------
 
-#if !defined(OS_STRING_POSIX_DEVICE_PREFIX)
-#define OS_STRING_POSIX_DEVICE_PREFIX "/dev/"
+#if !defined(MICRO_OS_PLUS_STRING_POSIX_DEVICE_PREFIX)
+#define MICRO_OS_PLUS_STRING_POSIX_DEVICE_PREFIX "/dev/"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -314,7 +314,7 @@ namespace os
     inline const char*
     device::device_prefix (void)
     {
-      return OS_STRING_POSIX_DEVICE_PREFIX;
+      return MICRO_OS_PLUS_STRING_POSIX_DEVICE_PREFIX;
     }
 
     // ========================================================================

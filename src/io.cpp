@@ -71,7 +71,7 @@ namespace os
     io*
     vopen (const char* path, int oflag, std::va_list args)
     {
-#if defined(OS_TRACE_POSIX_IO_IO)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_IO)
       trace::printf ("io::%s(\"%s\")\n", __func__, path ? path : "");
 #endif
 
@@ -135,7 +135,7 @@ namespace os
 
         // Return a valid pointer to an object derived from io, or nullptr.
 
-#if defined(OS_TRACE_POSIX_IO_IO)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_IO)
       trace::printf ("io::%s(\"%s\")=%p fd=%d\n", __func__, path, io,
                      io->file_descriptor ());
 #endif
@@ -148,7 +148,7 @@ namespace os
         : impl_ (impl), //
           type_ (t)
     {
-#if defined(OS_TRACE_POSIX_IO_IO)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_IO)
       trace::printf ("io::%s()=%p\n", __func__, this);
 #endif
 
@@ -157,7 +157,7 @@ namespace os
 
     io::~io ()
     {
-#if defined(OS_TRACE_POSIX_IO_IO)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_IO)
       trace::printf ("io::%s() @%p\n", __func__, this);
 #endif
 
@@ -169,7 +169,7 @@ namespace os
     int
     io::close (void)
     {
-#if defined(OS_TRACE_POSIX_IO_IO)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_IO)
       trace::printf ("io::%s() @%p\n", __func__, this);
 #endif
 
@@ -194,7 +194,7 @@ namespace os
     io*
     io::alloc_file_descriptor (void)
     {
-#if defined(OS_TRACE_POSIX_IO_IO)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_IO)
       trace::printf ("io::%s() @%p\n", __func__, this);
 #endif
 
@@ -207,7 +207,7 @@ namespace os
           return nullptr;
         }
 
-#if defined(OS_TRACE_POSIX_IO_IO)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_IO)
       trace::printf ("io::%s() @%p fd=%d\n", __func__, this, fd);
 #endif
 
@@ -222,7 +222,7 @@ namespace os
     ssize_t
     io::read (void* buf, std::size_t nbyte)
     {
-#if defined(OS_TRACE_POSIX_IO_IO)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_IO)
       trace::printf ("io::%s(0x0%X, %u) @%p\n", __func__, buf, nbyte, this);
 #endif
 
@@ -263,7 +263,7 @@ namespace os
           impl ().offset_ += ret;
         }
 
-#if defined(OS_TRACE_POSIX_IO_IO)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_IO)
       trace::printf ("io::%s(0x0%X, %u) @%p n=%d\n", __func__, buf, nbyte,
                      this, ret);
 #endif
@@ -273,7 +273,7 @@ namespace os
     ssize_t
     io::write (const void* buf, std::size_t nbyte)
     {
-#if defined(OS_TRACE_POSIX_IO_IO)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_IO)
       trace::printf ("io::%s(0x0%X, %u) @%p\n", __func__, buf, nbyte, this);
 #endif
 
@@ -316,7 +316,7 @@ namespace os
           impl ().offset_ += ret;
         }
 
-#if defined(OS_TRACE_POSIX_IO_IO)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_IO)
       trace::printf ("io::%s(0x0%X, %u) @%p n=%d\n", __func__, buf, nbyte,
                      this, ret);
 #endif
@@ -326,7 +326,7 @@ namespace os
     ssize_t
     io::writev (const struct iovec* iov, int iovcnt)
     {
-#if defined(OS_TRACE_POSIX_IO_IO)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_IO)
       trace::printf ("io::%s(0x0%X, %d) @%p\n", __func__, iov, iovcnt, this);
 #endif
 
@@ -380,7 +380,7 @@ namespace os
     int
     io::vfcntl (int cmd, std::va_list args)
     {
-#if defined(OS_TRACE_POSIX_IO_IO)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_IO)
       trace::printf ("io::%s(%d) @%p\n", __func__, cmd, this);
 #endif
 
@@ -415,7 +415,7 @@ namespace os
     int
     io::fstat (struct stat* buf)
     {
-#if defined(OS_TRACE_POSIX_IO_IO)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_IO)
       trace::printf ("io::%s(%p) @%p\n", __func__, buf, this);
 #endif
 
@@ -446,7 +446,7 @@ namespace os
     off_t
     io::lseek (off_t offset, int whence)
     {
-#if defined(OS_TRACE_POSIX_IO_IO)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_IO)
       trace::printf ("io::%s(%d, %d) @%p\n", __func__, offset, whence, this);
 #endif
 
@@ -466,14 +466,14 @@ namespace os
 
     io_impl::io_impl (void)
     {
-#if defined(OS_TRACE_POSIX_IO_IO)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_IO)
       trace::printf ("io_impl::%s()=%p\n", __func__, this);
 #endif
     }
 
     io_impl::~io_impl ()
     {
-#if defined(OS_TRACE_POSIX_IO_IO)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_IO)
       trace::printf ("io_impl::%s() @%p\n", __func__, this);
 #endif
     }

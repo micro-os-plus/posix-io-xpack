@@ -82,7 +82,7 @@ namespace os
         : name_ (name), //
           impl_ (impl)
     {
-#if defined(OS_TRACE_POSIX_IO_NET_STACK)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_NET_STACK)
       trace::printf ("net_stack::%s(\"%s\")=%p\n", __func__, name_, this);
 #endif
       deferred_sockets_list_.clear ();
@@ -90,7 +90,7 @@ namespace os
 
     net_stack::~net_stack ()
     {
-#if defined(OS_TRACE_POSIX_IO_NET_STACK)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_NET_STACK)
       trace::printf ("net_stack::%s(\"%s\") %p\n", __func__, name_, this);
 #endif
     }
@@ -108,14 +108,14 @@ namespace os
     net_stack_impl::net_stack_impl (net_interface& interface)
         : interface_ (interface)
     {
-#if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("net_stack_impl::%s()=%p\n", __func__, this);
 #endif
     }
 
     net_stack_impl::~net_stack_impl ()
     {
-#if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("net_stack_impl::%s() @%p\n", __func__, this);
 #endif
     }

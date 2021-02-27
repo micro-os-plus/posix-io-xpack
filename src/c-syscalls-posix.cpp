@@ -25,7 +25,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#if !defined(OS_USE_SEMIHOSTING_SYSCALLS)
+#if !defined(MICRO_OS_PLUS_USE_SEMIHOSTING_SYSCALLS)
 
 #include <micro-os-plus/rtos.h>
 #include <micro-os-plus/posix-io/types.h>
@@ -55,7 +55,7 @@
 // with '__posix_'.
 // For embedded environments it is possible to also add aliases to the
 // standard, non-prefixed names, by adding the following preprocessor
-// definition: OS_INCLUDE_STANDARD_POSIX_FUNCTIONS
+// definition: MICRO_OS_PLUS_INCLUDE_STANDARD_POSIX_FUNCTIONS
 
 // Notes: Reentrancy and 'errno'.
 //
@@ -956,7 +956,7 @@ initialise_monitor_handles (void)
 // The aliases must be in the same compilation unit as the names
 // they alias.
 
-#if defined(OS_INCLUDE_NEWLIB_POSIX_FUNCTIONS)
+#if defined(MICRO_OS_PLUS_INCLUDE_NEWLIB_POSIX_FUNCTIONS)
 
 // For special embedded environment that use POSIX system calls
 // with the newlib reentrant code, redefine
@@ -977,6 +977,6 @@ initialise_monitor_handles (void)
 
 // ----------------------------------------------------------------------------
 
-#endif // !defined(OS_USE_SEMIHOSTING_SYSCALLS)
+#endif // !defined(MICRO_OS_PLUS_USE_SEMIHOSTING_SYSCALLS)
 
 // ----------------------------------------------------------------------------

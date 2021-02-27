@@ -107,7 +107,7 @@ namespace os
     int
     file_descriptors_manager::allocate (class io* io)
     {
-#if defined(OS_TRACE_POSIX_IO_FILE_DESCRIPTORS_MANAGER)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_DESCRIPTORS_MANAGER)
       trace::printf ("file_descriptors_manager::%s(%p)\n", __func__, io);
 #endif
 
@@ -124,7 +124,7 @@ namespace os
             {
               descriptors_array__[i] = io;
               io->file_descriptor (static_cast<int> (i));
-#if defined(OS_TRACE_POSIX_IO_FILE_DESCRIPTORS_MANAGER)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_DESCRIPTORS_MANAGER)
               trace::printf ("file_descriptors_manager::%s(%p) fd=%d\n",
                              __func__, io, i);
 #endif
@@ -161,7 +161,7 @@ namespace os
     int
     file_descriptors_manager::deallocate (int fildes)
     {
-#if defined(OS_TRACE_POSIX_IO_FILE_DESCRIPTORS_MANAGER)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_DESCRIPTORS_MANAGER)
       trace::printf ("file_descriptors_manager::%s(%d)\n", __func__, fildes);
 #endif
 

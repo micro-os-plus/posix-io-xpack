@@ -46,14 +46,14 @@ namespace os
         : io{ impl, t }, //
           name_ (name)
     {
-#if defined(OS_TRACE_POSIX_IO_DEVICE)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_DEVICE)
       trace::printf ("device::%s(\"%s\")=%p\n", __func__, name_, this);
 #endif
     }
 
     device::~device ()
     {
-#if defined(OS_TRACE_POSIX_IO_DEVICE)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_DEVICE)
       trace::printf ("device::%s() @%p\n", __func__, this);
 #endif
 
@@ -79,7 +79,7 @@ namespace os
     int
     device::vopen (const char* path, int oflag, std::va_list args)
     {
-#if defined(OS_TRACE_POSIX_IO_DEVICE)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_DEVICE)
       trace::printf ("device::%s(\"%s\") @%p\n", __func__, path ? path : "",
                      this);
 #endif
@@ -105,7 +105,7 @@ namespace os
         }
       ++(impl ().open_count_);
       ret = file_descriptor ();
-#if defined(OS_TRACE_POSIX_IO_DEVICE)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_DEVICE)
       trace::printf ("device::%s(\"%s\")=%p fd=%d\n", __func__,
                      path ? path : "", this, ret);
 #endif
@@ -116,7 +116,7 @@ namespace os
     int
     device::close (void)
     {
-#if defined(OS_TRACE_POSIX_IO_DEVICE)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_DEVICE)
       trace::printf ("device::%s() @%p\n", __func__, this);
 #endif
 
@@ -152,7 +152,7 @@ namespace os
     int
     device::vioctl (int request, std::va_list args)
     {
-#if defined(OS_TRACE_POSIX_IO_DEVICE)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_DEVICE)
       trace::printf ("device::%s(%d) @%p\n", __func__, request, this);
 #endif
 
@@ -170,7 +170,7 @@ namespace os
     void
     device::sync (void)
     {
-#if defined(OS_TRACE_POSIX_IO_DEVICE)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_DEVICE)
       trace::printf ("device::%s() @%p\n", __func__, this);
 #endif
 
@@ -198,14 +198,14 @@ namespace os
 
     device_impl::device_impl (void)
     {
-#if defined(OS_TRACE_POSIX_IO_DEVICE)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_DEVICE)
       trace::printf ("device_impl::%s()=%p\n", __func__, this);
 #endif
     }
 
     device_impl::~device_impl ()
     {
-#if defined(OS_TRACE_POSIX_IO_DEVICE)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_DEVICE)
       trace::printf ("device_impl::%s() @%p\n", __func__, this);
 #endif
     }

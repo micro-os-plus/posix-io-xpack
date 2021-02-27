@@ -44,14 +44,14 @@ namespace os
 
     directory::directory (directory_impl& impl) : impl_ (impl)
     {
-#if defined(OS_TRACE_POSIX_IO_DIRECTORY)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_DIRECTORY)
       trace::printf ("directory::%s()=%p\n", __func__, this);
 #endif
     }
 
     directory::~directory ()
     {
-#if defined(OS_TRACE_POSIX_IO_DIRECTORY)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_DIRECTORY)
       trace::printf ("directory::%s() @%p\n", __func__, this);
 #endif
     }
@@ -61,7 +61,7 @@ namespace os
     struct dirent*
     directory::read (void)
     {
-#if defined(OS_TRACE_POSIX_IO_DIRECTORY)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_DIRECTORY)
       trace::printf ("directory::%s() @%p\n", __func__, this);
 #endif
 
@@ -79,7 +79,7 @@ namespace os
     void
     directory::rewind (void)
     {
-#if defined(OS_TRACE_POSIX_IO_DIRECTORY)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_DIRECTORY)
       trace::printf ("directory::%s() @%p\n", __func__, this);
 #endif
 
@@ -95,7 +95,7 @@ namespace os
     int
     directory::close (void)
     {
-#if defined(OS_TRACE_POSIX_IO_DIRECTORY)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_DIRECTORY)
       trace::printf ("directory::%s() @%p\n", __func__, this);
 #endif
 
@@ -120,7 +120,7 @@ namespace os
 
     directory_impl::directory_impl (class file_system& fs) : file_system_ (fs)
     {
-#if defined(OS_TRACE_POSIX_IO_DIRECTORY)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_DIRECTORY)
       trace::printf ("directory_impl::%s()=%p\n", __func__, this);
 #endif
       memset (&dir_entry_, 0, sizeof (struct dirent));
@@ -128,7 +128,7 @@ namespace os
 
     directory_impl::~directory_impl ()
     {
-#if defined(OS_TRACE_POSIX_IO_DIRECTORY)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_DIRECTORY)
       trace::printf ("directory_impl::%s() @%p\n", __func__, this);
 #endif
     }

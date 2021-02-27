@@ -430,7 +430,7 @@ namespace os
         : block_device_partition{ impl_instance_, name }, //
           impl_instance_{ parent, std::forward<Args> (args)... }
     {
-#if defined(OS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
       trace::printf ("block_device_partition_implementable::%s(\"%s\")=@%p\n",
                      __func__, name_, this);
 #endif
@@ -440,7 +440,7 @@ namespace os
     block_device_partition_implementable<
         T>::~block_device_partition_implementable ()
     {
-#if defined(OS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
       trace::printf ("block_device_partition_implementable::%s() @%p %s\n",
                      __func__, this, name_);
 #endif
@@ -464,7 +464,7 @@ namespace os
           impl_instance_{ parent, std::forward<Args> (args)... }, //
           locker_ (locker)
     {
-#if defined(OS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
       trace::printf ("block_device_partition_lockable::%s(\"%s\")=@%p\n",
                      __func__, name_, this);
 #endif
@@ -473,7 +473,7 @@ namespace os
     template <typename T, typename L>
     block_device_partition_lockable<T, L>::~block_device_partition_lockable ()
     {
-#if defined(OS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
       trace::printf ("block_device_partition_lockable::%s() @%p %s\n",
                      __func__, this, name_);
 #endif
@@ -486,7 +486,7 @@ namespace os
     block_device_partition_lockable<T, L>::vioctl (int request,
                                                    std::va_list args)
     {
-#if defined(OS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
       trace::printf ("block_device_partition_lockable::%s(%d) @%p\n", __func__,
                      request, this);
 #endif
@@ -502,7 +502,7 @@ namespace os
                                                        blknum_t blknum,
                                                        std::size_t nblocks)
     {
-#if defined(OS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
       trace::printf ("block_device_partition_lockable::%s(%p, %u, %u) @%p\n",
                      __func__, buf, blknum, nblocks, this);
 #endif
@@ -518,7 +518,7 @@ namespace os
                                                         blknum_t blknum,
                                                         std::size_t nblocks)
     {
-#if defined(OS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
       trace::printf ("block_device_partition_lockable::%s(%p, %u, %u) @%p\n",
                      __func__, buf, blknum, nblocks, this);
 #endif

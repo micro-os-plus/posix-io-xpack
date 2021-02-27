@@ -65,7 +65,7 @@ namespace os
     int
     mkdir (const char* path, mode_t mode)
     {
-#if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("%s(\"%s\", %u)\n", __func__, path, mode);
 #endif
 
@@ -97,7 +97,7 @@ namespace os
     int
     rmdir (const char* path)
     {
-#if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("%s(\"%s\")\n", __func__, path);
 #endif
 
@@ -129,7 +129,7 @@ namespace os
     void
     sync (void)
     {
-#if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("%s()\n", __func__);
 #endif
 
@@ -152,7 +152,7 @@ namespace os
     int
     chmod (const char* path, mode_t mode)
     {
-#if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("%s(\"%s\", %u)\n", __func__, path, mode);
 #endif
 
@@ -183,7 +183,7 @@ namespace os
     int
     stat (const char* path, struct stat* buf)
     {
-#if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("%s(\"%s\", %p)\n", __func__, path, buf);
 #endif
 
@@ -214,7 +214,7 @@ namespace os
     int
     truncate (const char* path, off_t length)
     {
-#if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("%s(\"%s\", %u)\n", __func__, path, length);
 #endif
 
@@ -251,7 +251,7 @@ namespace os
     int
     rename (const char* existing, const char* _new)
     {
-#if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("%s(\"%s\",\"%s\")\n", __func__, existing, _new);
 #endif
 
@@ -284,7 +284,7 @@ namespace os
     int
     unlink (const char* path)
     {
-#if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("%s(\"%s\")\n", __func__, path);
 #endif
 
@@ -315,7 +315,7 @@ namespace os
     int
     utime (const char* path, const struct utimbuf* times)
     {
-#if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("%s(\"%s\", %p)\n", __func__, path, times);
 #endif
 
@@ -346,7 +346,7 @@ namespace os
     int
     statvfs (const char* path, struct statvfs* buf)
     {
-#if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("%s(\"%s\", %p)\n", __func__, path, buf);
 #endif
 
@@ -377,7 +377,7 @@ namespace os
     directory*
     opendir (const char* dirpath)
     {
-#if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("%s(\"%s\")\n", __func__, dirpath);
 #endif
 
@@ -436,7 +436,7 @@ namespace os
         // Return a valid pointer to an object derived from directory, or
         // nullptr.
 
-#if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("%s(\"%s\")=%p\n", __func__, dirpath, dir);
 #endif
       return dir;
@@ -448,7 +448,7 @@ namespace os
         : name_ (name), //
           impl_ (impl)
     {
-#if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("file_system::%s(\"%s\")=%p\n", __func__, name_, this);
 #endif
       deferred_files_list_.clear ();
@@ -457,7 +457,7 @@ namespace os
 
     file_system::~file_system ()
     {
-#if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("file_system::%s() @%p %s\n", __func__, this, name_);
 #endif
     }
@@ -479,7 +479,7 @@ namespace os
     int
     file_system::vmkfs (int options, std::va_list args)
     {
-#if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("file_system::%s(%u) @%p\n", __func__, options, this);
 #endif
 
@@ -514,7 +514,7 @@ namespace os
     file_system::vmount (const char* path, unsigned int flags,
                          std::va_list args)
     {
-#if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("file_system::%s(\"%s\", %u) @%p\n", __func__,
                      path ? path : "nullptr", flags, this);
 #endif
@@ -580,7 +580,7 @@ namespace os
     int
     file_system::umount (int unsigned flags)
     {
-#if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("file_system::%s(%u) @%p\n", __func__, flags, this);
 #endif
 
@@ -669,7 +669,7 @@ namespace os
     file*
     file_system::vopen (const char* path, int oflag, std::va_list args)
     {
-#if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("file_system::%s(\"%s\", %u)\n", __func__, path, oflag);
 #endif
 
@@ -699,7 +699,7 @@ namespace os
     directory*
     file_system::opendir (const char* dirpath)
     {
-#if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("file_system::%s(\"%s\")\n", __func__, dirpath);
 #endif
 
@@ -728,7 +728,7 @@ namespace os
     int
     file_system::mkdir (const char* path, mode_t mode)
     {
-#if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("file_system::%s(\"%s\", %u)\n", __func__, path, mode);
 #endif
 
@@ -758,7 +758,7 @@ namespace os
     int
     file_system::rmdir (const char* path)
     {
-#if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("file_system::%s(\"%s\")\n", __func__, path);
 #endif
 
@@ -788,7 +788,7 @@ namespace os
     void
     file_system::sync (void)
     {
-#if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("file_system::%s() @%p\n", __func__, this);
 #endif
 
@@ -808,7 +808,7 @@ namespace os
     int
     file_system::chmod (const char* path, mode_t mode)
     {
-#if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("file_system::%s(\"%s\", %u)\n", __func__, path, mode);
 #endif
 
@@ -839,7 +839,7 @@ namespace os
     int
     file_system::stat (const char* path, struct stat* buf)
     {
-#if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("file_system::%s(\"%s\", %p)\n", __func__, path, buf);
 #endif
 
@@ -870,7 +870,7 @@ namespace os
     int
     file_system::truncate (const char* path, off_t length)
     {
-#if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("file_system::%s(\"%s\", %u)\n", __func__, path, length);
 #endif
 
@@ -901,7 +901,7 @@ namespace os
     int
     file_system::rename (const char* existing, const char* _new)
     {
-#if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("file_system::%s(\"%s\",\"%s\")\n", __func__, existing,
                      _new);
 #endif
@@ -933,7 +933,7 @@ namespace os
     int
     file_system::unlink (const char* path)
     {
-#if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("file_system::%s(\"%s\")\n", __func__, path);
 #endif
 
@@ -965,7 +965,7 @@ namespace os
     int
     file_system::utime (const char* path, const struct utimbuf* times)
     {
-#if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("file_system::%s(\"%s\", %p)\n", __func__, path, times);
 #endif
 
@@ -1009,7 +1009,7 @@ namespace os
     int
     file_system::statvfs (struct statvfs* buf)
     {
-#if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("file_system::%s(%p)\n", __func__, buf);
 #endif
 
@@ -1032,14 +1032,14 @@ namespace os
     file_system_impl::file_system_impl (block_device& device)
         : device_ (device)
     {
-#if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("file_system_impl::%s()=%p\n", __func__, this);
 #endif
     }
 
     file_system_impl::~file_system_impl ()
     {
-#if defined(OS_TRACE_POSIX_IO_FILE_SYSTEM)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("file_system_impl::%s() @%p\n", __func__, this);
 #endif
     }

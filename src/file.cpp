@@ -42,14 +42,14 @@ namespace os
 
     file::file (file_impl& impl) : io{ impl, type::file }
     {
-#if defined(OS_TRACE_POSIX_IO_FILE)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE)
       trace::printf ("file::%s()=%p\n", __func__, this);
 #endif
     }
 
     file::~file ()
     {
-#if defined(OS_TRACE_POSIX_IO_FILE)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE)
       trace::printf ("file::%s() @%p\n", __func__, this);
 #endif
     }
@@ -59,7 +59,7 @@ namespace os
     int
     file::close (void)
     {
-#if defined(OS_TRACE_POSIX_IO_FILE)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE)
       trace::printf ("file::%s() @%p\n", __func__, this);
 #endif
 
@@ -77,7 +77,7 @@ namespace os
     int
     file::ftruncate (off_t length)
     {
-#if defined(OS_TRACE_POSIX_IO_FILE)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE)
       trace::printf ("file::%s(%u) @%p\n", __func__, length, this);
 #endif
 
@@ -96,7 +96,7 @@ namespace os
     int
     file::fsync (void)
     {
-#if defined(OS_TRACE_POSIX_IO_FILE)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE)
       trace::printf ("file::%s() @%p\n", __func__, this);
 #endif
 
@@ -109,7 +109,7 @@ namespace os
     int
     file::fstatvfs (struct statvfs* buf)
     {
-#if defined(OS_TRACE_POSIX_IO_FILE)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE)
       trace::printf ("file::%s(%p) @%p\n", __func__, buf, this);
 #endif
 
@@ -123,14 +123,14 @@ namespace os
 
     file_impl::file_impl (class file_system& fs) : file_system_ (fs)
     {
-#if defined(OS_TRACE_POSIX_IO_FILE)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE)
       trace::printf ("file_impl::%s()=%p\n", __func__, this);
 #endif
     }
 
     file_impl::~file_impl ()
     {
-#if defined(OS_TRACE_POSIX_IO_FILE)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE)
       trace::printf ("file_impl::%s() @%p\n", __func__, this);
 #endif
     }

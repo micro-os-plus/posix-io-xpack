@@ -43,7 +43,7 @@ namespace os
     char_device::char_device (char_device_impl& impl, const char* name)
         : device{ impl, type::char_device, name }
     {
-#if defined(OS_TRACE_POSIX_IO_CHAR_DEVICE)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_CHAR_DEVICE)
       trace::printf ("char_device::%s(\"%s\")=@%p\n", __func__, name_, this);
 #endif
 
@@ -52,7 +52,7 @@ namespace os
 
     char_device::~char_device ()
     {
-#if defined(OS_TRACE_POSIX_IO_CHAR_DEVICE)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_CHAR_DEVICE)
       trace::printf ("char_device::%s() @%p %s\n", __func__, this, name_);
 #endif
 
@@ -65,14 +65,14 @@ namespace os
 
     char_device_impl::char_device_impl (void)
     {
-#if defined(OS_TRACE_POSIX_IO_CHAR_DEVICE)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_CHAR_DEVICE)
       trace::printf ("char_device_impl::%s()=@%p\n", __func__, this);
 #endif
     }
 
     char_device_impl::~char_device_impl ()
     {
-#if defined(OS_TRACE_POSIX_IO_CHAR_DEVICE)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_CHAR_DEVICE)
       trace::printf ("char_device_impl::%s() @%p\n", __func__, this);
 #endif
     }

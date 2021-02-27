@@ -40,14 +40,14 @@ namespace os
     tty::tty (tty_impl& impl, const char* name) : char_device{ impl, name }
     {
       type_ |= type::tty;
-#if defined(OS_TRACE_POSIX_IO_TTY)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_TTY)
       trace::printf ("tty::%s(\"%s\")=@%p\n", __func__, name_, this);
 #endif
     }
 
     tty::~tty () noexcept
     {
-#if defined(OS_TRACE_POSIX_IO_TTY)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_TTY)
       trace::printf ("tty::%s() @%p %s\n", __func__, this, name_);
 #endif
     }
@@ -88,14 +88,14 @@ namespace os
 
     tty_impl::tty_impl (void)
     {
-#if defined(OS_TRACE_POSIX_IO_TTY)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_TTY)
       trace::printf ("tty_impl::%s()=@%p\n", __func__, this);
 #endif
     }
 
     tty_impl::~tty_impl ()
     {
-#if defined(OS_TRACE_POSIX_IO_TTY)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_TTY)
       trace::printf ("tty_impl::%s() @%p\n", __func__, this);
 #endif
     }

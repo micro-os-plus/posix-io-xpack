@@ -468,7 +468,7 @@ namespace os
         : file{ impl_instance_ }, //
           impl_instance_{ fs }
     {
-#if defined(OS_TRACE_POSIX_IO_FILE)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE)
       trace::printf ("file_implementable::%s()=@%p\n", __func__, this);
 #endif
     }
@@ -476,7 +476,7 @@ namespace os
     template <typename T>
     file_implementable<T>::~file_implementable ()
     {
-#if defined(OS_TRACE_POSIX_IO_FILE)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE)
       trace::printf ("file_implementable::%s() @%p\n", __func__, this);
 #endif
     }
@@ -497,7 +497,7 @@ namespace os
           impl_instance_{ fs }, //
           locker_ (locker)
     {
-#if defined(OS_TRACE_POSIX_IO_FILE)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE)
       trace::printf ("file_lockable::%s()=@%p\n", __func__, this);
 #endif
     }
@@ -505,7 +505,7 @@ namespace os
     template <typename T, typename L>
     file_lockable<T, L>::~file_lockable ()
     {
-#if defined(OS_TRACE_POSIX_IO_FILE)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE)
       trace::printf ("file_lockable::%s() @%p\n", __func__, this);
 #endif
     }

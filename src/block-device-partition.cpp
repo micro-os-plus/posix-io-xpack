@@ -41,7 +41,7 @@ namespace os
                                                     const char* name)
         : block_device{ impl, name }
     {
-#if defined(OS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
       trace::printf ("block_device_partition::%s(\"%s\")=@%p\n", __func__,
                      name_, this);
 #endif
@@ -49,7 +49,7 @@ namespace os
 
     block_device_partition::~block_device_partition ()
     {
-#if defined(OS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
       trace::printf ("block_device_partition::%s() @%p %s\n", __func__, this,
                      name_);
 #endif
@@ -60,7 +60,7 @@ namespace os
     void
     block_device_partition::configure (blknum_t offset, blknum_t nblocks)
     {
-#if defined(OS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
       trace::printf ("block_device_partition::%s(%u,%u) @%p\n", __func__,
                      offset, nblocks, this);
 #endif
@@ -74,7 +74,7 @@ namespace os
         block_device& parent)
         : parent_ (parent)
     {
-#if defined(OS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
       trace::printf ("block_device_partition_impl::%s()=@%p\n", __func__,
                      this);
 #endif
@@ -82,7 +82,7 @@ namespace os
 
     block_device_partition_impl::~block_device_partition_impl ()
     {
-#if defined(OS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
       trace::printf ("block_device_partition_impl::%s() @%p\n", __func__,
                      this);
 #endif
@@ -105,7 +105,7 @@ namespace os
     void
     block_device_partition_impl::configure (blknum_t offset, blknum_t nblocks)
     {
-#if defined(OS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
       trace::printf ("block_device_partition_impl::%s(%u,%u) @%p\n", __func__,
                      offset, nblocks, this);
 #endif
@@ -123,7 +123,7 @@ namespace os
     block_device_partition_impl::do_vopen (const char* path, int oflag,
                                            std::va_list args)
     {
-#if defined(OS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
       trace::printf ("block_device_partition_impl::%s(%d) @%p\n", __func__,
                      oflag, this);
 #endif
@@ -135,7 +135,7 @@ namespace os
     block_device_partition_impl::do_read_block (void* buf, blknum_t blknum,
                                                 std::size_t nblocks)
     {
-#if defined(OS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
       trace::printf ("block_device_partition_impl::%s(0x%X, %u, %u) @%p\n",
                      __func__, buf, blknum, nblocks, this);
 #endif
@@ -149,7 +149,7 @@ namespace os
                                                  blknum_t blknum,
                                                  std::size_t nblocks)
     {
-#if defined(OS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
       trace::printf ("block_device_partition_impl::%s(0x%X, %u, %u) @%p\n",
                      __func__, buf, blknum, nblocks, this);
 #endif
@@ -161,7 +161,7 @@ namespace os
     void
     block_device_partition_impl::do_sync (void)
     {
-#if defined(OS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
       trace::printf ("block_device_partition_impl::%s() @%p\n", __func__,
                      this);
 #endif
@@ -172,7 +172,7 @@ namespace os
     int
     block_device_partition_impl::do_close (void)
     {
-#if defined(OS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
       trace::printf ("block_device_partition_impl::%s() @%p\n", __func__,
                      this);
 #endif

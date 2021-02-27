@@ -305,7 +305,7 @@ namespace os
         : tty{ impl_instance_, name }, //
           impl_instance_{ std::forward<Args> (args)... }
     {
-#if defined(OS_TRACE_POSIX_IO_TTY)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_TTY)
       trace::printf ("tty_implementable::%s(\"%s\")=@%p\n", __func__, name_,
                      this);
 #endif
@@ -314,7 +314,7 @@ namespace os
     template <typename T>
     tty_implementable<T>::~tty_implementable ()
     {
-#if defined(OS_TRACE_POSIX_IO_TTY)
+#if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_TTY)
       trace::printf ("tty_implementable::%s() @%p %s\n", __func__, this,
                      name_);
 #endif
