@@ -62,7 +62,8 @@ extern "C"
   struct dirent
   {
     ino_t d_ino; /* File serial number. */
-    char d_name[MICRO_OS_PLUS_INTEGER_DIRENT_NAME_MAX]; /* Filename string of entry. */
+    char d_name[MICRO_OS_PLUS_INTEGER_DIRENT_NAME_MAX]; /* Filename string of
+                                                           entry. */
   };
 
   // The content of this structure is not relevant, it is here just to keep
