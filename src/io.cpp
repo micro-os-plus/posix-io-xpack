@@ -97,8 +97,7 @@ namespace micro_os_plus
       while (true)
         {
           // Check if path is a device.
-          io = posix::device_registry<device>::identify_device (
-              path);
+          io = posix::device_registry<device>::identify_device (path);
           if (io != nullptr)
             {
               // If so, use the implementation to open the device.
@@ -116,8 +115,7 @@ namespace micro_os_plus
           // Check if a regular file.
           auto adjusted_path = path;
           auto* const fs
-              = posix::file_system::identify_mounted (
-                  &adjusted_path);
+              = posix::file_system::identify_mounted (&adjusted_path);
 
           // The manager will return null if there are no file systems
           // registered, no need to check this condition separately.

@@ -405,8 +405,7 @@ namespace micro_os_plus
         {
           // Check if path is a device.
           posix::io* io;
-          io = posix::device_registry<device>::identify_device (
-              dirpath);
+          io = posix::device_registry<device>::identify_device (dirpath);
           if (io != nullptr)
             {
               // Cannot list devices (for now).
@@ -416,8 +415,7 @@ namespace micro_os_plus
           // Check if a regular folder.
           auto adjusted_path = dirpath;
           auto* const fs
-              = posix::file_system::identify_mounted (
-                  &adjusted_path);
+              = posix::file_system::identify_mounted (&adjusted_path);
 
           // The manager will return null if there are no file systems
           // registered, no need to check this condition separately.
