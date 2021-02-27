@@ -41,11 +41,15 @@
 
 // ----------------------------------------------------------------------------
 
+using namespace micro_os_plus;
+
+// ----------------------------------------------------------------------------
+
 // Variadic calls are processed in two steps, first prepare a
 // va_list structure, then call implementation functions like doOpen()
 // doIoctl(), that use 'va_list args'.
 
-namespace os
+namespace micro_os_plus
 {
   namespace posix
   {
@@ -89,11 +93,12 @@ namespace os
 
       errno = 0;
 
-      os::posix::io* io;
+      posix::io* io;
       while (true)
         {
           // Check if path is a device.
-          io = os::posix::device_registry<device>::identify_device (path);
+          io = posix::device_registry<device>::identify_device (
+              path);
           if (io != nullptr)
             {
               // If so, use the implementation to open the device.
@@ -111,7 +116,8 @@ namespace os
           // Check if a regular file.
           auto adjusted_path = path;
           auto* const fs
-              = os::posix::file_system::identify_mounted (&adjusted_path);
+              = posix::file_system::identify_mounted (
+                  &adjusted_path);
 
           // The manager will return null if there are no file systems
           // registered, no need to check this condition separately.
@@ -536,6 +542,6 @@ namespace os
 
     // ==========================================================================
   } // namespace posix
-} // namespace os
+} // namespace micro_os_plus
 
 // ----------------------------------------------------------------------------

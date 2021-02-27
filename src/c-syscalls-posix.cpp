@@ -65,6 +65,10 @@
 
 // ----------------------------------------------------------------------------
 
+using namespace micro_os_plus;
+
+// ----------------------------------------------------------------------------
+
 extern "C"
 {
   void
@@ -73,8 +77,6 @@ extern "C"
 
 // ----------------------------------------------------------------------------
 // ---- POSIX IO functions ----------------------------------------------------
-
-using namespace os;
 
 /**
  * @details
@@ -815,7 +817,7 @@ __posix_socketpair (int domain, int type, int protocol, int socket_vector[2])
 int
 __posix_gettimeofday (struct timeval* ptimeval, void* ptimezone)
 {
-  ptimeval->tv_sec = static_cast<time_t> (os::rtos::rtclock.now ());
+  ptimeval->tv_sec = static_cast<time_t> (rtos::rtclock.now ());
   ptimeval->tv_usec = 0;
 
   return 0;

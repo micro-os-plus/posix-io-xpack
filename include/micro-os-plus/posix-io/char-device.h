@@ -44,7 +44,7 @@
 
 // ----------------------------------------------------------------------------
 
-namespace os
+namespace micro_os_plus
 {
   namespace posix
   {
@@ -253,11 +253,11 @@ namespace os
 
     // ==========================================================================
   } // namespace posix
-} // namespace os
+} // namespace micro_os_plus
 
 // ===== Inline & template implementations ====================================
 
-namespace os
+namespace micro_os_plus
 {
   namespace posix
   {
@@ -302,7 +302,7 @@ namespace os
 
     // ==========================================================================
   } // namespace posix
-} // namespace os
+} // namespace micro_os_plus
 
 // ----------------------------------------------------------------------------
 

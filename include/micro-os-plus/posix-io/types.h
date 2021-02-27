@@ -41,7 +41,7 @@
 
 #ifdef __cplusplus
 
-namespace os
+namespace micro_os_plus
 {
   namespace posix
   {
@@ -51,7 +51,7 @@ namespace os
     constexpr file_descriptor_t no_file_descriptor = -1;
 
   } // namespace posix
-} // namespace os
+} // namespace micro_os_plus
 
 #endif // __cplusplus
 

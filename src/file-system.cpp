@@ -35,7 +35,11 @@
 
 // ----------------------------------------------------------------------------
 
-namespace os
+using namespace micro_os_plus;
+
+// ----------------------------------------------------------------------------
+
+namespace micro_os_plus
 {
   namespace posix
   {
@@ -395,13 +399,14 @@ namespace os
 
       errno = 0;
 
-      os::posix::directory* dir;
+      posix::directory* dir;
 
       while (true)
         {
           // Check if path is a device.
-          os::posix::io* io;
-          io = os::posix::device_registry<device>::identify_device (dirpath);
+          posix::io* io;
+          io = posix::device_registry<device>::identify_device (
+              dirpath);
           if (io != nullptr)
             {
               // Cannot list devices (for now).
@@ -411,7 +416,8 @@ namespace os
           // Check if a regular folder.
           auto adjusted_path = dirpath;
           auto* const fs
-              = os::posix::file_system::identify_mounted (&adjusted_path);
+              = posix::file_system::identify_mounted (
+                  &adjusted_path);
 
           // The manager will return null if there are no file systems
           // registered, no need to check this condition separately.
@@ -1046,6 +1052,6 @@ namespace os
 
     // ==========================================================================
   } // namespace posix
-} // namespace os
+} // namespace micro_os_plus
 
 // ----------------------------------------------------------------------------
