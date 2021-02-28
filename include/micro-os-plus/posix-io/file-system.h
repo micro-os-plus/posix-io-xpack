@@ -215,7 +215,7 @@ namespace micro_os_plus
       mkfs (int options, ...);
 
       virtual int
-      vmkfs (int options, std::va_list args);
+      vmkfs (int options, std::va_list arguments);
 
       int
       mount (const char* path = nullptr, unsigned int flags = 0, ...);
@@ -227,13 +227,13 @@ namespace micro_os_plus
        *   file system is mounted as root, i.e. the default if no other
        *   mount point matches.
        * @param flags File system specific flags.
-       * @param args Optional arguments.
+       * @param arguments Optional arguments.
        * @retval 0 if successful,
        * @retval -1 otherwise and the variable errno is set to
        *   indicate the error.
        */
       virtual int
-      vmount (const char* path, unsigned int flags, std::va_list args);
+      vmount (const char* path, unsigned int flags, std::va_list arguments);
 
       /**
        * @brief Unmount file system.
@@ -255,7 +255,7 @@ namespace micro_os_plus
       open (const char* path = nullptr, int oflag = 0, ...);
 
       virtual file*
-      vopen (const char* path, int oflag, std::va_list args);
+      vopen (const char* path, int oflag, std::va_list arguments);
 
       // http://pubs.opengroup.org/onlinepubs/9699919799/functions/opendir.html
       virtual directory*
@@ -465,11 +465,11 @@ namespace micro_os_plus
 
     public:
       virtual int
-      do_vmkfs (int options, std::va_list args)
+      do_vmkfs (int options, std::va_list arguments)
           = 0;
 
       virtual int
-      do_vmount (unsigned int flags, std::va_list args)
+      do_vmount (unsigned int flags, std::va_list arguments)
           = 0;
 
       virtual int
@@ -478,7 +478,7 @@ namespace micro_os_plus
 
       virtual file*
       do_vopen (class file_system& fs, const char* path, int oflag,
-                std::va_list args)
+                std::va_list arguments)
           = 0;
 
       virtual directory*
@@ -570,7 +570,7 @@ namespace micro_os_plus
     public:
       template <typename... Args>
       file_system_implementable (const char* name, block_device& device,
-                                 Args&&... args);
+                                 Args&&... arguments);
 
       /**
        * @cond ignore
@@ -646,7 +646,7 @@ namespace micro_os_plus
     public:
       template <typename... Args>
       file_system_lockable (const char* name, block_device& device,
-                            lockable_type& locker, Args&&... args);
+                            lockable_type& locker, Args&&... arguments);
 
       /**
        * @cond ignore
@@ -686,14 +686,14 @@ namespace micro_os_plus
        *   file system is mounted as root, i.e. the default if no other
        *   mount point matches.
        * @param flags File system specific flags.
-       * @param args Optional arguments.
+       * @param arguments Optional arguments.
        * @retval 0 if successful,
        * @retval -1 otherwise and the variable errno is set to
        *   indicate the error.
        */
       virtual int
       vmount (const char* path, unsigned int flags,
-              std::va_list args) override;
+              std::va_list arguments) override;
 
       /**
        * @brief Unmount file system.
@@ -709,7 +709,7 @@ namespace micro_os_plus
       // ----------------------------------------------------------------------
 
       virtual file*
-      vopen (const char* path, int oflag, std::va_list args) override;
+      vopen (const char* path, int oflag, std::va_list arguments) override;
 
       // http://pubs.opengroup.org/onlinepubs/9699919799/functions/opendir.html
       virtual directory*
@@ -981,9 +981,9 @@ namespace micro_os_plus
     template <typename T>
     template <typename... Args>
     file_system_implementable<T>::file_system_implementable (
-        const char* name, block_device& device, Args&&... args)
+        const char* name, block_device& device, Args&&... arguments)
         : file_system{ impl_instance_, name }, //
-          impl_instance_{ device, std::forward<Args> (args)... }
+          impl_instance_{ device, std::forward<Args> (arguments)... }
     {
 #if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("file_system_implementable::%s(\"%s\")=@%p\n", __func__,
@@ -1014,9 +1014,9 @@ namespace micro_os_plus
     file_system_lockable<T, L>::file_system_lockable (const char* name,
                                                       block_device& device,
                                                       lockable_type& locker,
-                                                      Args&&... args)
+                                                      Args&&... arguments)
         : file_system{ impl_instance_, name }, //
-          impl_instance_{ device, locker, std::forward<Args> (args)... }
+          impl_instance_{ device, locker, std::forward<Args> (arguments)... }
     {
 #if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("file_system_lockable::%s()=%p\n", __func__, this);
@@ -1036,11 +1036,11 @@ namespace micro_os_plus
     template <typename T, typename L>
     int
     file_system_lockable<T, L>::vmount (const char* path, unsigned int flags,
-                                        std::va_list args)
+                                        std::va_list arguments)
     {
       std::lock_guard<L> lock{ impl_instance_.locker () };
 
-      return file_system::vmount (path, flags, args);
+      return file_system::vmount (path, flags, arguments);
     }
 
     /**
@@ -1062,11 +1062,11 @@ namespace micro_os_plus
     template <typename T, typename L>
     file*
     file_system_lockable<T, L>::vopen (const char* path, int oflag,
-                                       std::va_list args)
+                                       std::va_list arguments)
     {
       std::lock_guard<L> lock{ impl_instance_.locker () };
 
-      return file_system::vopen (path, oflag, args);
+      return file_system::vopen (path, oflag, arguments);
     }
 
     template <typename T, typename L>

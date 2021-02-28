@@ -94,7 +94,8 @@ namespace micro_os_plus
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 
     int
-    block_device_partition_impl::do_vioctl (int request, std::va_list args)
+    block_device_partition_impl::do_vioctl (int request,
+                                            std::va_list arguments)
     {
       errno = ENOSYS;
       return -1;
@@ -121,14 +122,14 @@ namespace micro_os_plus
 
     int
     block_device_partition_impl::do_vopen (const char* path, int oflag,
-                                           std::va_list args)
+                                           std::va_list arguments)
     {
 #if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
       trace::printf ("block_device_partition_impl::%s(%d) @%p\n", __func__,
                      oflag, this);
 #endif
 
-      return parent_.vopen (path, oflag, args);
+      return parent_.vopen (path, oflag, arguments);
     }
 
     ssize_t

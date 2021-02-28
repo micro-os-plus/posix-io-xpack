@@ -123,11 +123,11 @@ namespace micro_os_plus
        *
        * @param path May be nullptr.
        * @param oflag
-       * @param args
+       * @param arguments
        * @return
        */
       int
-      vopen (const char* path, int oflag, std::va_list args);
+      vopen (const char* path, int oflag, std::va_list arguments);
 
       virtual int
       close (void) override;
@@ -136,7 +136,7 @@ namespace micro_os_plus
       ioctl (int request, ...);
 
       virtual int
-      vioctl (int request, std::va_list args);
+      vioctl (int request, std::va_list arguments);
 
       virtual void
       sync (void);
@@ -252,11 +252,11 @@ namespace micro_os_plus
       do_is_opened (void) override;
 
       virtual int
-      do_vopen (const char* path, int oflag, std::va_list args)
+      do_vopen (const char* path, int oflag, std::va_list arguments)
           = 0;
 
       virtual int
-      do_vioctl (int request, std::va_list args)
+      do_vioctl (int request, std::va_list arguments)
           = 0;
 
       virtual void

@@ -91,10 +91,10 @@ extern "C"
 int
 __posix_open (const char* path, int oflag, ...)
 {
-  va_list args;
-  va_start (args, oflag);
-  auto* const io = posix::vopen (path, oflag, args);
-  va_end (args);
+  va_list arguments;
+  va_start (arguments, oflag);
+  auto* const io = posix::vopen (path, oflag, arguments);
+  va_end (arguments);
 
   if (io == nullptr)
     {
@@ -185,10 +185,11 @@ __posix_ioctl (int fildes, int request, ...)
       return -1;
     }
 
-  va_list args;
-  va_start (args, request);
-  int ret = (static_cast<posix::char_device*> (io))->vioctl (request, args);
-  va_end (args);
+  va_list arguments;
+  va_start (arguments, request);
+  int ret
+      = (static_cast<posix::char_device*> (io))->vioctl (request, arguments);
+  va_end (arguments);
 
   return ret;
 }
@@ -347,10 +348,10 @@ __posix_fcntl (int fildes, int cmd, ...)
       return -1;
     }
 
-  va_list args;
-  va_start (args, cmd);
-  int ret = io->vfcntl (cmd, args);
-  va_end (args);
+  va_list arguments;
+  va_start (arguments, cmd);
+  int ret = io->vfcntl (cmd, arguments);
+  va_end (arguments);
 
   return ret;
 }

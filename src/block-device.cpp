@@ -114,7 +114,7 @@ namespace micro_os_plus
     }
 
     int
-    block_device::vioctl (int request, std::va_list args)
+    block_device::vioctl (int request, std::va_list arguments)
     {
 #if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_BLOCK_DEVICE)
       trace::printf ("block_device::%s(%d) @%p\n", __func__, request, this);
@@ -133,7 +133,7 @@ namespace micro_os_plus
         case BLKSSZGET:
           // Get logical device sector size (to be used for read/writes).
           {
-            std::size_t* sz = va_arg (args, std::size_t*);
+            std::size_t* sz = va_arg (arguments, std::size_t*);
             if (sz == nullptr || impl ().block_logical_size_bytes_ != 0)
               {
                 errno = EINVAL;
@@ -147,7 +147,7 @@ namespace micro_os_plus
         case BLKPBSZGET:
           // Get physical device sector size (internally used for erase).
           {
-            std::size_t* sz = va_arg (args, std::size_t*);
+            std::size_t* sz = va_arg (arguments, std::size_t*);
             if (sz == nullptr || impl ().block_physical_size_bytes_ != 0)
               {
                 errno = EINVAL;
@@ -161,7 +161,7 @@ namespace micro_os_plus
         case BLKGETSIZE64:
           // Get device size in bytes.
           {
-            uint64_t* sz = va_arg (args, uint64_t*);
+            uint64_t* sz = va_arg (arguments, uint64_t*);
             if (sz == nullptr || impl ().num_blocks_ != 0)
               {
                 errno = EINVAL;
@@ -176,7 +176,7 @@ namespace micro_os_plus
         default:
 
           // Execute the implementation specific code.
-          return impl ().do_vioctl (request, args);
+          return impl ().do_vioctl (request, arguments);
         }
     }
 

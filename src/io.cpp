@@ -47,7 +47,7 @@ using namespace micro_os_plus;
 
 // Variadic calls are processed in two steps, first prepare a
 // va_list structure, then call implementation functions like doOpen()
-// doIoctl(), that use 'va_list args'.
+// doIoctl(), that use 'va_list arguments'.
 
 namespace micro_os_plus
 {
@@ -59,10 +59,10 @@ namespace micro_os_plus
     open (const char* path, int oflag, ...)
     {
       // Forward to the variadic version of the function.
-      std::va_list args;
-      va_start (args, oflag);
-      io* const ret = vopen (path, oflag, args);
-      va_end (args);
+      std::va_list arguments;
+      va_start (arguments, oflag);
+      io* const ret = vopen (path, oflag, arguments);
+      va_end (arguments);
 
       return ret;
     }
@@ -73,7 +73,7 @@ namespace micro_os_plus
      * new POSIX file descriptor, to be used by C functions.
      */
     io*
-    vopen (const char* path, int oflag, std::va_list args)
+    vopen (const char* path, int oflag, std::va_list arguments)
     {
 #if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_IO)
       trace::printf ("io::%s(\"%s\")\n", __func__, path ? path : "");
@@ -101,7 +101,8 @@ namespace micro_os_plus
           if (io != nullptr)
             {
               // If so, use the implementation to open the device.
-              int oret = static_cast<device*> (io)->vopen (path, oflag, args);
+              int oret
+                  = static_cast<device*> (io)->vopen (path, oflag, arguments);
               if (oret < 0)
                 {
                   // Open failed.
@@ -127,7 +128,7 @@ namespace micro_os_plus
 
           // Use the file system implementation to open the file, using
           // the adjusted path (mount point prefix removed).
-          io = fs->vopen (adjusted_path, oflag, args);
+          io = fs->vopen (adjusted_path, oflag, arguments);
           if (io == nullptr)
             {
               // Open failed.
@@ -373,16 +374,16 @@ namespace micro_os_plus
     io::fcntl (int cmd, ...)
     {
       // Forward to the variadic version of the function.
-      std::va_list args;
-      va_start (args, cmd);
-      int ret = vfcntl (cmd, args);
-      va_end (args);
+      std::va_list arguments;
+      va_start (arguments, cmd);
+      int ret = vfcntl (cmd, arguments);
+      va_end (arguments);
 
       return ret;
     }
 
     int
-    io::vfcntl (int cmd, std::va_list args)
+    io::vfcntl (int cmd, std::va_list arguments)
     {
 #if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_IO)
       trace::printf ("io::%s(%d) @%p\n", __func__, cmd, this);
@@ -403,7 +404,7 @@ namespace micro_os_plus
       errno = 0;
 
       // Execute the implementation specific code.
-      return impl ().do_vfcntl (cmd, args);
+      return impl ().do_vfcntl (cmd, arguments);
     }
 
     int
@@ -516,7 +517,7 @@ namespace micro_os_plus
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 
     int
-    io_impl::do_vfcntl (int cmd, std::va_list args)
+    io_impl::do_vfcntl (int cmd, std::va_list arguments)
     {
       errno = ENOSYS; // Not implemented
       return -1;

@@ -111,7 +111,7 @@ namespace micro_os_plus
 
     public:
       virtual int
-      vioctl (int request, std::va_list args) override;
+      vioctl (int request, std::va_list arguments) override;
 
       virtual ssize_t
       read_block (void* buf, blknum_t blknum, std::size_t nblocks = 1);
@@ -265,7 +265,7 @@ namespace micro_os_plus
 
     public:
       template <typename... Args>
-      block_device_implementable (const char* name, Args&&... args);
+      block_device_implementable (const char* name, Args&&... arguments);
 
       /**
        * @cond ignore
@@ -342,7 +342,7 @@ namespace micro_os_plus
     public:
       template <typename... Args>
       block_device_lockable (const char* name, lockable_type& locker,
-                             Args&&... args);
+                             Args&&... arguments);
 
       /**
        * @cond ignore
@@ -388,10 +388,10 @@ namespace micro_os_plus
       writev (const struct iovec* iov, int iovcnt) override;
 
       virtual int
-      vfcntl (int cmd, std::va_list args) override;
+      vfcntl (int cmd, std::va_list arguments) override;
 
       virtual int
-      vioctl (int request, std::va_list args) override;
+      vioctl (int request, std::va_list arguments) override;
 
       virtual off_t
       lseek (off_t offset, int whence) override;
@@ -473,9 +473,9 @@ namespace micro_os_plus
     template <typename T>
     template <typename... Args>
     block_device_implementable<T>::block_device_implementable (
-        const char* name, Args&&... args)
+        const char* name, Args&&... arguments)
         : block_device{ impl_instance_, name }, //
-          impl_instance_{ std::forward<Args> (args)... }
+          impl_instance_{ std::forward<Args> (arguments)... }
     {
 #if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_BLOCK_DEVICE)
       trace::printf ("block_device_implementable::%s(\"%s\")=@%p\n", __func__,
@@ -505,9 +505,9 @@ namespace micro_os_plus
     template <typename... Args>
     block_device_lockable<T, L>::block_device_lockable (const char* name,
                                                         lockable_type& locker,
-                                                        Args&&... args)
+                                                        Args&&... arguments)
         : block_device{ impl_instance_, name }, //
-          impl_instance_{ std::forward<Args> (args)... }, //
+          impl_instance_{ std::forward<Args> (arguments)... }, //
           locker_ (locker)
     {
 #if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_BLOCK_DEVICE)
@@ -584,7 +584,7 @@ namespace micro_os_plus
 
     template <typename T, typename L>
     int
-    block_device_lockable<T, L>::vfcntl (int cmd, std::va_list args)
+    block_device_lockable<T, L>::vfcntl (int cmd, std::va_list arguments)
     {
 #if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_BLOCK_DEVICE)
       trace::printf ("block_device_lockable::%s(%d) @%p\n", __func__, cmd,
@@ -593,12 +593,12 @@ namespace micro_os_plus
 
       std::lock_guard<L> lock{ locker_ };
 
-      return block_device::vfcntl (cmd, args);
+      return block_device::vfcntl (cmd, arguments);
     }
 
     template <typename T, typename L>
     int
-    block_device_lockable<T, L>::vioctl (int request, std::va_list args)
+    block_device_lockable<T, L>::vioctl (int request, std::va_list arguments)
     {
 #if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_BLOCK_DEVICE)
       trace::printf ("block_device_lockable::%s(%d) @%p\n", __func__, request,
@@ -607,7 +607,7 @@ namespace micro_os_plus
 
       std::lock_guard<L> lock{ locker_ };
 
-      return block_device::vioctl (request, args);
+      return block_device::vioctl (request, arguments);
     }
 
     template <typename T, typename L>

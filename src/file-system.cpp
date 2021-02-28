@@ -472,16 +472,16 @@ namespace micro_os_plus
     file_system::mkfs (int options, ...)
     {
       // Forward to the variadic version of the function.
-      std::va_list args;
-      va_start (args, options);
-      int ret = vmkfs (options, args);
-      va_end (args);
+      std::va_list arguments;
+      va_start (arguments, options);
+      int ret = vmkfs (options, arguments);
+      va_end (arguments);
 
       return ret;
     }
 
     int
-    file_system::vmkfs (int options, std::va_list args)
+    file_system::vmkfs (int options, std::va_list arguments)
     {
 #if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("file_system::%s(%u) @%p\n", __func__, options, this);
@@ -497,7 +497,7 @@ namespace micro_os_plus
       errno = 0;
 
       int ret;
-      ret = impl ().do_vmkfs (options, args);
+      ret = impl ().do_vmkfs (options, arguments);
 
       return ret;
     }
@@ -506,17 +506,17 @@ namespace micro_os_plus
     file_system::mount (const char* path, unsigned int flags, ...)
     {
       // Forward to the variadic version of the function.
-      std::va_list args;
-      va_start (args, flags);
-      int ret = vmount (path, flags, args);
-      va_end (args);
+      std::va_list arguments;
+      va_start (arguments, flags);
+      int ret = vmount (path, flags, arguments);
+      va_end (arguments);
 
       return ret;
     }
 
     int
     file_system::vmount (const char* path, unsigned int flags,
-                         std::va_list args)
+                         std::va_list arguments)
     {
 #if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("file_system::%s(\"%s\", %u) @%p\n", __func__,
@@ -556,7 +556,7 @@ namespace micro_os_plus
 
       errno = 0;
 
-      int ret = impl ().do_vmount (flags, args);
+      int ret = impl ().do_vmount (flags, arguments);
       if (ret < 0)
         {
           return -1;
@@ -662,16 +662,16 @@ namespace micro_os_plus
     file_system::open (const char* path, int oflag, ...)
     {
       // Forward to the variadic version of the function.
-      std::va_list args;
-      va_start (args, oflag);
-      file* ret = vopen (path, oflag, args);
-      va_end (args);
+      std::va_list arguments;
+      va_start (arguments, oflag);
+      file* ret = vopen (path, oflag, arguments);
+      va_end (arguments);
 
       return ret;
     }
 
     file*
-    file_system::vopen (const char* path, int oflag, std::va_list args)
+    file_system::vopen (const char* path, int oflag, std::va_list arguments)
     {
 #if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("file_system::%s(\"%s\", %u)\n", __func__, path, oflag);
@@ -688,7 +688,7 @@ namespace micro_os_plus
       // Execute the file specific implementation code.
       // Allocation is done by the implementation, where
       // the size is known.
-      file* fil = impl ().do_vopen (*this, path, oflag, args);
+      file* fil = impl ().do_vopen (*this, path, oflag, arguments);
       if (fil == nullptr)
         {
           return nullptr;

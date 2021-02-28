@@ -75,7 +75,7 @@ namespace micro_os_plus
     open (const char* path, int oflag, ...);
 
     io*
-    vopen (const char* path, int oflag, std::va_list args);
+    vopen (const char* path, int oflag, std::va_list arguments);
 
     /**
      * @}
@@ -99,7 +99,7 @@ namespace micro_os_plus
       friend class file_descriptors_manager;
 
       friend io*
-      vopen (const char* path, int oflag, std::va_list args);
+      vopen (const char* path, int oflag, std::va_list arguments);
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wshadow"
@@ -192,7 +192,7 @@ namespace micro_os_plus
       fcntl (int cmd, ...);
 
       virtual int
-      vfcntl (int cmd, std::va_list args);
+      vfcntl (int cmd, std::va_list arguments);
 
       int
       isatty (void);
@@ -350,7 +350,7 @@ namespace micro_os_plus
       do_writev (const struct iovec* iov, int iovcnt);
 
       virtual int
-      do_vfcntl (int cmd, std::va_list args);
+      do_vfcntl (int cmd, std::va_list arguments);
 
       virtual int
       do_isatty (void);

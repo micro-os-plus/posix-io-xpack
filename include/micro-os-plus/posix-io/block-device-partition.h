@@ -171,10 +171,10 @@ namespace micro_os_plus
 
     public:
       virtual int
-      do_vioctl (int request, std::va_list args) override;
+      do_vioctl (int request, std::va_list arguments) override;
 
       virtual int
-      do_vopen (const char* path, int oflag, std::va_list args) override;
+      do_vopen (const char* path, int oflag, std::va_list arguments) override;
 
       virtual ssize_t
       do_read_block (void* buf, blknum_t blknum, std::size_t nblocks) override;
@@ -236,7 +236,7 @@ namespace micro_os_plus
       template <typename... Args>
       block_device_partition_implementable (const char* name,
                                             block_device& parent,
-                                            Args&&... args);
+                                            Args&&... arguments);
 
       /**
        * @cond ignore
@@ -317,7 +317,8 @@ namespace micro_os_plus
     public:
       template <typename... Args>
       block_device_partition_lockable (const char* name, block_device& parent,
-                                       lockable_type& locker, Args&&... args);
+                                       lockable_type& locker,
+                                       Args&&... arguments);
 
       /**
        * @cond ignore
@@ -353,7 +354,7 @@ namespace micro_os_plus
 
     public:
       virtual int
-      vioctl (int request, std::va_list args) override;
+      vioctl (int request, std::va_list arguments) override;
 
       virtual ssize_t
       read_block (void* buf, blknum_t blknum,
@@ -426,9 +427,9 @@ namespace micro_os_plus
     block_device_partition_implementable<
         T>::block_device_partition_implementable (const char* name,
                                                   block_device& parent,
-                                                  Args&&... args)
+                                                  Args&&... arguments)
         : block_device_partition{ impl_instance_, name }, //
-          impl_instance_{ parent, std::forward<Args> (args)... }
+          impl_instance_{ parent, std::forward<Args> (arguments)... }
     {
 #if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
       trace::printf ("block_device_partition_implementable::%s(\"%s\")=@%p\n",
@@ -459,9 +460,9 @@ namespace micro_os_plus
     template <typename... Args>
     block_device_partition_lockable<T, L>::block_device_partition_lockable (
         const char* name, block_device& parent, lockable_type& locker,
-        Args&&... args)
+        Args&&... arguments)
         : block_device_partition{ impl_instance_, name }, //
-          impl_instance_{ parent, std::forward<Args> (args)... }, //
+          impl_instance_{ parent, std::forward<Args> (arguments)... }, //
           locker_ (locker)
     {
 #if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
@@ -484,7 +485,7 @@ namespace micro_os_plus
     template <typename T, typename L>
     int
     block_device_partition_lockable<T, L>::vioctl (int request,
-                                                   std::va_list args)
+                                                   std::va_list arguments)
     {
 #if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_BLOCK_DEVICE_PARTITION)
       trace::printf ("block_device_partition_lockable::%s(%d) @%p\n", __func__,
@@ -493,7 +494,7 @@ namespace micro_os_plus
 
       std::lock_guard<L> lock{ locker_ };
 
-      return block_device_partition::vioctl (request, args);
+      return block_device_partition::vioctl (request, arguments);
     }
 
     template <typename T, typename L>

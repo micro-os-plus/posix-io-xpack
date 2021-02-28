@@ -68,16 +68,16 @@ namespace micro_os_plus
     device::open (const char* path, int oflag, ...)
     {
       // Forward to the variadic version of the function.
-      std::va_list args;
-      va_start (args, oflag);
-      int ret = vopen (path, oflag, args);
-      va_end (args);
+      std::va_list arguments;
+      va_start (arguments, oflag);
+      int ret = vopen (path, oflag, arguments);
+      va_end (arguments);
 
       return ret;
     }
 
     int
-    device::vopen (const char* path, int oflag, std::va_list args)
+    device::vopen (const char* path, int oflag, std::va_list arguments)
     {
 #if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_DEVICE)
       trace::printf ("device::%s(\"%s\") @%p\n", __func__, path ? path : "",
@@ -90,7 +90,7 @@ namespace micro_os_plus
       if (impl ().open_count_ == 0)
         {
           // If so, use the implementation to open the device.
-          ret = impl ().do_vopen (path, oflag, args);
+          ret = impl ().do_vopen (path, oflag, arguments);
           if (ret < 0)
             {
               // Open failed.
@@ -141,16 +141,16 @@ namespace micro_os_plus
     device::ioctl (int request, ...)
     {
       // Forward to the variadic version of the function.
-      std::va_list args;
-      va_start (args, request);
-      int ret = vioctl (request, args);
-      va_end (args);
+      std::va_list arguments;
+      va_start (arguments, request);
+      int ret = vioctl (request, arguments);
+      va_end (arguments);
 
       return ret;
     }
 
     int
-    device::vioctl (int request, std::va_list args)
+    device::vioctl (int request, std::va_list arguments)
     {
 #if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_DEVICE)
       trace::printf ("device::%s(%d) @%p\n", __func__, request, this);
@@ -164,7 +164,7 @@ namespace micro_os_plus
 
       errno = 0;
 
-      return impl ().do_vioctl (request, args);
+      return impl ().do_vioctl (request, arguments);
     }
 
     void

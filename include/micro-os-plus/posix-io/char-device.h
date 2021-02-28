@@ -196,7 +196,7 @@ namespace micro_os_plus
 
     public:
       template <typename... Args>
-      char_device_implementable (const char* name, Args&&... args);
+      char_device_implementable (const char* name, Args&&... arguments);
 
       /**
        * @cond ignore
@@ -273,10 +273,10 @@ namespace micro_os_plus
 
     template <typename T>
     template <typename... Args>
-    char_device_implementable<T>::char_device_implementable (const char* name,
-                                                             Args&&... args)
+    char_device_implementable<T>::char_device_implementable (
+        const char* name, Args&&... arguments)
         : char_device{ impl_instance_, name }, //
-          impl_instance_{ std::forward<Args> (args)... }
+          impl_instance_{ std::forward<Args> (arguments)... }
     {
 #if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_CHAR_DEVICE)
       trace::printf ("char_device_implementable::%s(\"%s\")=@%p\n", __func__,

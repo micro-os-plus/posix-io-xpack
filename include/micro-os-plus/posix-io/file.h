@@ -387,7 +387,7 @@ namespace micro_os_plus
       writev (const struct iovec* iov, int iovcnt) override;
 
       virtual int
-      vfcntl (int cmd, std::va_list args) override;
+      vfcntl (int cmd, std::va_list arguments) override;
 
       virtual int
       fstat (struct stat* buf) override;
@@ -550,11 +550,11 @@ namespace micro_os_plus
 
     template <typename T, typename L>
     int
-    file_lockable<T, L>::vfcntl (int cmd, std::va_list args)
+    file_lockable<T, L>::vfcntl (int cmd, std::va_list arguments)
     {
       std::lock_guard<L> lock{ locker_ };
 
-      return file::vfcntl (cmd, args);
+      return file::vfcntl (cmd, arguments);
     }
 
     template <typename T, typename L>

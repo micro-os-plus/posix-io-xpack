@@ -224,7 +224,7 @@ namespace micro_os_plus
 
     public:
       template <typename... Args>
-      tty_implementable (const char* name, Args&&... args);
+      tty_implementable (const char* name, Args&&... arguments);
 
       /**
        * @cond ignore
@@ -301,9 +301,10 @@ namespace micro_os_plus
 
     template <typename T>
     template <typename... Args>
-    tty_implementable<T>::tty_implementable (const char* name, Args&&... args)
+    tty_implementable<T>::tty_implementable (const char* name,
+                                             Args&&... arguments)
         : tty{ impl_instance_, name }, //
-          impl_instance_{ std::forward<Args> (args)... }
+          impl_instance_{ std::forward<Args> (arguments)... }
     {
 #if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_TTY)
       trace::printf ("tty_implementable::%s(\"%s\")=@%p\n", __func__, name_,

@@ -304,7 +304,7 @@ namespace micro_os_plus
     public:
       template <typename... Args>
       net_stack_implementable (const char* name, net_interface& interface,
-                               Args&&... args);
+                               Args&&... arguments);
 
       /**
        * @cond ignore
@@ -380,7 +380,7 @@ namespace micro_os_plus
     public:
       template <typename... Args>
       net_stack_lockable (const char* name, net_interface& interface,
-                          lockable_type& locker, Args&&... args);
+                          lockable_type& locker, Args&&... arguments);
 
       /**
        * @cond ignore
@@ -559,9 +559,9 @@ namespace micro_os_plus
     template <typename T>
     template <typename... Args>
     net_stack_implementable<T>::net_stack_implementable (
-        const char* name, net_interface& interface, Args&&... args)
+        const char* name, net_interface& interface, Args&&... arguments)
         : net_stack{ impl_instance_, name }, //
-          impl_instance_{ interface, std::forward<Args> (args)... }
+          impl_instance_{ interface, std::forward<Args> (arguments)... }
     {
 #if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_NET_STACK)
       trace::printf ("net_stack_implementable::%s(\"%s\")=@%p\n", __func__,
@@ -592,9 +592,10 @@ namespace micro_os_plus
     net_stack_lockable<T, L>::net_stack_lockable (const char* name,
                                                   net_interface& interface,
                                                   lockable_type& locker,
-                                                  Args&&... args)
+                                                  Args&&... arguments)
         : net_stack{ impl_instance_, name }, //
-          impl_instance_{ interface, locker, std::forward<Args> (args)... }
+          impl_instance_{ interface, locker,
+                          std::forward<Args> (arguments)... }
     {
 #if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_NET_STACK)
       trace::printf ("net_stack_lockable::%s()=%p\n", __func__, this);
