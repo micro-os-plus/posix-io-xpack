@@ -72,7 +72,7 @@ namespace micro_os_plus
     class file_system_impl;
 
     /**
-     * @ingroup micro-os-plus-posix-io-func
+     * @ingroup micro-os-plus-posix-io-function
      * @{
      */
 
