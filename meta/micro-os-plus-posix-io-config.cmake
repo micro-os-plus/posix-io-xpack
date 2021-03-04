@@ -60,15 +60,15 @@ if(NOT TARGET micro-os-plus-posix-io-static)
     micro-os-plus-posix-io-static
     
     PUBLIC
-      micro-os-plus::utils-lists-static
-      micro-os-plus::diag-trace-static
+      micro-os-plus::utils-lists
+      micro-os-plus::diag-trace
   )
 
   # ---------------------------------------------------------------------------
   # Aliases.
 
-  add_library(micro-os-plus::posix-io-static ALIAS micro-os-plus-posix-io-static)
-  message(STATUS "=> micro-os-plus::posix-io-static")
+  add_library(micro-os-plus::posix-io ALIAS micro-os-plus-posix-io-static)
+  message(STATUS "=> micro-os-plus::posix-io")
 
 endif()
 
