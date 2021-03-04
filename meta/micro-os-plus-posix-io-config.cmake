@@ -68,7 +68,7 @@ if(NOT TARGET micro-os-plus-posix-io-static)
   # Aliases.
 
   add_library(micro-os-plus::posix-io-static ALIAS micro-os-plus-posix-io-static)
-  message(STATUS "micro-os-plus::posix-io-static")
+  message(STATUS "=> micro-os-plus::posix-io-static")
 
 endif()
 
