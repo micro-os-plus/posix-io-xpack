@@ -58,6 +58,17 @@
 
 // ----------------------------------------------------------------------------
 
+#pragma GCC diagnostic push
+
+#if defined(__clang__)
+#pragma clang diagnostic ignored "-Wc++98-compat"
+#endif
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic ignored "-Wredundant-tags"
+#pragma GCC diagnostic ignored "-Wsuggest-final-methods"
+#pragma GCC diagnostic ignored "-Wsuggest-final-types"
+#endif
+
 namespace micro_os_plus
 {
   namespace posix
@@ -106,7 +117,7 @@ namespace micro_os_plus
     unlink (const char* path);
 
     int
-    utime (const char* path, const struct utimbuf* times);
+    utime (const char* path, const utimbuf* times);
 
     int
     statvfs (const char* path, struct statvfs* buf);
@@ -162,7 +173,7 @@ namespace micro_os_plus
       unlink (const char* path);
 
       friend int
-      utime (const char* path, const struct utimbuf* times);
+      utime (const char* path, const utimbuf* times);
 
       friend int
       statvfs (const char* path, struct statvfs* buf);
@@ -289,7 +300,7 @@ namespace micro_os_plus
       unlink (const char* path);
 
       virtual int
-      utime (const char* path, const struct utimbuf* times);
+      utime (const char* path, const utimbuf* times);
 
       virtual int
       statvfs (struct statvfs* buf);
@@ -518,7 +529,7 @@ namespace micro_os_plus
           = 0;
 
       virtual int
-      do_utime (const char* path, const struct utimbuf* times)
+      do_utime (const char* path, const utimbuf* times)
           = 0;
 
       virtual int
@@ -742,7 +753,7 @@ namespace micro_os_plus
       unlink (const char* path) override;
 
       virtual int
-      utime (const char* path, const struct utimbuf* times) override;
+      utime (const char* path, const utimbuf* times) override;
 
       virtual int
       statvfs (struct statvfs* buf) override;
@@ -791,7 +802,7 @@ namespace micro_os_plus
     inline file_system_impl&
     file_system::impl (void) const
     {
-      return static_cast<file_system_impl&> (impl_);
+      return impl_;
     }
 
     inline block_device&
@@ -1157,8 +1168,7 @@ namespace micro_os_plus
     // http://pubs.opengroup.org/onlinepubs/9699919799/functions/utime.html
     template <typename T, typename L>
     int
-    file_system_lockable<T, L>::utime (const char* path,
-                                       const struct utimbuf* times)
+    file_system_lockable<T, L>::utime (const char* path, const utimbuf* times)
     {
       std::lock_guard<L> lock{ impl_instance_.locker () };
 
@@ -1184,6 +1194,8 @@ namespace micro_os_plus
     // ==========================================================================
   } // namespace posix
 } // namespace micro_os_plus
+
+#pragma GCC diagnostic pop
 
 // ----------------------------------------------------------------------------
 

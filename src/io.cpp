@@ -45,6 +45,15 @@ using namespace micro_os_plus;
 
 // ----------------------------------------------------------------------------
 
+#pragma GCC diagnostic push
+
+#if defined(__clang__)
+#pragma clang diagnostic ignored "-Wc++98-compat"
+#endif
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic ignored "-Wsuggest-final-methods"
+#endif
+
 // Variadic calls are processed in two steps, first prepare a
 // va_list structure, then call implementation functions like doOpen()
 // doIoctl(), that use 'va_list arguments'.
@@ -329,7 +338,7 @@ namespace micro_os_plus
     }
 
     ssize_t
-    io::writev (const struct iovec* iov, int iovcnt)
+    io::writev (const iovec* iov, int iovcnt)
     {
 #if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_IO)
       trace::printf ("io::%s(0x0%X, %d) @%p\n", __func__, iov, iovcnt, this);
@@ -496,11 +505,11 @@ namespace micro_os_plus
     }
 
     ssize_t
-    io_impl::do_writev (const struct iovec* iov, int iovcnt)
+    io_impl::do_writev (const iovec* iov, int iovcnt)
     {
       ssize_t total = 0;
 
-      const struct iovec* p = iov;
+      const iovec* p = iov;
       for (int i = 0; i < iovcnt; ++i, ++p)
         {
           ssize_t ret = do_write (p->iov_base, p->iov_len);
@@ -537,6 +546,7 @@ namespace micro_os_plus
       return -1;
     }
 
+#pragma GCC diagnostic pop
 #pragma GCC diagnostic pop
 
     // ==========================================================================

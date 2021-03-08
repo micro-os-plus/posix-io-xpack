@@ -33,6 +33,12 @@
 
 // ----------------------------------------------------------------------------
 
+#pragma GCC diagnostic push
+
+#if defined(__clang__)
+#pragma clang diagnostic ignored "-Wc++98-compat"
+#endif
+
 namespace micro_os_plus
 {
   namespace posix
@@ -60,7 +66,7 @@ namespace micro_os_plus
     // ------------------------------------------------------------------------
 
     class socket*
-    socket::accept (struct sockaddr* address, socklen_t* address_len)
+    socket::accept (sockaddr* address, socklen_t* address_len)
     {
       errno = 0;
 
@@ -75,7 +81,7 @@ namespace micro_os_plus
     }
 
     int
-    socket::bind (const struct sockaddr* address, socklen_t address_len)
+    socket::bind (const sockaddr* address, socklen_t address_len)
     {
       errno = 0;
 
@@ -84,7 +90,7 @@ namespace micro_os_plus
     }
 
     int
-    socket::connect (const struct sockaddr* address, socklen_t address_len)
+    socket::connect (const sockaddr* address, socklen_t address_len)
     {
       errno = 0;
 
@@ -93,7 +99,7 @@ namespace micro_os_plus
     }
 
     int
-    socket::getpeername (struct sockaddr* address, socklen_t* address_len)
+    socket::getpeername (sockaddr* address, socklen_t* address_len)
     {
       errno = 0;
 
@@ -102,7 +108,7 @@ namespace micro_os_plus
     }
 
     int
-    socket::getsockname (struct sockaddr* address, socklen_t* address_len)
+    socket::getsockname (sockaddr* address, socklen_t* address_len)
     {
       errno = 0;
 
@@ -141,7 +147,7 @@ namespace micro_os_plus
 
     ssize_t
     socket::recvfrom (void* buffer, size_t length, int flags,
-                      struct sockaddr* address, socklen_t* address_len)
+                      sockaddr* address, socklen_t* address_len)
     {
       errno = 0;
 
@@ -150,7 +156,7 @@ namespace micro_os_plus
     }
 
     ssize_t
-    socket::recvmsg (struct msghdr* message, int flags)
+    socket::recvmsg (msghdr* message, int flags)
     {
       errno = 0;
 
@@ -168,7 +174,7 @@ namespace micro_os_plus
     }
 
     ssize_t
-    socket::sendmsg (const struct msghdr* message, int flags)
+    socket::sendmsg (const msghdr* message, int flags)
     {
       errno = 0;
 
@@ -178,7 +184,7 @@ namespace micro_os_plus
 
     ssize_t
     socket::sendto (const void* message, size_t length, int flags,
-                    const struct sockaddr* dest_addr, socklen_t dest_len)
+                    const sockaddr* dest_addr, socklen_t dest_len)
     {
       errno = 0;
 
@@ -233,5 +239,7 @@ namespace micro_os_plus
     // ==========================================================================
   } // namespace posix
 } // namespace micro_os_plus
+
+#pragma GCC diagnostic pop
 
 // ----------------------------------------------------------------------------

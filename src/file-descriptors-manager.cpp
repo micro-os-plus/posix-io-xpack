@@ -37,6 +37,12 @@
 
 // ----------------------------------------------------------------------------
 
+#pragma GCC diagnostic push
+
+#if defined(__clang__)
+#pragma clang diagnostic ignored "-Wc++98-compat"
+#endif
+
 namespace micro_os_plus
 {
   namespace posix
@@ -176,7 +182,7 @@ namespace micro_os_plus
       return 0;
     }
 
-    class socket*
+    socket*
     file_descriptors_manager::socket (int fildes)
     {
       assert ((fildes >= 0) && (static_cast<std::size_t> (fildes) < size__));
@@ -206,5 +212,7 @@ namespace micro_os_plus
     // ========================================================================
   } // namespace posix
 } // namespace micro_os_plus
+
+#pragma GCC diagnostic pop
 
 // ----------------------------------------------------------------------------

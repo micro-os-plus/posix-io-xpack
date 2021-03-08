@@ -58,7 +58,7 @@ namespace micro_os_plus
 
     // ------------------------------------------------------------------------
 
-    struct dirent*
+    dirent*
     directory::read (void)
     {
 #if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_DIRECTORY)
@@ -123,7 +123,7 @@ namespace micro_os_plus
 #if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_DIRECTORY)
       trace::printf ("directory_impl::%s()=%p\n", __func__, this);
 #endif
-      memset (&dir_entry_, 0, sizeof (struct dirent));
+      memset (&dir_entry_, 0, sizeof (dirent));
     }
 
     directory_impl::~directory_impl ()

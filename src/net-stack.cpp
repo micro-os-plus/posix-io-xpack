@@ -30,6 +30,15 @@
 
 // ----------------------------------------------------------------------------
 
+#pragma GCC diagnostic push
+
+#if defined(__clang__)
+#pragma clang diagnostic ignored "-Wc++98-compat"
+#endif
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic ignored "-Wsuggest-final-methods"
+#endif
+
 namespace micro_os_plus
 {
   namespace posix
@@ -65,7 +74,10 @@ namespace micro_os_plus
 
       // TODO: implement a way to identify the net stack.
       net_stack* ns = nullptr;
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wnull-dereference"
       class socket* sock = ns->socket (domain, type, protocol);
+#pragma GCC diagnostic pop
       if (sock == nullptr)
         {
           return nullptr;
@@ -123,5 +135,7 @@ namespace micro_os_plus
     // ==========================================================================
   } // namespace posix
 } // namespace micro_os_plus
+
+#pragma GCC diagnostic pop
 
 // ----------------------------------------------------------------------------

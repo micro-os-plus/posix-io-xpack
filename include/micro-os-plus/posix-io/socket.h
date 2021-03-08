@@ -48,6 +48,15 @@
 
 // ----------------------------------------------------------------------------
 
+#pragma GCC diagnostic push
+
+#if defined(__clang__)
+#pragma clang diagnostic ignored "-Wc++98-compat"
+#endif
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic ignored "-Wredundant-tags"
+#endif
+
 namespace micro_os_plus
 {
   namespace posix
@@ -107,19 +116,19 @@ namespace micro_os_plus
 
     public:
       virtual class socket*
-      accept (struct sockaddr* address, socklen_t* address_len);
+      accept (sockaddr* address, socklen_t* address_len);
 
       virtual int
-      bind (const struct sockaddr* address, socklen_t address_len);
+      bind (const sockaddr* address, socklen_t address_len);
 
       virtual int
-      connect (const struct sockaddr* address, socklen_t address_len);
+      connect (const sockaddr* address, socklen_t address_len);
 
       virtual int
-      getpeername (struct sockaddr* address, socklen_t* address_len);
+      getpeername (sockaddr* address, socklen_t* address_len);
 
       virtual int
-      getsockname (struct sockaddr* address, socklen_t* address_len);
+      getsockname (sockaddr* address, socklen_t* address_len);
 
       virtual int
       getsockopt (int level, int option_name, void* option_value,
@@ -132,21 +141,21 @@ namespace micro_os_plus
       recv (void* buffer, size_t length, int flags);
 
       virtual ssize_t
-      recvfrom (void* buffer, size_t length, int flags,
-                struct sockaddr* address, socklen_t* address_len);
+      recvfrom (void* buffer, size_t length, int flags, sockaddr* address,
+                socklen_t* address_len);
 
       virtual ssize_t
-      recvmsg (struct msghdr* message, int flags);
+      recvmsg (msghdr* message, int flags);
 
       virtual ssize_t
       send (const void* buffer, size_t length, int flags);
 
       virtual ssize_t
-      sendmsg (const struct msghdr* message, int flags);
+      sendmsg (const msghdr* message, int flags);
 
       virtual ssize_t
       sendto (const void* message, size_t length, int flags,
-              const struct sockaddr* dest_addr, socklen_t dest_len);
+              const sockaddr* dest_addr, socklen_t dest_len);
 
       virtual int
       setsockopt (int level, int option_name, const void* option_value,
@@ -255,23 +264,23 @@ namespace micro_os_plus
 
     public:
       virtual class socket*
-      do_accept (struct sockaddr* address, socklen_t* address_len)
+      do_accept (sockaddr* address, socklen_t* address_len)
           = 0;
 
       virtual int
-      do_bind (const struct sockaddr* address, socklen_t address_len)
+      do_bind (const sockaddr* address, socklen_t address_len)
           = 0;
 
       virtual int
-      do_connect (const struct sockaddr* address, socklen_t address_len)
+      do_connect (const sockaddr* address, socklen_t address_len)
           = 0;
 
       virtual int
-      do_getpeername (struct sockaddr* address, socklen_t* address_len)
+      do_getpeername (sockaddr* address, socklen_t* address_len)
           = 0;
 
       virtual int
-      do_getsockname (struct sockaddr* address, socklen_t* address_len)
+      do_getsockname (sockaddr* address, socklen_t* address_len)
           = 0;
 
       virtual int
@@ -288,12 +297,12 @@ namespace micro_os_plus
           = 0;
 
       virtual ssize_t
-      do_recvfrom (void* buffer, size_t length, int flags,
-                   struct sockaddr* address, socklen_t* address_len)
+      do_recvfrom (void* buffer, size_t length, int flags, sockaddr* address,
+                   socklen_t* address_len)
           = 0;
 
       virtual ssize_t
-      do_recvmsg (struct msghdr* message, int flags)
+      do_recvmsg (msghdr* message, int flags)
           = 0;
 
       virtual ssize_t
@@ -301,12 +310,12 @@ namespace micro_os_plus
           = 0;
 
       virtual ssize_t
-      do_sendmsg (const struct msghdr* message, int flags)
+      do_sendmsg (const msghdr* message, int flags)
           = 0;
 
       virtual ssize_t
       do_sendto (const void* message, size_t length, int flags,
-                 const struct sockaddr* dest_addr, socklen_t dest_len)
+                 const sockaddr* dest_addr, socklen_t dest_len)
           = 0;
 
       virtual int
@@ -456,19 +465,19 @@ namespace micro_os_plus
       close (void) override;
 
       virtual class socket*
-      accept (struct sockaddr* address, socklen_t* address_len) override;
+      accept (sockaddr* address, socklen_t* address_len) override;
 
       virtual int
-      bind (const struct sockaddr* address, socklen_t address_len) override;
+      bind (const sockaddr* address, socklen_t address_len) override;
 
       virtual int
-      connect (const struct sockaddr* address, socklen_t address_len) override;
+      connect (const sockaddr* address, socklen_t address_len) override;
 
       virtual int
-      getpeername (struct sockaddr* address, socklen_t* address_len) override;
+      getpeername (sockaddr* address, socklen_t* address_len) override;
 
       virtual int
-      getsockname (struct sockaddr* address, socklen_t* address_len) override;
+      getsockname (sockaddr* address, socklen_t* address_len) override;
 
       virtual int
       getsockopt (int level, int option_name, void* option_value,
@@ -481,21 +490,21 @@ namespace micro_os_plus
       recv (void* buffer, size_t length, int flags) override;
 
       virtual ssize_t
-      recvfrom (void* buffer, size_t length, int flags,
-                struct sockaddr* address, socklen_t* address_len) override;
+      recvfrom (void* buffer, size_t length, int flags, sockaddr* address,
+                socklen_t* address_len) override;
 
       virtual ssize_t
-      recvmsg (struct msghdr* message, int flags) override;
+      recvmsg (msghdr* message, int flags) override;
 
       virtual ssize_t
       send (const void* buffer, size_t length, int flags) override;
 
       virtual ssize_t
-      sendmsg (const struct msghdr* message, int flags) override;
+      sendmsg (const msghdr* message, int flags) override;
 
       virtual ssize_t
       sendto (const void* message, size_t length, int flags,
-              const struct sockaddr* dest_addr, socklen_t dest_len) override;
+              const sockaddr* dest_addr, socklen_t dest_len) override;
 
       virtual int
       setsockopt (int level, int option_name, const void* option_value,
@@ -616,8 +625,7 @@ namespace micro_os_plus
 
     template <typename T, typename L>
     class socket*
-    socket_lockable<T, L>::accept (struct sockaddr* address,
-                                   socklen_t* address_len)
+    socket_lockable<T, L>::accept (sockaddr* address, socklen_t* address_len)
     {
       std::lock_guard<L> lock{ locker_ };
 
@@ -626,7 +634,7 @@ namespace micro_os_plus
 
     template <typename T, typename L>
     int
-    socket_lockable<T, L>::bind (const struct sockaddr* address,
+    socket_lockable<T, L>::bind (const sockaddr* address,
                                  socklen_t address_len)
     {
       std::lock_guard<L> lock{ locker_ };
@@ -636,7 +644,7 @@ namespace micro_os_plus
 
     template <typename T, typename L>
     int
-    socket_lockable<T, L>::connect (const struct sockaddr* address,
+    socket_lockable<T, L>::connect (const sockaddr* address,
                                     socklen_t address_len)
     {
       std::lock_guard<L> lock{ locker_ };
@@ -646,7 +654,7 @@ namespace micro_os_plus
 
     template <typename T, typename L>
     int
-    socket_lockable<T, L>::getpeername (struct sockaddr* address,
+    socket_lockable<T, L>::getpeername (sockaddr* address,
                                         socklen_t* address_len)
     {
       std::lock_guard<L> lock{ locker_ };
@@ -656,7 +664,7 @@ namespace micro_os_plus
 
     template <typename T, typename L>
     int
-    socket_lockable<T, L>::getsockname (struct sockaddr* address,
+    socket_lockable<T, L>::getsockname (sockaddr* address,
                                         socklen_t* address_len)
     {
       std::lock_guard<L> lock{ locker_ };
@@ -696,8 +704,7 @@ namespace micro_os_plus
     template <typename T, typename L>
     ssize_t
     socket_lockable<T, L>::recvfrom (void* buffer, size_t length, int flags,
-                                     struct sockaddr* address,
-                                     socklen_t* address_len)
+                                     sockaddr* address, socklen_t* address_len)
     {
       std::lock_guard<L> lock{ locker_ };
 
@@ -706,7 +713,7 @@ namespace micro_os_plus
 
     template <typename T, typename L>
     ssize_t
-    socket_lockable<T, L>::recvmsg (struct msghdr* message, int flags)
+    socket_lockable<T, L>::recvmsg (msghdr* message, int flags)
     {
       std::lock_guard<L> lock{ locker_ };
 
@@ -724,7 +731,7 @@ namespace micro_os_plus
 
     template <typename T, typename L>
     ssize_t
-    socket_lockable<T, L>::sendmsg (const struct msghdr* message, int flags)
+    socket_lockable<T, L>::sendmsg (const msghdr* message, int flags)
     {
       std::lock_guard<L> lock{ locker_ };
 
@@ -734,7 +741,7 @@ namespace micro_os_plus
     template <typename T, typename L>
     ssize_t
     socket_lockable<T, L>::sendto (const void* message, size_t length,
-                                   int flags, const struct sockaddr* dest_addr,
+                                   int flags, const sockaddr* dest_addr,
                                    socklen_t dest_len)
     {
       std::lock_guard<L> lock{ locker_ };
@@ -781,6 +788,8 @@ namespace micro_os_plus
     // ==========================================================================
   } // namespace posix
 } // namespace micro_os_plus
+
+#pragma GCC diagnostic pop
 
 // ----------------------------------------------------------------------------
 

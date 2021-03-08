@@ -37,6 +37,12 @@
 
 // ----------------------------------------------------------------------------
 
+#pragma GCC diagnostic push
+
+#if defined(__clang__)
+#pragma clang diagnostic ignored "-Wc++98-compat"
+#endif
+
 namespace micro_os_plus
 {
   namespace posix
@@ -222,7 +228,7 @@ namespace micro_os_plus
           tmp += offset;
           break;
 
-        case SEEK_END:
+        default:
           errno = EINVAL;
           return -1;
         }
@@ -268,7 +274,7 @@ namespace micro_os_plus
       ssize_t ret = do_read_block (buf, blknum, nblocks);
       if (ret >= 0)
         {
-          ret *= block_logical_size_bytes_;
+          ret *= static_cast<ssize_t> (block_logical_size_bytes_);
         }
       return ret;
     }
@@ -303,7 +309,7 @@ namespace micro_os_plus
       ssize_t ret = do_write_block (buf, blknum, nblocks);
       if (ret >= 0)
         {
-          ret *= block_logical_size_bytes_;
+          ret *= static_cast<ssize_t> (block_logical_size_bytes_);
         }
       return ret;
     }
@@ -311,5 +317,7 @@ namespace micro_os_plus
     // ==========================================================================
   } // namespace posix
 } // namespace micro_os_plus
+
+#pragma GCC diagnostic pop
 
 // ----------------------------------------------------------------------------

@@ -27,7 +27,7 @@
 
 #if !defined(MICRO_OS_PLUS_USE_SEMIHOSTING_SYSCALLS)
 
-#include <micro-os-plus/rtos.h>
+// #include <micro-os-plus/rtos.h>
 #include <micro-os-plus/posix-io/types.h>
 #include <micro-os-plus/posix-io/file-descriptors-manager.h>
 #include <micro-os-plus/posix-io/io.h>
@@ -69,6 +69,12 @@ using namespace micro_os_plus;
 
 // ----------------------------------------------------------------------------
 
+#pragma GCC diagnostic push
+
+#if defined(__clang__)
+#pragma clang diagnostic ignored "-Wc++98-compat"
+#endif
+
 extern "C"
 {
   void
@@ -80,7 +86,6 @@ extern "C"
 
 /**
  * @details
- *
  * The `open()` function shall establish the connection between a file and a
  * file descriptor. It shall create an open file description that refers
  * to a file and a file descriptor that refers to that open file
@@ -216,7 +221,6 @@ __posix_lseek (int fildes, off_t offset, int whence)
 
 /**
  * @details
- *
  * This function shall test whether _fildes_, an open file descriptor,
  * is associated with a terminal device.
  */
@@ -815,14 +819,18 @@ __posix_socketpair (int domain, int type, int protocol, int socket_vector[2])
   return -1;
 }
 
+#if 0
+// Temporarily disabled, there should be no dependency on RTOS.
 int
 __posix_gettimeofday (struct timeval* ptimeval, void* ptimezone)
 {
+  // TODO rewrite to use new clocks.
   ptimeval->tv_sec = static_cast<time_t> (rtos::rtclock.now ());
   ptimeval->tv_usec = 0;
 
   return 0;
 }
+#endif
 
 int
 __posix_select (int nfds, fd_set* readfds, fd_set* writefds, fd_set* errorfds,
@@ -977,6 +985,8 @@ initialise_monitor_handles (void)
 #endif
 
 #endif // defined(__ARM_EABI__) && (__STDC_HOSTED__ != 0)
+
+#pragma GCC diagnostic pop
 
 // ----------------------------------------------------------------------------
 

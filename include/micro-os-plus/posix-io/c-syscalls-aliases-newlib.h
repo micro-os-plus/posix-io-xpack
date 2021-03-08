@@ -247,11 +247,12 @@ extern "C"
   ssize_t __attribute__ ((weak, alias ("__posix_writev")))
   writev (int fildes, const struct iovec* iov, int iovcnt);
 
-/**
- * @endcond
- */
+  /**
+   * @endcond
+   */
 
-// --------------------------------------------------------------------------
+  // --------------------------------------------------------------------------
+
 #ifdef __cplusplus
 }
 #endif

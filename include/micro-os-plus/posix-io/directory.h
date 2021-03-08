@@ -49,6 +49,15 @@
 
 // ----------------------------------------------------------------------------
 
+#pragma GCC diagnostic push
+
+#if defined(__clang__)
+#pragma clang diagnostic ignored "-Wc++98-compat"
+#endif
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic ignored "-Wredundant-tags"
+#endif
+
 namespace micro_os_plus
 {
   namespace posix
@@ -125,7 +134,7 @@ namespace micro_os_plus
 
     public:
       // http://pubs.opengroup.org/onlinepubs/9699919799/functions/readdir.html
-      virtual struct dirent*
+      virtual dirent*
       read (void);
 
       // http://pubs.opengroup.org/onlinepubs/9699919799/functions/rewinddir.html
@@ -139,7 +148,7 @@ namespace micro_os_plus
       // ----------------------------------------------------------------------
       // Support functions.
 
-      struct dirent*
+      dirent*
       dir_entry (void);
 
       class file_system&
@@ -240,7 +249,7 @@ namespace micro_os_plus
       /**
        * @return object if successful, otherwise nullptr and errno.
        */
-      virtual struct dirent*
+      virtual dirent*
       do_read (void)
           = 0;
 
@@ -269,7 +278,7 @@ namespace micro_os_plus
        */
 
       // This also solves the readdir() re-entrancy issue.
-      struct dirent dir_entry_;
+      dirent dir_entry_;
 
       class file_system& file_system_;
 
@@ -405,7 +414,7 @@ namespace micro_os_plus
       // opendir() uses the file system lock.
 
       // http://pubs.opengroup.org/onlinepubs/9699919799/functions/readdir.html
-      virtual struct dirent*
+      virtual dirent*
       read (void) override;
 
       // http://pubs.opengroup.org/onlinepubs/9699919799/functions/rewinddir.html
@@ -461,7 +470,7 @@ namespace micro_os_plus
       return impl ().file_system ();
     }
 
-    inline struct dirent*
+    inline dirent*
     directory::dir_entry (void)
     {
       return &(impl ().dir_entry_);
@@ -470,7 +479,7 @@ namespace micro_os_plus
     inline directory_impl&
     directory::impl (void) const
     {
-      return static_cast<directory_impl&> (impl_);
+      return impl_;
     }
 
     // ========================================================================
@@ -533,7 +542,7 @@ namespace micro_os_plus
     // ------------------------------------------------------------------------
 
     template <typename T, typename L>
-    struct dirent*
+    dirent*
     directory_lockable<T, L>::read (void)
     {
 #if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_DIRECTORY)
@@ -581,6 +590,8 @@ namespace micro_os_plus
     // ==========================================================================
   } // namespace posix
 } // namespace micro_os_plus
+
+#pragma GCC diagnostic pop
 
 // ----------------------------------------------------------------------------
 

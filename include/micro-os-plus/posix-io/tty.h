@@ -45,6 +45,12 @@
 
 // ----------------------------------------------------------------------------
 
+#pragma GCC diagnostic push
+
+#if defined(__clang__)
+#pragma clang diagnostic ignored "-Wc++98-compat"
+#endif
+
 namespace micro_os_plus
 {
   namespace posix
@@ -100,11 +106,11 @@ namespace micro_os_plus
     public:
       // http://pubs.opengroup.org/onlinepubs/9699919799/functions/tcgetattr.html
       virtual int
-      tcgetattr (struct termios* ptio);
+      tcgetattr (termios* ptio);
 
       // http://pubs.opengroup.org/onlinepubs/9699919799/functions/tcsetattr.html
       virtual int
-      tcsetattr (int options, const struct termios* ptio);
+      tcsetattr (int options, const termios* ptio);
 
       // http://pubs.opengroup.org/onlinepubs/9699919799/functions/tcflush.html
       virtual int
@@ -176,11 +182,11 @@ namespace micro_os_plus
 
     public:
       virtual int
-      do_tcgetattr (struct termios* ptio)
+      do_tcgetattr (termios* ptio)
           = 0;
 
       virtual int
-      do_tcsetattr (int options, const struct termios* ptio)
+      do_tcsetattr (int options, const termios* ptio)
           = 0;
 
       virtual int
@@ -331,6 +337,10 @@ namespace micro_os_plus
     // ==========================================================================
   } // namespace posix
 } // namespace micro_os_plus
+
+#pragma GCC diagnostic pop
+
+// ----------------------------------------------------------------------------
 
 #endif // __cplusplus
 

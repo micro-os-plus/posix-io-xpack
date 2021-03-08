@@ -49,6 +49,15 @@
 
 // ----------------------------------------------------------------------------
 
+#pragma GCC diagnostic push
+
+#if defined(__clang__)
+#pragma clang diagnostic ignored "-Wc++98-compat"
+#endif
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic ignored "-Wredundant-tags"
+#endif
+
 namespace micro_os_plus
 {
   namespace posix
@@ -384,13 +393,13 @@ namespace micro_os_plus
       write (const void* buf, std::size_t nbyte) override;
 
       virtual ssize_t
-      writev (const struct iovec* iov, int iovcnt) override;
+      writev (const iovec* iov, int iovcnt) override;
 
       virtual int
       vfcntl (int cmd, std::va_list arguments) override;
 
       virtual int
-      fstat (struct stat* buf) override;
+      fstat (stat* buf) override;
 
       virtual off_t
       lseek (off_t offset, int whence) override;
@@ -541,7 +550,7 @@ namespace micro_os_plus
 
     template <typename T, typename L>
     ssize_t
-    file_lockable<T, L>::writev (const struct iovec* iov, int iovcnt)
+    file_lockable<T, L>::writev (const iovec* iov, int iovcnt)
     {
       std::lock_guard<L> lock{ locker_ };
 
@@ -559,7 +568,7 @@ namespace micro_os_plus
 
     template <typename T, typename L>
     int
-    file_lockable<T, L>::fstat (struct stat* buf)
+    file_lockable<T, L>::fstat (stat* buf)
     {
       std::lock_guard<L> lock{ locker_ };
 
@@ -603,6 +612,8 @@ namespace micro_os_plus
     // ==========================================================================
   } // namespace posix
 } // namespace micro_os_plus
+
+#pragma GCC diagnostic pop
 
 // ----------------------------------------------------------------------------
 

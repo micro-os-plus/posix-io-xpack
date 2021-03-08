@@ -61,9 +61,10 @@ extern "C"
   // http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/dirent.h.html
   struct dirent
   {
-    ino_t d_ino; /* File serial number. */
-    char d_name[MICRO_OS_PLUS_INTEGER_DIRENT_NAME_MAX]; /* Filename string of
-                                                           entry. */
+    // File serial number.
+    ino_t d_ino;
+    // Filename string of entry.
+    char d_name[MICRO_OS_PLUS_INTEGER_DIRENT_NAME_MAX];
   };
 
   // The content of this structure is not relevant, it is here just to keep
@@ -71,7 +72,7 @@ extern "C"
   // and casted to DIR.
   typedef struct
   {
-    ;
+    // Empty.
   } DIR;
 
   // --------------------------------------------------------------------------

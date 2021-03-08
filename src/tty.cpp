@@ -31,6 +31,12 @@
 
 // ----------------------------------------------------------------------------
 
+#pragma GCC diagnostic push
+
+#if defined(__clang__)
+#pragma clang diagnostic ignored "-Wc++98-compat"
+#endif
+
 namespace micro_os_plus
 {
   namespace posix
@@ -61,13 +67,13 @@ namespace micro_os_plus
     }
 
     inline int
-    tty::tcgetattr (struct termios* ptio)
+    tty::tcgetattr (termios* ptio)
     {
       return impl ().do_tcgetattr (ptio);
     }
 
     inline int
-    tty::tcsetattr (int options, const struct termios* ptio)
+    tty::tcsetattr (int options, const termios* ptio)
     {
       return impl ().do_tcsetattr (options, ptio);
     }
@@ -109,5 +115,7 @@ namespace micro_os_plus
     // ==========================================================================
   } // namespace posix
 } // namespace micro_os_plus
+
+#pragma GCC diagnostic pop
 
 // ----------------------------------------------------------------------------

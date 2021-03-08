@@ -51,6 +51,17 @@
 
 // ----------------------------------------------------------------------------
 
+#pragma GCC diagnostic push
+
+#if defined(__clang__)
+#pragma clang diagnostic ignored "-Wc++98-compat"
+#endif
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic ignored "-Wredundant-tags"
+#pragma GCC diagnostic ignored "-Wsuggest-final-methods"
+#pragma GCC diagnostic ignored "-Wsuggest-final-types"
+#endif
+
 struct iovec;
 
 namespace micro_os_plus
@@ -118,6 +129,9 @@ namespace micro_os_plus
        * @{
        */
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
+
       using type_t = unsigned int;
       enum type : type_t
       {
@@ -129,6 +143,8 @@ namespace micro_os_plus
         file = 1 << 4,
         socket = 1 << 5
       };
+
+#pragma GCC diagnostic pop
 
       /**
        * @}
@@ -186,7 +202,7 @@ namespace micro_os_plus
       write (const void* buf, std::size_t nbyte);
 
       virtual ssize_t
-      writev (const struct iovec* iov, int iovcnt);
+      writev (const iovec* iov, int iovcnt);
 
       int
       fcntl (int cmd, ...);
@@ -198,7 +214,7 @@ namespace micro_os_plus
       isatty (void);
 
       virtual int
-      fstat (struct stat* buf);
+      fstat (stat* buf);
 
       virtual off_t
       lseek (off_t offset, int whence);
@@ -347,7 +363,7 @@ namespace micro_os_plus
           = 0;
 
       virtual ssize_t
-      do_writev (const struct iovec* iov, int iovcnt);
+      do_writev (const iovec* iov, int iovcnt);
 
       virtual int
       do_vfcntl (int cmd, std::va_list arguments);
@@ -356,7 +372,7 @@ namespace micro_os_plus
       do_isatty (void);
 
       virtual int
-      do_fstat (struct stat* buf);
+      do_fstat (stat* buf);
 
       virtual off_t
       do_lseek (off_t offset, int whence)
@@ -457,6 +473,8 @@ namespace micro_os_plus
     // ==========================================================================
   } // namespace posix
 } // namespace micro_os_plus
+
+#pragma GCC diagnostic pop
 
 // ----------------------------------------------------------------------------
 

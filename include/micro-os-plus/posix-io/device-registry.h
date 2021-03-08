@@ -49,6 +49,12 @@
 
 // ----------------------------------------------------------------------------
 
+#pragma GCC diagnostic push
+
+#if defined(__clang__)
+#pragma clang diagnostic ignored "-Wc++98-compat"
+#endif
+
 namespace micro_os_plus
 {
   namespace posix
@@ -159,6 +165,8 @@ namespace micro_os_plus
     device_registry<T>::link (value_type* device)
     {
 #if defined(DEBUG)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Waggregate-return"
       for (auto&& d : registry_list__)
         {
           // Validate the device name by checking duplicates.
@@ -168,6 +176,7 @@ namespace micro_os_plus
               std::abort ();
             }
         }
+#pragma GCC diagnostic pop
 #endif // DEBUG
 
       registry_list__.link (*device);
@@ -195,6 +204,8 @@ namespace micro_os_plus
       // The prefix was identified; try to match the rest of the path.
       auto name = path + std::strlen (prefix);
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Waggregate-return"
       for (auto&& p : registry_list__)
         {
           if (p.match_name (name))
@@ -202,6 +213,7 @@ namespace micro_os_plus
               return static_cast<value_type*> (&p);
             }
         }
+#pragma GCC diagnostic pop
 
       // Not a known device.
       return nullptr;
@@ -231,6 +243,8 @@ namespace micro_os_plus
     // ==========================================================================
   } // namespace posix
 } // namespace micro_os_plus
+
+#pragma GCC diagnostic pop
 
 // ----------------------------------------------------------------------------
 

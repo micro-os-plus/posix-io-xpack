@@ -59,7 +59,11 @@ extern "C"
   struct sockaddr
   {
     sa_family_t sa_family; // Address family.
+#pragma GCC diagnostic push
+// ISO C++ forbids flexible array member 'sa_data' [-Wpedantic]
+#pragma GCC diagnostic ignored "-Wpedantic"
     char sa_data[]; // Socket address (variable-length data).
+#pragma GCC diagnostic pop
   };
 
   int

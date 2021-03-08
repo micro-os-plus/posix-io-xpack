@@ -50,6 +50,17 @@
 
 // ----------------------------------------------------------------------------
 
+#pragma GCC diagnostic push
+
+#if defined(__clang__)
+#pragma clang diagnostic ignored "-Wc++98-compat"
+#endif
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic ignored "-Wredundant-tags"
+#pragma GCC diagnostic ignored "-Wsuggest-final-methods"
+#pragma GCC diagnostic ignored "-Wsuggest-final-types"
+#endif
+
 namespace micro_os_plus
 {
   namespace posix
@@ -459,7 +470,7 @@ namespace micro_os_plus
     inline net_stack_impl&
     net_stack::impl (void) const
     {
-      return static_cast<net_stack_impl&> (impl_);
+      return impl_;
     }
 
     inline void
@@ -622,6 +633,8 @@ namespace micro_os_plus
     // ========================================================================
   } // namespace posix
 } // namespace micro_os_plus
+
+#pragma GCC diagnostic pop
 
 // ----------------------------------------------------------------------------
 

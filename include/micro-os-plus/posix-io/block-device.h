@@ -44,6 +44,15 @@
 
 // ----------------------------------------------------------------------------
 
+#pragma GCC diagnostic push
+
+#if defined(__clang__)
+#pragma clang diagnostic ignored "-Wc++98-compat"
+#endif
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic ignored "-Wsuggest-final-methods"
+#endif
+
 namespace micro_os_plus
 {
   namespace posix
@@ -385,7 +394,7 @@ namespace micro_os_plus
       write (const void* buf, std::size_t nbyte) override;
 
       virtual ssize_t
-      writev (const struct iovec* iov, int iovcnt) override;
+      writev (const iovec* iov, int iovcnt) override;
 
       virtual int
       vfcntl (int cmd, std::va_list arguments) override;
@@ -570,7 +579,7 @@ namespace micro_os_plus
 
     template <typename T, typename L>
     ssize_t
-    block_device_lockable<T, L>::writev (const struct iovec* iov, int iovcnt)
+    block_device_lockable<T, L>::writev (const iovec* iov, int iovcnt)
     {
 #if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_BLOCK_DEVICE)
       trace::printf ("block_device_lockable::%s(0x0%X, %d) @%p\n", __func__,
@@ -677,6 +686,8 @@ namespace micro_os_plus
     // ==========================================================================
   } // namespace posix
 } // namespace micro_os_plus
+
+#pragma GCC diagnostic pop
 
 // ----------------------------------------------------------------------------
 

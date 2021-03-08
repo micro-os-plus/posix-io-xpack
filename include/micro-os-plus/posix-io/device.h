@@ -52,6 +52,16 @@
 
 // ----------------------------------------------------------------------------
 
+#pragma GCC diagnostic push
+
+#if defined(__clang__)
+#pragma clang diagnostic ignored "-Wc++98-compat"
+#endif
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic ignored "-Wsuggest-final-methods"
+#pragma GCC diagnostic ignored "-Wsuggest-final-types"
+#endif
+
 namespace micro_os_plus
 {
   namespace posix
@@ -113,8 +123,9 @@ namespace micro_os_plus
       /**
        *
        * @param path May be nullptr.
-       * @param oflag
-       * @return
+       * @param oflag Flags.
+       * @return A non-negative integer, termed a file descriptor, or -1
+       * on failure.
        */
       int
       open (const char* path = nullptr, int oflag = 0, ...);
@@ -122,9 +133,10 @@ namespace micro_os_plus
       /**
        *
        * @param path May be nullptr.
-       * @param oflag
-       * @param arguments
-       * @return
+       * @param oflag Flags.
+       * @param arguments Variable list of arguments.
+       * @return A non-negative integer, termed a file descriptor, or -1
+       * on failure.
        */
       int
       vopen (const char* path, int oflag, std::va_list arguments);
@@ -328,6 +340,8 @@ namespace micro_os_plus
     // ==========================================================================
   } // namespace posix
 } // namespace micro_os_plus
+
+#pragma GCC diagnostic pop
 
 // ----------------------------------------------------------------------------
 

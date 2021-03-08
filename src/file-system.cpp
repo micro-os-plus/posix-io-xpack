@@ -39,6 +39,15 @@ using namespace micro_os_plus;
 
 // ----------------------------------------------------------------------------
 
+#pragma GCC diagnostic push
+
+#if defined(__clang__)
+#pragma clang diagnostic ignored "-Wc++98-compat"
+#endif
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic ignored "-Wsuggest-final-methods"
+#endif
+
 namespace micro_os_plus
 {
   namespace posix
@@ -59,7 +68,7 @@ namespace micro_os_plus
 
 #pragma GCC diagnostic pop
 
-    class file_system* file_system::mounted_root__;
+    file_system* file_system::mounted_root__;
 
     /**
      * @endcond
@@ -137,11 +146,14 @@ namespace micro_os_plus
       trace::printf ("%s()\n", __func__);
 #endif
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Waggregate-return"
       // Enumerate all mounted file systems and sync them.
       for (auto&& fs : file_system::mounted_list__)
         {
           fs.sync ();
         }
+#pragma GCC diagnostic pop
 
       if (file_system::mounted_root__ != nullptr)
         {
@@ -317,7 +329,7 @@ namespace micro_os_plus
     }
 
     int
-    utime (const char* path, const struct utimbuf* times)
+    utime (const char* path, const utimbuf* times)
     {
 #if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("%s(\"%s\", %p)\n", __func__, path, times);
@@ -532,6 +544,8 @@ namespace micro_os_plus
 
       if (path != nullptr)
         {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Waggregate-return"
           for (auto&& fs : mounted_list__)
             {
               // Validate the device name by checking duplicates.
@@ -543,6 +557,7 @@ namespace micro_os_plus
                   return -1;
                 }
             }
+#pragma GCC diagnostic pop
         }
 
       char* p = const_cast<char*> (path);
@@ -619,6 +634,8 @@ namespace micro_os_plus
       assert (path1 != nullptr);
       assert (*path1 != nullptr);
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Waggregate-return"
       for (auto&& fs : mounted_list__)
         {
           auto len = std::strlen (fs.mounted_path_);
@@ -645,6 +662,7 @@ namespace micro_os_plus
               return &fs;
             }
         }
+#pragma GCC diagnostic pop
 
       // If root file system defined, return it.
       if (mounted_root__ != nullptr)
@@ -967,7 +985,7 @@ namespace micro_os_plus
 
     // http://pubs.opengroup.org/onlinepubs/9699919799/functions/utime.html
     int
-    file_system::utime (const char* path, const struct utimbuf* times)
+    file_system::utime (const char* path, const utimbuf* times)
     {
 #if defined(MICRO_OS_PLUS_TRACE_POSIX_IO_FILE_SYSTEM)
       trace::printf ("file_system::%s(\"%s\", %p)\n", __func__, path, times);
@@ -993,7 +1011,7 @@ namespace micro_os_plus
 
       errno = 0;
 
-      struct utimbuf tmp;
+      utimbuf tmp;
       if (times == nullptr)
         {
           // If times is a null pointer, the access and modification times
@@ -1051,5 +1069,7 @@ namespace micro_os_plus
     // ==========================================================================
   } // namespace posix
 } // namespace micro_os_plus
+
+#pragma GCC diagnostic pop
 
 // ----------------------------------------------------------------------------
