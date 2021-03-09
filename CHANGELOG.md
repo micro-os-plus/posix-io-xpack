@@ -6,6 +6,12 @@ Please check
 [GitHub](https://github.com/micro-os-plus/posix-io-xpack/issues/)
 and close existing issues and pull requests.
 
+## 2021-03-09
+
+- v2.0.1
+- fix/silence warnings
+- temporarily disable gettimeofday until a solution is found
+
 ## 2021-03-01
 
 - v2.0.0
