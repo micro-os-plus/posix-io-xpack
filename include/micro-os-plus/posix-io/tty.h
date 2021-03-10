@@ -168,7 +168,7 @@ namespace micro_os_plus
        * @endcond
        */
 
-      virtual ~tty_impl ();
+      virtual ~tty_impl () override;
 
       /**
        * @}
@@ -202,7 +202,7 @@ namespace micro_os_plus
           = 0;
 
       virtual int
-      do_isatty (void) final;
+      do_isatty (void) override final;
 
       /**
        * @}

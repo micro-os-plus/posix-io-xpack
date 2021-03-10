@@ -54,7 +54,9 @@
 #pragma clang diagnostic ignored "-Wc++98-compat"
 #endif
 #if defined(__GNUC__) && !defined(__clang__)
+#if __GNUC__ >= 10
 #pragma GCC diagnostic ignored "-Wredundant-tags"
+#endif
 #endif
 
 namespace micro_os_plus
