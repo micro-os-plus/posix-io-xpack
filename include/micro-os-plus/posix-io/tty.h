@@ -47,8 +47,10 @@
 
 #pragma GCC diagnostic push
 
+#if defined(__GNUC__) && !defined(__clang__)
 #pragma GCC diagnostic ignored "-Wsuggest-final-types"
 #pragma GCC diagnostic ignored "-Wsuggest-final-methods"
+#endif
 #if defined(__clang__)
 #pragma clang diagnostic ignored "-Wc++98-compat"
 #endif
