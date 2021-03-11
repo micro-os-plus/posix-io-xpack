@@ -882,14 +882,26 @@ pid_t
 __posix_fork (void)
 {
   errno = ENOSYS; // Not implemented
+
+#pragma GCC diagnostic push
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic ignored "-Wuseless-cast"
+#endif
   return static_cast<pid_t> (-1);
+#pragma GCC diagnostic pop
 }
 
 pid_t
 __posix_getpid (void)
 {
   errno = ENOSYS; // Not implemented
+
+#pragma GCC diagnostic push
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic ignored "-Wuseless-cast"
+#endif
   return static_cast<pid_t> (-1);
+#pragma GCC diagnostic pop
 }
 
 int
@@ -917,8 +929,15 @@ pid_t
 __posix_wait (int* stat_loc)
 {
   errno = ENOSYS; // Not implemented
+
+#pragma GCC diagnostic push
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic ignored "-Wuseless-cast"
+#endif
   return static_cast<pid_t> (-1);
+#pragma GCC diagnostic pop
 }
+
 
 int
 __posix_chown (const char* path, uid_t owner, gid_t group)

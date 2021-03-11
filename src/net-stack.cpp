@@ -112,7 +112,10 @@ namespace micro_os_plus
     {
       errno = 0;
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wnull-dereference"
       return impl ().do_socket (domain, type, protocol);
+#pragma GCC diagnostic pop
     }
 
     // ========================================================================

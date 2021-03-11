@@ -174,8 +174,14 @@ namespace micro_os_plus
                 return -1;
               }
 
+#pragma GCC diagnostic push
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic ignored "-Wuseless-cast"
+#endif
             *sz = (static_cast<uint64_t> (
                 impl ().num_blocks_ * impl ().block_logical_size_bytes_));
+#pragma GCC diagnostic pop
+
             return 0;
           }
 
