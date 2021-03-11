@@ -35,10 +35,14 @@
 #if defined(_POSIX_VERSION)
 
 #pragma GCC diagnostic push
+
+#pragma GCC diagnostic ignored "-Wpedantic"
 #if defined(__clang__)
 #pragma clang diagnostic ignored "-Wgnu-include-next"
 #endif
+
 #include_next <dirent.h>
+
 #pragma GCC diagnostic pop
 
 #else
