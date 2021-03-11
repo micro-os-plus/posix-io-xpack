@@ -8,6 +8,8 @@ and close existing issues and pull requests.
 
 ## 2021-03-11
 
+- v2.0.4
+- tty.h: -Wsuggest-final-* only for gcc
 - v2.0.3
 - silence warnings
 
