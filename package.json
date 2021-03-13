@@ -1,6 +1,6 @@
 {
   "name": "@micro-os-plus/posix-io",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "description": "A source xPack with POSIX I/O",
   "main": "",
   "scripts": {
