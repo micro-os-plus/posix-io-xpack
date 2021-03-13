@@ -938,7 +938,6 @@ __posix_wait (int* stat_loc)
 #pragma GCC diagnostic pop
 }
 
-
 int
 __posix_chown (const char* path, uid_t owner, gid_t group)
 {
