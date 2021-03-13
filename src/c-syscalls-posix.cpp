@@ -162,7 +162,7 @@ __posix_write (int fildes, const void* buf, size_t nbyte)
 }
 
 ssize_t
-__posix_writev (int fildes, const struct iovec* iov, int iovcnt)
+__posix_writev (int fildes, const iovec* iov, int iovcnt)
 {
   auto* const io = posix::file_descriptors_manager::io (fildes);
   if (io == nullptr)
@@ -261,7 +261,7 @@ __posix_tcdrain (int fildes)
 }
 
 int
-__posix_tcgetattr (int fildes, struct termios* termios_p)
+__posix_tcgetattr (int fildes, termios* termios_p)
 {
   auto* const io = posix::file_descriptors_manager::io (fildes);
   if (io == nullptr)
@@ -281,8 +281,7 @@ __posix_tcgetattr (int fildes, struct termios* termios_p)
 }
 
 int
-__posix_tcsetattr (int fildes, int optional_actions,
-                   const struct termios* termios_p)
+__posix_tcsetattr (int fildes, int optional_actions, const termios* termios_p)
 {
   auto* const io = posix::file_descriptors_manager::io (fildes);
   if (io == nullptr)
@@ -466,7 +465,7 @@ __posix_unlink (const char* path)
 }
 
 int
-__posix_utime (const char* path, const struct utimbuf* times)
+__posix_utime (const char* path, const utimbuf* times)
 {
   return posix::utime (path, times);
 }
@@ -507,7 +506,7 @@ __posix_opendir (const char* dirpath)
   return reinterpret_cast<DIR*> (posix::opendir (dirpath));
 }
 
-struct dirent*
+dirent*
 __posix_readdir (DIR* dirp)
 {
   auto* const dir = reinterpret_cast<posix::directory*> (dirp);
@@ -586,7 +585,7 @@ __posix_socketpair (int domain, int type, int protocol, int socket_vector[2])
 #endif
 
 int
-__posix_accept (int socket, struct sockaddr* address, socklen_t* address_len)
+__posix_accept (int socket, sockaddr* address, socklen_t* address_len)
 {
   auto* const io = posix::file_descriptors_manager::socket (socket);
   if (io == nullptr)
@@ -599,8 +598,7 @@ __posix_accept (int socket, struct sockaddr* address, socklen_t* address_len)
 }
 
 int
-__posix_bind (int socket, const struct sockaddr* address,
-              socklen_t address_len)
+__posix_bind (int socket, const sockaddr* address, socklen_t address_len)
 {
   auto* const io = posix::file_descriptors_manager::socket (socket);
   if (io == nullptr)
@@ -612,8 +610,7 @@ __posix_bind (int socket, const struct sockaddr* address,
 }
 
 int
-__posix_connect (int socket, const struct sockaddr* address,
-                 socklen_t address_len)
+__posix_connect (int socket, const sockaddr* address, socklen_t address_len)
 {
   auto* const io = posix::file_descriptors_manager::socket (socket);
   if (io == nullptr)
@@ -625,8 +622,7 @@ __posix_connect (int socket, const struct sockaddr* address,
 }
 
 int
-__posix_getpeername (int socket, struct sockaddr* address,
-                     socklen_t* address_len)
+__posix_getpeername (int socket, sockaddr* address, socklen_t* address_len)
 {
   auto* const io = posix::file_descriptors_manager::socket (socket);
   if (io == nullptr)
@@ -638,8 +634,7 @@ __posix_getpeername (int socket, struct sockaddr* address,
 }
 
 int
-__posix_getsockname (int socket, struct sockaddr* address,
-                     socklen_t* address_len)
+__posix_getsockname (int socket, sockaddr* address, socklen_t* address_len)
 {
   auto* const io = posix::file_descriptors_manager::socket (socket);
   if (io == nullptr)
@@ -689,7 +684,7 @@ __posix_recv (int socket, void* buffer, size_t length, int flags)
 
 ssize_t
 __posix_recvfrom (int socket, void* buffer, size_t length, int flags,
-                  struct sockaddr* address, socklen_t* address_len)
+                  sockaddr* address, socklen_t* address_len)
 {
   auto* const io = posix::file_descriptors_manager::socket (socket);
   if (io == nullptr)
@@ -701,7 +696,7 @@ __posix_recvfrom (int socket, void* buffer, size_t length, int flags,
 }
 
 ssize_t
-__posix_recvmsg (int socket, struct msghdr* message, int flags)
+__posix_recvmsg (int socket, msghdr* message, int flags)
 {
   auto* const io = posix::file_descriptors_manager::socket (socket);
   if (io == nullptr)
@@ -725,7 +720,7 @@ __posix_send (int socket, const void* buffer, size_t length, int flags)
 }
 
 ssize_t
-__posix_sendmsg (int socket, const struct msghdr* message, int flags)
+__posix_sendmsg (int socket, const msghdr* message, int flags)
 {
   auto* const io = posix::file_descriptors_manager::socket (socket);
   if (io == nullptr)
@@ -738,7 +733,7 @@ __posix_sendmsg (int socket, const struct msghdr* message, int flags)
 
 ssize_t
 __posix_sendto (int socket, const void* message, size_t length, int flags,
-                const struct sockaddr* dest_addr, socklen_t dest_len)
+                const sockaddr* dest_addr, socklen_t dest_len)
 {
   auto* const io = posix::file_descriptors_manager::socket (socket);
   if (io == nullptr)
@@ -806,7 +801,7 @@ __posix_sockatmark (int socket)
 // Not yet implemented.
 
 int __attribute__ ((weak))
-__posix_readdir_r (DIR* dirp, struct dirent* entry, struct dirent** result)
+__posix_readdir_r (DIR* dirp, dirent* entry, dirent** result)
 {
   errno = ENOSYS; // Not implemented
   return -1;
@@ -834,14 +829,14 @@ __posix_gettimeofday (struct timeval* ptimeval, void* ptimezone)
 
 int
 __posix_select (int nfds, fd_set* readfds, fd_set* writefds, fd_set* errorfds,
-                struct timeval* timeout)
+                timeval* timeout)
 {
   errno = ENOSYS; // Not implemented
   return -1;
 }
 
 clock_t
-__posix_times (struct tms* buf)
+__posix_times (tms* buf)
 {
   errno = ENOSYS; // Not implemented
   return static_cast<clock_t> (-1);

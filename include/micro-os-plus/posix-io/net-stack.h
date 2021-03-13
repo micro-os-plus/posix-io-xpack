@@ -472,7 +472,10 @@ namespace micro_os_plus
     inline net_stack_impl&
     net_stack::impl (void) const
     {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wnull-dereference"
       return impl_;
+#pragma GCC diagnostic pop
     }
 
     inline void
