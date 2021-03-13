@@ -6,6 +6,11 @@ Please check
 [GitHub](https://github.com/micro-os-plus/posix-io-xpack/issues/)
 and close existing issues and pull requests.
 
+## 2021-03-13
+
+- v2.0.5
+- fix/silence warnings
+
 ## 2021-03-11
 
 - v2.0.4
