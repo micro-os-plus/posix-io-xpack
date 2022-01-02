@@ -14,18 +14,22 @@ The project is hosted on GitHub:
 To clone it:
 
 ```sh
+rm -rf ~/Work/posix-io-xpack.git && \
+mkdir -p ~/Work && \
 git clone \
   https://github.com/micro-os-plus/posix-io-xpack.git \
-  posix-io-xpack.git
+  ~/Work/posix-io-xpack.git
 ```
 
 For development purposes, clone the `xpack-develop` branch:
 
 ```sh
+rm -rf ~/Work/posix-io-xpack.git && \
+mkdir -p ~/Work && \
 git clone \
   --branch xpack-develop \
   https://github.com/micro-os-plus/posix-io-xpack.git \
-  posix-io-xpack.git
+  ~/Work/posix-io-xpack.git
 ```
 
 ## Prerequisites
