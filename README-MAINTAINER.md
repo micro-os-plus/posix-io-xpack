@@ -1,6 +1,6 @@
 [![license](https://img.shields.io/github/license/micro-os-plus/posix-io-xpack)](https://github.com/micro-os-plus/posix-io-xpack/blob/xpack/LICENSE)
 [![CI on Push](https://github.com/micro-os-plus/posix-io-xpack/workflows/CI%20on%20Push/badge.svg)](https://github.com/micro-os-plus/posix-io-xpack/actions?query=workflow%3A%22CI+on+Push%22)
-[![GitHub issues](https://img.shields.io/github/issues/micro-os-plus/posix-io-xpack.svg)](https://github.com/micro-os-plus/posix-io-xpack/issues)
+[![GitHub issues](https://img.shields.io/github/issues/micro-os-plus/posix-io-xpack.svg)](https://github.com/micro-os-plus/posix-io-xpack/issues/)
 [![GitHub pulls](https://img.shields.io/github/issues-pr/micro-os-plus/posix-io-xpack.svg)](https://github.com/micro-os-plus/posix-io-xpack/pulls)
 
 # Maintainer info
@@ -40,7 +40,7 @@ In the `micro-os-plus/web-jekyll` GitHub repo:
 - update the GitHub Actions URLs using the actual test pages
 
 If any, refer to closed
-[issues](https://github.com/micro-os-plus/posix-io/issues)
+[issues](https://github.com/micro-os-plus/posix-io-xpack/issues/)
 as:
 
 - **[Issue:\[#1\]\(...\)]**.
