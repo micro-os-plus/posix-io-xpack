@@ -43,7 +43,7 @@ if(NOT TARGET micro-os-plus-posix-io-static)
 
   add_library(micro-os-plus-posix-io-static STATIC EXCLUDE_FROM_ALL)
 
-  # ---------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
   xpack_glob_recurse_cxx(source_files "${xpack_current_folder}/src")
   xpack_display_relative_paths("${source_files}" "${xpack_current_folder}")
@@ -70,7 +70,7 @@ if(NOT TARGET micro-os-plus-posix-io-static)
       micro-os-plus::diag-trace
   )
 
-  # ---------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
   # Aliases.
 
   add_library(micro-os-plus::posix-io ALIAS micro-os-plus-posix-io-static)
