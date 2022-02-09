@@ -149,7 +149,7 @@ namespace micro_os_plus
     void
     device_registry<T>::link (value_type* device)
     {
-#if defined(DEBUG)
+#if defined(MICRO_OS_PLUS_DEBUG)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Waggregate-return"
       for (auto&& d : registry_list__)
@@ -162,7 +162,7 @@ namespace micro_os_plus
             }
         }
 #pragma GCC diagnostic pop
-#endif // DEBUG
+#endif // MICRO_OS_PLUS_DEBUG
 
       registry_list__.link (*device);
 
