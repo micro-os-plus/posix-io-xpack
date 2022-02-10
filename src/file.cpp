@@ -10,6 +10,12 @@
  * be obtained from https://opensource.org/licenses/MIT/.
  */
 
+// ----------------------------------------------------------------------------
+
+#if defined(MICRO_OS_PLUS_INCLUDE_CONFIG_H)
+#include <micro-os-plus/config.h>
+#endif // MICRO_OS_PLUS_INCLUDE_CONFIG_H
+
 #include <micro-os-plus/posix-io/file.h>
 #include <micro-os-plus/posix-io/file-system.h>
 
