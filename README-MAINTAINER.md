@@ -117,7 +117,7 @@ When the release is considered stable, promote it as `latest`:
 
 - `npm dist-tag ls @micro-os-plus/posix-io`
 - `npm dist-tag add @micro-os-plus/posix-io@2.0.5 latest`
-- `npm dist-tag ls @@micro-os-plus/posix-io`
+- `npm dist-tag ls @micro-os-plus/posix-io`
 
 ## Announce to the community
 
