@@ -15,10 +15,10 @@
     "type": "git",
     "url": "https://github.com/micro-os-plus/posix-io-xpack.git/"
   },
+  "homepage": "https://github.com/micro-os-plus/posix-io-xpack/",
   "bugs": {
     "url": "https://github.com/micro-os-plus/posix-io-xpack/issues/"
   },
-  "homepage": "https://github.com/micro-os-plus/posix-io-xpack/",
   "keywords": [
     "xpack",
     "c++",
@@ -32,6 +32,15 @@
   },
   "license": "MIT",
   "config": {},
+  "dependencies": {},
+  "bundleDependencies": [],
   "devDependencies": {},
-  "xpack": {}
+  "xpack": {
+    "minimumXpmRequired": "0.14.0",
+    "dependencies": {},
+    "devDependencies": {},
+    "properties": {},
+    "actions": {},
+    "buildConfigurations": {}
+  }
 }
