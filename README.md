@@ -61,7 +61,7 @@ xpm init # Unless a package.json is already present
 
 xpm install @micro-os-plus/posix-io@latest
 
-ls -l xpacks/micro-os-plus-posix-io
+ls -l xpacks/@micro-os-plus/posix-io
 ```
 
 ### Git submodule
@@ -75,7 +75,7 @@ git init # Unless already a Git project
 mkdir -p xpacks
 
 git submodule add https://github.com/micro-os-plus/posix-io-xpack.git \
-  xpacks/micro-os-plus-posix-io
+  xpacks/@micro-os-plus/posix-io
 ```
 
 ## Branches
