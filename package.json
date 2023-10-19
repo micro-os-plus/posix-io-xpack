@@ -1,7 +1,7 @@
 {
   "name": "@micro-os-plus/posix-io",
   "version": "2.0.5",
-  "description": "A source library xPack with POSIX I/O",
+  "description": "A source code library with POSIX I/O",
   "main": "",
   "scripts": {
     "npm-install": "npm install",
