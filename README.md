@@ -4,7 +4,7 @@
 [![license](https://img.shields.io/github/license/micro-os-plus/posix-io-xpack)](https://github.com/micro-os-plus/posix-io-xpack/blob/xpack/LICENSE)
 [![CI on Push](https://github.com/micro-os-plus/posix-io-xpack/actions/workflows/ci.yml/badge.svg)](https://github.com/micro-os-plus/posix-io-xpack/actions/workflows/ci.yml)
 
-# A source library xPack with the µOS++ POSIX I/O support
+# A source code library with the µOS++ POSIX I/O support
 
 This project includes files that implement a C++ POSIX inspired I/O framework.
 
@@ -161,7 +161,7 @@ are:
 
 ## License
 
-The original content is released under the
-[MIT License](https://opensource.org/licenses/MIT/),
+Unless otherwise stated, the content is released under the terms of the
+[MIT License](https://opensource.org/licenses/mit/),
 with all rights reserved to
 [Liviu Ionescu](https://github.com/ilg-ul).
